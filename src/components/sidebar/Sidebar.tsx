@@ -51,22 +51,36 @@ export default function Sidebar() {
                             Project Target
                         </MenuItem>
                         <SubMenu label="Development Status" icon={<Image src="/images/icon/development-status.svg" alt="icon" width={20} height={20}/>}>
-                            <MenuItem component={<Link href="#" />} active={pathname === "#"} icon={<Image src="/images/icon/dashboard.svg" alt="icon" width={20} height={20}/>}>
-                                Styling Design
-                            </MenuItem>
-                            <MenuItem component={<Link href="#" />} active={pathname === "#"} icon={<Image src="/images/icon/dashboard.svg" alt="icon" width={20} height={20}/>}>
-                                Engineering
-                            </MenuItem>
-                            <MenuItem component={<Link href="#" />} active={pathname === "#"} icon={<Image src="/images/icon/dashboard.svg" alt="icon" width={20} height={20}/>}>
-                                Production
-                            </MenuItem>
-                            <MenuItem 
-                                component={<Link href="/development-status/procurement" />} 
-                                active={pathname.startsWith("/development-status/procurement")} 
-                                icon={<Image src="/images/icon/procurement.svg" alt="icon" width={20} height={20}/>}
-                            >
-                                Procurement
-                            </MenuItem>
+                            <div className="flex flex-col gap-y-1">
+                                <MenuItem 
+                                    component={<Link href="/development-status/styling-design" />} 
+                                    active={pathname.startsWith("/development-status/styling-design")} 
+                                    icon={<Image src="/images/icon/dashboard.svg" alt="icon" width={20} height={20}/>}
+                                >
+                                    Styling Design
+                                </MenuItem>
+                                <MenuItem 
+                                    component={<Link href="/development-status/engineering" />} 
+                                    active={pathname.startsWith("/development-status/engineering")} 
+                                    icon={<Image src="/images/icon/dashboard.svg" alt="icon" width={20} height={20}/>}
+                                >
+                                    Engineering
+                                </MenuItem>
+                                <MenuItem 
+                                    component={<Link href="/development-status/production" />} 
+                                    active={pathname.startsWith("/development-status/production")} 
+                                    icon={<Image src="/images/icon/dashboard.svg" alt="icon" width={20} height={20}/>}
+                                >
+                                    Production
+                                </MenuItem>
+                                <MenuItem 
+                                    component={<Link href="/development-status/procurement" />} 
+                                    active={pathname.startsWith("/development-status/procurement")} 
+                                    icon={<Image src="/images/icon/procurement.svg" alt="icon" width={20} height={20}/>}
+                                >
+                                    Procurement
+                                </MenuItem>
+                            </div>
                         </SubMenu>
                         <SubMenu label="Budget Status" icon={<Image src="/images/icon/budget-status.svg" alt="icon" width={20} height={20}/>}>
                             <MenuItem component={<Link href="#" />} active={pathname === "#"} icon={<Image src="/images/icon/dashboard.svg" alt="icon" width={20} height={20}/>}>
