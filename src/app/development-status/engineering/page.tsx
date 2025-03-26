@@ -8,11 +8,11 @@ export default function ShowData() {
     return (
         <div>
             <div className="flex flex-col gap-y-5">
-                <p className="font-bold">Project Target</p>
+                <p className="font-bold">Development Status Engineering</p>
                 <div className="flex justify-between">
-                    <Link href="/project-target/add">
+                    <Link href="/development-status/engineering/add">
                         <AddButton
-                            buttonText="Add Project Target"
+                            buttonText="Add Engineering"
                         />
                     </Link>
                 </div>

@@ -15,8 +15,6 @@ export default function ShowData() {
                     <Link href="/highlight-issue/add">
                         <AddButton
                             buttonText="Add Highligt Issue"
-                            height="45px"
-                            width="200px"
                         />
                     </Link>
                     <SearchInput

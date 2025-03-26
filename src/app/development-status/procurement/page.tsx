@@ -15,8 +15,6 @@ export default function ShowData() {
                     <Link href="/development-status/procurement/add">
                         <AddButton
                             buttonText="Add Procurement"
-                            height="45px"
-                            width="200px"
                         />
                     </Link>
                     <SearchInput

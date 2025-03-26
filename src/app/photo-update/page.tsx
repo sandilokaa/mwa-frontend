@@ -16,8 +16,6 @@ export default function ShowData() {
                     <Link href="/photo-update/add">
                         <AddButton
                             buttonText="Add Photo"
-                            height="45px"
-                            width="200px"
                         />
                     </Link>
                     <div className="flex gap-5">
