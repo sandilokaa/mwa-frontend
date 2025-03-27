@@ -15,7 +15,7 @@ export default function ShowData() {
                 <div className="flex justify-between">
                     <Link href="/photo-update/add">
                         <AddButton
-                            buttonText="Add Photo"
+                            buttonText="Add Photo Update"
                         />
                     </Link>
                     <div className="flex gap-5">
