@@ -15,10 +15,10 @@ export default function EditData() {
                 <Link className="cursor-pointer" href="/highlight-issue">
                     <Image src="/images/icon/chevron-down.svg" width={24} height={24} alt="Back Icon"/>
                 </Link>
-                <p className="font-bold">Edit Highligth Issue</p>
+                <p className="font-bold">Edit Highlight Issue</p>
             </div>
             <div className="mt-5 bg-white w-full rounded-[10px] p-5">
-                <p className="text-sm font-bold">Highligth Issue Form</p>
+                <p className="text-sm font-bold">Highlight Issue Form</p>
                 <div className="flex flex-col gap-y-5 mt-5">
                     <div className="flex flex-col gap-y-4">
                         <div className="grid grid-cols-4 gap-4">

@@ -15,7 +15,7 @@ export default function DetailData() {
             <div className="grid grid-cols-4 mt-5 gap-5">
                 <div className="bg-white w-full rounded-[10px] p-5 col-span-3">
                     <div className="flex justify-between">
-                        <p className="text-sm font-bold">Highligth Issue Information</p>
+                        <p className="text-sm font-bold">Highlight Issue Information</p>
                         <Link className="cursor-pointer" href="/highlight-issue/:id/edit">
                             <Image className="cursor-pointer" src="/images/icon/edit.svg" alt="Edit Icon" width={22} height={22}/>
                         </Link>
