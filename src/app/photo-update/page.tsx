@@ -35,22 +35,22 @@ export default function ShowData() {
                     <p className="font-bold">Chassis</p>
                 </div>
                 <div className="mt-5">
-                    <div className="grid grid-cols-4 gap-4">
-                        <div className="relative group cursor-pointer">
-                            <Image className="w-full h-auto" src="/images/general/chassis-try.png" alt="Item Image" width={275} height={330}/>
-                            <div className="absolute left-0 inset-0 bg-[rgba(0,0,0,0.5)] opacity-0 group-hover:opacity-100 flex flex-col justify-end text-white p-4 transition-opacity duration-300 rounded-[8px]">
+                    <div className="grid grid-cols-4 gap-2">
+                        <div className="relative group cursor-pointer min-w-[275px] min-h-[330px]">
+                            <Image className="w-full h-auto rounded-lg" src="/images/general/chassis-try.png" alt="Item Image" width={275} height={330}/>
+                            <div className="absolute left-0 inset-0 bg-[rgba(0,0,0,0.5)] opacity-0 group-hover:opacity-100 flex flex-col justify-end text-white p-4 transition-opacity duration-300 rounded-lg">
                                 <div className="flex flex-col gap-4">
                                     <div className="flex flex-col gap-1">
                                         <p className="text-sm font-medium">12/05/2025</p>
                                         <p className="text-sm font-medium mt-1">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt</p>
                                     </div>
                                     <div className="flex gap-[10px] justify-end">
-                                        <Link href="#">
+                                        <Link href="/photo-update/:id">
                                             <div className="p-2 rounded-sm bg-[#2181E8] cursor-pointer">
                                                 <Image src="/images/icon/eye.svg" alt="view icon" height={16} width={16}/>
                                             </div>
                                         </Link>
-                                        <Link href="#">
+                                        <Link href="/photo-update/:id/edit">
                                             <div className="p-2 rounded-sm bg-[#FDBE1B] cursor-pointer">
                                                 <Image src="/images/icon/edit-2.svg" alt="view icon" height={16} width={16}/>
                                             </div>
