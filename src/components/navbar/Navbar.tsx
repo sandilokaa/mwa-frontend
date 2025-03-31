@@ -9,7 +9,7 @@ export default function Navbar() {
             <div className="flex justify-end gap-4">
                 <div className="flex">
                     <DropdownProduct
-                        options={["6x6 Conversion", "Hilux S Cab"]}
+                        options={["6x6 Conversion"]}
                     />
                 </div>
                 <div className="flex gap-x-[8px] justify-center items-center py-2 px-4 bg-[#292929] text-white rounded-sm">

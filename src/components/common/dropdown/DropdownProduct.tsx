@@ -12,11 +12,9 @@ export default function DropdownProduct({ options }: DropdownProductProps) {
     const [isOpen, setIsOpen] = useState(false);
     const { selectedProduct, setSelectedProduct } = useProductFilter(); 
 
-
-
     const handleSelect = (option: string) => {
         setIsOpen(false);
-        setSelectedProduct(option)
+        setSelectedProduct(option);
     };
 
     return (

@@ -6,13 +6,9 @@ import InputForm from "@/components/common/input/InputForm";
 import TextAreaForm from "@/components/common/input/TextAreaForm";
 import DateInputForm from "@/components/common/input/DateInputFrom";
 import SubmitButton from "@/components/common/button/SubmitButton";
-import ReadOnlyForm from "@/components/common/input/ReadOnlyForm";
 import Dropdown from "@/components/common/dropdown/DropdownForm";
-import { useProductFilter } from "@/context/ProductFilterContext";
 
 export default function AddData() {
-
-    const { selectedProduct} = useProductFilter();
 
     return (
         <div>
@@ -59,10 +55,6 @@ export default function AddData() {
                             />
                         </div>
                         <div className="grid grid-cols-3 gap-4">
-                            <ReadOnlyForm
-                                label="Product *"
-                                defaultValue={selectedProduct}
-                            />
                             <DateInputForm
                                 label="Date *"
                             />
