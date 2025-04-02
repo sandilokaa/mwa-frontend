@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import Sidebar from "@/components/sidebar/Sidebar";
 import Navbar from "@/components/navbar/Navbar";
+import Footer from "@/components/common/footer/Footer";
 import { ProductFilterProvider } from "@/context/ProductFilterContext";
 import "./globals.css";
 
@@ -30,6 +31,7 @@ export default function RootLayout({
               <div className="flex-1 overflow-auto p-5">
                 {children}
               </div>
+              <Footer/>
             </div>
           </div>
         </ProductFilterProvider>
