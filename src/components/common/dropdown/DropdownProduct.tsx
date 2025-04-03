@@ -22,7 +22,7 @@ export default function DropdownProduct({ options }: DropdownProductProps) {
             <div className="flex flex-col gap-1">
                 <button
                     onClick={() => setIsOpen(!isOpen)}
-                    className="bg-[#EFEFEF] rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-300 cursor-pointer w-full h-[45px]"
+                    className="bg-[#EFEFEF] rounded-sm px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-300 cursor-pointer w-full h-[45px]"
                 >
                     <div className="flex justify-between items-center gap-2">
                         <p className="text-sm text-black">
