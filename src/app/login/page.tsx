@@ -10,7 +10,7 @@ export default function LoginData() {
             <div className="grid grid-cols-3 gap-[50px] h-full">
                 <div className="grid col-span-2">
                     <div className="h-full w-full relative">
-                        <Image src="/images/general/login-image.svg" alt="Login Image" layout="fill" objectFit="cover"/>
+                        <Image src="https://images.unsplash.com/photo-1584549239925-5554aa6b9183?q=80&w=2874&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Login Image" layout="fill" objectFit="cover"/>
                     </div>
                 </div>
                 <div className="grid grid-cols-1">
