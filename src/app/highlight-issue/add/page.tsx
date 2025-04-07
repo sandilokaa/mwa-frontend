@@ -55,6 +55,11 @@ export default function AddData() {
                             />
                         </div>
                         <div className="grid grid-cols-3 gap-4">
+                            <Dropdown
+                                label="Product *"
+                                options={["6x6 Conversion"]}
+                                onSelect={() => ""}
+                            />
                             <DateInputForm
                                 label="Date *"
                             />
@@ -62,9 +67,7 @@ export default function AddData() {
                     </div>
                     <div className="flex justify-end">
                         <SubmitButton
-                            buttonText="Add Highlight"
-                            width="auto"
-                            height="45px"
+                            buttonText="Add Highlight Issue"
                         />
                     </div>
                 </div>
