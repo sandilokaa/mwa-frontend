@@ -1,10 +1,37 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
+import { useRef } from "react";
+import { useRouter } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { loginUser } from "@/store/slice/authSlice";
+import type { RootState } from "@/store/store";
 import InputForm from "@/components/common/input/InputForm";
 import AuthButton from "@/components/common/button/AuthButton";
 import Image from "next/image";
 
 export default function LoginData() {
+
+    const dispatch = useAppDispatch();
+    const router = useRouter();
+    const emailRef = useRef<HTMLInputElement>(null);
+    const passwordRef = useRef<HTMLInputElement>(null);
+
+    const { loading, error } = useAppSelector((state: RootState) => state.auth);
+
+    const handleSubmit = async () => {
+        const email = emailRef.current?.value;
+        const password = passwordRef.current?.value;
+
+        if (!email || !password) return;
+
+        const result = await dispatch(loginUser({ email, password }));
+
+        if (loginUser.fulfilled.match(result)) {
+            router.push('/dashboard');
+        }
+    }
+
     return (
         <div className="relative h-screen overflow-hidden">
             <div className="grid grid-cols-3 gap-[50px] h-full">
@@ -27,16 +54,21 @@ export default function LoginData() {
                                 <div className="flex flex-col mt-[50px] gap-[35px] w-[80%]">
                                     <div className="flex flex-col gap-5">
                                         <InputForm
+                                            ref={emailRef}
+                                            type="email"
                                             label="Email *"
                                             placeholder="Enter your email"
                                         />
                                         <InputForm
+                                            ref={passwordRef}
+                                            type="password"
                                             label="Password *"
                                             placeholder="Enter your password"
                                         />
                                     </div>
                                     <div className="flex">
                                         <AuthButton
+                                            onClick={handleSubmit}
                                             buttonText="Sign In"
                                         />
                                     </div>
