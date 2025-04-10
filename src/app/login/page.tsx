@@ -1,19 +1,23 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { useSnackbar } from "notistack";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { loginUser } from "@/store/slice/authSlice";
 import type { RootState } from "@/store/store";
 import InputForm from "@/components/common/input/InputForm";
 import AuthButton from "@/components/common/button/AuthButton";
-import Image from "next/image";
 
 export default function LoginData() {
 
     const dispatch = useAppDispatch();
     const router = useRouter();
+    const { enqueueSnackbar } = useSnackbar();
+    const [formError, setFormError] = useState("");
+
     const emailRef = useRef<HTMLInputElement>(null);
     const passwordRef = useRef<HTMLInputElement>(null);
 
@@ -23,14 +27,24 @@ export default function LoginData() {
         const email = emailRef.current?.value;
         const password = passwordRef.current?.value;
 
-        if (!email || !password) return;
+        if (!email || !password) {
+            setFormError("Email or password is required!");
+            return;
+        }
 
         const result = await dispatch(loginUser({ email, password }));
 
         if (loginUser.fulfilled.match(result)) {
+            enqueueSnackbar('Login successful!', { variant: 'success' });
             router.push('/dashboard');
+        } else {
+            setFormError("Your email or password is incorrect!");
         }
     }
+
+    const handleInputChange = () => {
+        if (formError) setFormError("");
+    };
 
     return (
         <div className="relative h-screen overflow-hidden">
@@ -58,13 +72,18 @@ export default function LoginData() {
                                             type="email"
                                             label="Email *"
                                             placeholder="Enter your email"
+                                            onChange={handleInputChange}
                                         />
                                         <InputForm
                                             ref={passwordRef}
                                             type="password"
                                             label="Password *"
                                             placeholder="Enter your password"
+                                            onChange={handleInputChange}
                                         />
+                                        {formError && (
+                                            <p className="text-red-500 text-sm">{formError}</p>
+                                        )}
                                     </div>
                                     <div className="flex">
                                         <AuthButton
