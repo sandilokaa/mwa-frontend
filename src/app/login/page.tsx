@@ -65,7 +65,7 @@ export default function LoginData() {
                                     <p className="text-[32px] font-bold">Welcome to the Merpati Wahana Raya Dashboard</p>
                                     <p className="text-sm font-normal">Sign in to access full features</p>
                                 </div>
-                                <div className="flex flex-col mt-[50px] gap-[35px] w-[80%]">
+                                <div className="flex flex-col mt-[50px] gap-[35px] w-[84%]">
                                     <div className="flex flex-col gap-5">
                                         <InputForm
                                             ref={emailRef}
