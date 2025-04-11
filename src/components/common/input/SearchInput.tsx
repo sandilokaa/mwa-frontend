@@ -16,7 +16,7 @@ export default function SearchInput({ value, onChange }: SearchInputProps) {
                 value={value}
                 onChange={onChange}
                 placeholder="Search"
-                className="pl-10 pr-4 py-2 w-full border border-gray-300 bg-white text-gray-400 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-300 h-[45px]"
+                className="pl-10 pr-4 py-2 w-full border border-gray-300 bg-white text-gray-400 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-300 h-[45px] text-sm"
             />
         </div>
     );
