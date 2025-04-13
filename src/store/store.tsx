@@ -1,11 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { createWrapper } from "next-redux-wrapper";
 import authReducer from "./slice/authSlice";
+import productReducer from "./slice/productSlice";
+import photoUpdateReducer from "./slice/photoUpdateSlice";
 
 const makeStore = () =>
     configureStore({
         reducer: {
-            auth: authReducer
+            auth: authReducer,
+            products: productReducer,
+            photoUpdates: photoUpdateReducer,
         },
     });
 
