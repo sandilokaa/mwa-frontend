@@ -23,7 +23,7 @@ export default function DropdownCategory({ options, onSelect }: DropdownCategory
             <div className="flex flex-col gap-1">
                 <button
                     onClick={() => setIsOpen(!isOpen)}
-                    className="bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-300 cursor-pointer w-full h-[45px]"
+                    className="bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-300 cursor-pointer w-[150px] h-[45px]"
                 >
                     <div className="flex justify-between items-center gap-2">
                         <p className={`text-sm ${selected ? "text-black" : "text-[#989898]"}`}>
