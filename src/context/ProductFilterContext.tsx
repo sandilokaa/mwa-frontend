@@ -1,28 +1,31 @@
-"use client";
+import { createContext, useContext, useState } from "react";
 
-import { createContext, useContext, useState, ReactNode } from "react";
-
-interface ProductFilterContextType {
-    selectedProduct: string;
-    setSelectedProduct: (product: string) => void;
+interface Product {
+    id: number;
+    name: string;
 }
 
-const ProductFilterContext = createContext<ProductFilterContextType | null>(null);
+interface ProductFilterContextType {
+    selectedProduct: Product | null;
+    setSelectedProduct: (product: Product) => void;
+}
 
-export function ProductFilterProvider({ children }: { children: ReactNode }) {
-    const [selectedProduct, setSelectedProduct] = useState<string>("6x6 Conversion");
+const ProductFilterContext = createContext<ProductFilterContextType | undefined>(undefined);
+
+export const ProductFilterProvider = ({ children }: { children: React.ReactNode }) => {
+    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
     return (
         <ProductFilterContext.Provider value={{ selectedProduct, setSelectedProduct }}>
             {children}
         </ProductFilterContext.Provider>
     );
-}
+};
 
-export function useProductFilter() {
+export const useProductFilter = () => {
     const context = useContext(ProductFilterContext);
     if (!context) {
-        throw new Error("useProductFilter must be used inside ProductFilterProvider");
+        throw new Error("useProductFilter must be used within a ProductFilterProvider");
     }
     return context;
-}
+};
