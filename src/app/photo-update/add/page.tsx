@@ -6,6 +6,7 @@ import TextAreaForm from "@/components/common/input/TextAreaForm";
 import SubmitButton from "@/components/common/button/SubmitButton";
 import Dropdown from "@/components/common/dropdown/DropdownForm";
 import DateInputForm from "@/components/common/input/DateInputFrom";
+import FileInputForm from "@/components/common/input/FileInputForm";
 
 export default function AddData() {
 
@@ -24,7 +25,7 @@ export default function AddData() {
                         <div className="grid grid-cols-3 gap-4">
                             <Dropdown
                                 label="Product *"
-                                options={["Chassis", "Under Body", "Upper Body", "Exterior", "Interior"]}
+                                options={["6x6 Conversion"]}
                                 onSelect={() => ""}
                             />
                             <Dropdown
@@ -44,7 +45,9 @@ export default function AddData() {
                             />
                         </div>
                         <div className="grid grid-cols-1">
-                            
+                            <FileInputForm
+                                label="Upload Photo *"
+                            />
                         </div>
                     </div>
                     <div className="flex justify-end">
