@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useAppSelector } from "@/store/hooks";
+import { RootState } from "@/store/store";
 import Image from "next/image";
 
 interface DropdownProps {
@@ -9,9 +11,26 @@ interface DropdownProps {
     onSelect: (value: string) => void;
 }
 
+interface Product {
+    id: number;
+    name: string;
+}
+
 export default function Dropdown({ options, onSelect, label }: DropdownProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [selected, setSelected] = useState("");
+
+    const { products } = useAppSelector((state: RootState) => state.products);
+    const [currentOptions, setCurrentOptions] = useState<string[]>(options);
+
+    useEffect(() => {
+        if (label.toLowerCase() === "product *") {
+            const names = products.map((product: Product) => product.name);
+            setCurrentOptions(names);
+        } else {
+            setCurrentOptions(options);
+        }
+    }, [label, products, options]);
 
     const handleSelect = (option: string) => {
         setSelected(option);
@@ -38,7 +57,7 @@ export default function Dropdown({ options, onSelect, label }: DropdownProps) {
 
             {isOpen && (
                 <div className="absolute right-0 mt-2 w-full bg-white border border-gray-300 rounded-md shadow-lg z-10 p-2">
-                    {options.map((option, index) => (
+                    {currentOptions.map((option, index) => (
                         <button
                             key={index}
                             onClick={() => handleSelect(option)}
