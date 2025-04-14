@@ -55,21 +55,21 @@ export default function Sidebar() {
                                 <MenuItem 
                                     component={<Link href="/development-status/styling-design" />} 
                                     active={pathname.startsWith("/development-status/styling-design")} 
-                                    icon={<Image src="/images/icon/dashboard.svg" alt="icon" width={20} height={20}/>}
+                                    icon={<Image src="/images/icon/styling-design.svg" alt="icon" width={20} height={20}/>}
                                 >
                                     Styling Design
                                 </MenuItem>
                                 <MenuItem 
                                     component={<Link href="/development-status/engineering" />} 
                                     active={pathname.startsWith("/development-status/engineering")} 
-                                    icon={<Image src="/images/icon/dashboard.svg" alt="icon" width={20} height={20}/>}
+                                    icon={<Image src="/images/icon/design-engineering.svg" alt="icon" width={20} height={20}/>}
                                 >
-                                    Engineering
+                                    Design Engineering
                                 </MenuItem>
                                 <MenuItem 
                                     component={<Link href="/development-status/production" />} 
                                     active={pathname.startsWith("/development-status/production")} 
-                                    icon={<Image src="/images/icon/dashboard.svg" alt="icon" width={20} height={20}/>}
+                                    icon={<Image src="/images/icon/production.svg" alt="icon" width={20} height={20}/>}
                                 >
                                     Production
                                 </MenuItem>
