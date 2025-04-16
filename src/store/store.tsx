@@ -1,15 +1,27 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { createWrapper } from "next-redux-wrapper";
-import authReducer from "./slice/authSlice";
-import productReducer from "./slice/productSlice";
-import photoUpdateReducer from "./slice/photoUpdateSlice";
+
+import authReducer from "./slice/auth/authSlice";
+
+import productGetAllReducer from "./slice/product/getAllSlice";
+
+import photoUpdateGetAllReducer from "./slice/photoUpdate/getAllSlice";
+
+import procGetAllReducer from "./slice/procurement/getAllSlice";
+import procNotifReducer from "./slice/procurement/getNotificationSlice";
+import procDetailReducer from "./slice/procurement/getDetailSlice";
+import procDeleteReducer from "./slice/procurement/deleteSlice";
 
 const makeStore = () =>
     configureStore({
         reducer: {
             auth: authReducer,
-            products: productReducer,
-            photoUpdates: photoUpdateReducer,
+            productList: productGetAllReducer,
+            photoUpdateLists: photoUpdateGetAllReducer,
+            procurementLists: procGetAllReducer,
+            notificationLists: procNotifReducer,
+            procurementDetail: procDetailReducer,
+            deleteProcurement: procDeleteReducer
         },
     });
 
