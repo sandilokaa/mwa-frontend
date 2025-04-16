@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useProductFilter } from "@/context/ProductFilterContext";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { RootState } from "@/store/store";
-import { fetchProducts } from "@/store/slice/productSlice";
+import { fetchProducts } from "@/store/slice/product/getAllSlice";
 
 interface Product {
     id: number;
@@ -16,11 +16,13 @@ export default function DropdownProduct() {
     const dispatch = useAppDispatch();
     const [isOpen, setIsOpen] = useState(false);
     const { selectedProduct, setSelectedProduct } = useProductFilter(); 
-    const { products } = useAppSelector((state: RootState) => state.products);
+    const { products } = useAppSelector((state: RootState) => state.productList);
 
     useEffect(() => {
-        dispatch(fetchProducts());
-
+        if (products.length === 0) {
+            dispatch(fetchProducts());
+        }
+    
         if (!selectedProduct) {
             const defaultProduct = products.find(product => product.name === "6x6 Conversion");
             if (defaultProduct) {
@@ -28,6 +30,7 @@ export default function DropdownProduct() {
             }
         }
     }, [dispatch, selectedProduct, products, setSelectedProduct]);
+    
 
     const handleSelect = (product: Product) => {
         setIsOpen(false);

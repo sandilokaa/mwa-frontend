@@ -20,7 +20,7 @@ export default function Dropdown({ options, onSelect, label }: DropdownProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [selected, setSelected] = useState("");
 
-    const { products } = useAppSelector((state: RootState) => state.products);
+    const { products } = useAppSelector((state: RootState) => state.productList);
     const [currentOptions, setCurrentOptions] = useState<string[]>(options);
 
     useEffect(() => {

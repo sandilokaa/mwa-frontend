@@ -4,7 +4,7 @@ import Image from "next/image"
 import { useAppDispatch, useAppSelector } from "@/store/hooks"
 import type { RootState } from "@/store/store"
 import { useRouter } from "next/navigation"
-import { logoutUser } from "@/store/slice/authSlice"
+import { logoutUser } from "@/store/slice/auth/authSlice"
 import DropdownProduct from "../common/dropdown/DropdownProduct"
 import { useSnackbar } from "notistack"
 

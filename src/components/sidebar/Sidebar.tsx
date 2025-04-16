@@ -4,8 +4,9 @@ import { usePathname } from "next/navigation";
 import { Sidebar as ProSidebar, Menu, MenuItem, SubMenu } from "react-pro-sidebar";
 import Link from "next/link";
 import Image from "next/image";
+import React from "react";
 
-export default function Sidebar() {
+const Sidebar = React.memo(function Sidebar() {
 
     const pathname = usePathname();
 
@@ -40,11 +41,11 @@ export default function Sidebar() {
                         <span>Menu</span>
                     </div>
                     <div className="flex flex-col mt-[10px] gap-y-2 text-sm text-[#144C68] font-medium">
-                        <MenuItem component={<Link href="/dashboard" />} active={pathname === "/dashboard"} icon={<Image src="/images/icon/dashboard.svg" alt="icon" width={20} height={20}/>}>
+                        <MenuItem component={<Link href="/dashboard" prefetch/>} active={pathname === "/dashboard"} icon={<Image src="/images/icon/dashboard.svg" alt="icon" width={20} height={20}/>}>
                             Dashboard
                         </MenuItem>
                         <MenuItem 
-                            component={<Link href="/project-target" />} 
+                            component={<Link href="/project-target" prefetch/>} 
                             active={pathname.startsWith("/project-target")} 
                             icon={<Image src="/images/icon/project-target.svg" alt="icon" width={20} height={20}/>}
                         >
@@ -53,28 +54,28 @@ export default function Sidebar() {
                         <SubMenu label="Development Status" icon={<Image src="/images/icon/development-status.svg" alt="icon" width={20} height={20}/>}>
                             <div className="flex flex-col gap-y-1">
                                 <MenuItem 
-                                    component={<Link href="/development-status/styling-design" />} 
+                                    component={<Link href="/development-status/styling-design" prefetch/>} 
                                     active={pathname.startsWith("/development-status/styling-design")} 
                                     icon={<Image src="/images/icon/styling-design.svg" alt="icon" width={20} height={20}/>}
                                 >
                                     Styling Design
                                 </MenuItem>
                                 <MenuItem 
-                                    component={<Link href="/development-status/engineering" />} 
+                                    component={<Link href="/development-status/engineering" prefetch/>} 
                                     active={pathname.startsWith("/development-status/engineering")} 
                                     icon={<Image src="/images/icon/design-engineering.svg" alt="icon" width={20} height={20}/>}
                                 >
                                     Design Engineering
                                 </MenuItem>
                                 <MenuItem 
-                                    component={<Link href="/development-status/production" />} 
+                                    component={<Link href="/development-status/production" prefetch/>} 
                                     active={pathname.startsWith("/development-status/production")} 
                                     icon={<Image src="/images/icon/production.svg" alt="icon" width={20} height={20}/>}
                                 >
                                     Production
                                 </MenuItem>
                                 <MenuItem 
-                                    component={<Link href="/development-status/procurement" />} 
+                                    component={<Link href="/development-status/procurement" prefetch/>} 
                                     active={pathname.startsWith("/development-status/procurement")} 
                                     icon={<Image src="/images/icon/procurement.svg" alt="icon" width={20} height={20}/>}
                                 >
@@ -83,22 +84,22 @@ export default function Sidebar() {
                             </div>
                         </SubMenu>
                         <SubMenu label="Budget Status" icon={<Image src="/images/icon/budget-status.svg" alt="icon" width={20} height={20}/>}>
-                            <MenuItem component={<Link href="#" />} active={pathname === "#"} icon={<Image src="/images/icon/dashboard.svg" alt="icon" width={20} height={20}/>}>
+                            <MenuItem component={<Link href="#" prefetch/>} active={pathname === "#"} icon={<Image src="/images/icon/dashboard.svg" alt="icon" width={20} height={20}/>}>
                                 Overall Result
                             </MenuItem>
-                            <MenuItem component={<Link href="#" />} active={pathname === "#"} icon={<Image src="/images/icon/dashboard.svg" alt="icon" width={20} height={20}/>}>
+                            <MenuItem component={<Link href="#" prefetch/>} active={pathname === "#"} icon={<Image src="/images/icon/dashboard.svg" alt="icon" width={20} height={20}/>}>
                                 Result Month
                             </MenuItem>
                         </SubMenu>
                         <MenuItem 
-                            component={<Link href="/highlight-issue" />} 
+                            component={<Link href="/highlight-issue" prefetch/>} 
                             active={pathname.startsWith("/highlight-issue")}  
                             icon={<Image src="/images/icon/highlight-issue.svg" alt="icon" width={20} height={20}/>}
                         >
                             Highlight Issue
                         </MenuItem>
                         <MenuItem 
-                            component={<Link href="/photo-update" />} 
+                            component={<Link href="/photo-update" prefetch/>} 
                             active={pathname.startsWith("/photo-update")}
                             icon={<Image src="/images/icon/photo-update.svg" alt="icon" width={20} height={20}/>}
                         >
@@ -109,4 +110,6 @@ export default function Sidebar() {
             </ProSidebar>
         </div>
     );
-}
+})
+
+export default Sidebar;
