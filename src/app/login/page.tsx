@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useSnackbar } from "notistack";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { loginUser } from "@/store/slice/authSlice";
+import { loginUser } from "@/store/slice/auth/authSlice";
 import type { RootState } from "@/store/store";
 import InputForm from "@/components/common/input/InputForm";
 import AuthButton from "@/components/common/button/AuthButton";
@@ -36,7 +36,9 @@ export default function LoginData() {
 
         if (loginUser.fulfilled.match(result)) {
             enqueueSnackbar('Login successful!', { variant: 'success' });
-            router.push('/dashboard');
+            setTimeout(() => {
+                router.push('/dashboard');
+            }, 1000);
         } else {
             setFormError("Your email or password is incorrect!");
         }
@@ -51,7 +53,6 @@ export default function LoginData() {
             <div className="grid grid-cols-3 gap-[50px] h-full">
                 <div className="grid col-span-2">
                     <div className="h-full w-full relative">
-                        {/* <Image src="https://images.unsplash.com/photo-1584549239925-5554aa6b9183?q=80&w=2874&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Login Image" layout="fill" objectFit="cover"/> */}
                         <Image src="/images/general/login-img.jpg" alt="Login Image" layout="fill"/>
                     </div>
                 </div>

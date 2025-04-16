@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useAppDispatch, useAppSelector } from "@/store/hooks"
-import { fetchPhotoUpdates } from "@/store/slice/photoUpdateSlice";
+import { fetchPhotoUpdateLists } from "@/store/slice/photoUpdate/getAllSlice";
 import { useProductFilter } from "@/context/ProductFilterContext";
 
 import AddButton from "@/components/common/button/AddButton";
@@ -14,11 +14,11 @@ export default function ShowData() {
     const dispatch = useAppDispatch();
     const [selectedCategory, setSelectedCategory] = useState("Chassis");
     const { selectedProduct } = useProductFilter();
-    const { photoUpdates, loading } = useAppSelector(state => state.photoUpdates);
+    const { photoUpdates, loading } = useAppSelector(state => state.photoUpdateLists);
 
     useEffect(() => {
         if (selectedProduct) {
-            dispatch(fetchPhotoUpdates({ category: selectedCategory, productId: selectedProduct.id }));
+            dispatch(fetchPhotoUpdateLists({ category: selectedCategory, productId: selectedProduct.id }));
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedProduct?.id, selectedCategory]);
@@ -58,7 +58,7 @@ export default function ShowData() {
                                             <div className="absolute left-0 inset-0 bg-[rgba(0,0,0,0.5)] opacity-0 group-hover:opacity-100 flex flex-col justify-end text-white p-4 transition-opacity duration-300 rounded-lg">
                                                 <div className="flex flex-col gap-4">
                                                     <div className="flex flex-col gap-1">
-                                                        <p className="text-sm font-medium">{new Date(photo?.dateInput).toLocaleDateString()}</p>
+                                                        <p className="text-sm font-medium">{new Date(photo?.dateInput).toLocaleDateString('en-GB')}</p>
                                                         <p className="text-sm font-medium mt-1">{photo?.information}</p>
                                                     </div>
                                                     <div className="flex gap-[10px] justify-end">
