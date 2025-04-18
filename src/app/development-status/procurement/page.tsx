@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useProductFilter } from "@/context/ProductFilterContext";
-import { fetchFilteredProcurement, Progress, StatusProc, fetchAllProcurements } from "@/store/slice/procurement/getAllSlice";
+import { fetchFilteredProcurement, Progress, StatusProc, fetchAllProcurements, fetchSummaryProcurement } from "@/store/slice/procurement/getAllSlice";
 import { fetchNotificationList } from "@/store/slice/procurement/getNotificationSlice";
 import { deleteProcurement, resetDeleteState } from "@/store/slice/procurement/deleteSlice";
 import { useSnackbar } from "notistack";
@@ -24,13 +24,13 @@ export default function ShowData() {
     const { enqueueSnackbar } = useSnackbar();
 
     /* ------------------- Get All Procurement ------------------- */
-    const [search, setSearch] = useState('');
-    const { filteredProcurements, loading, allProcurements } = useAppSelector(state => state.procurementLists);
 
-    const chartData = getProcurementChartData(allProcurements);
+    const [search, setSearch] = useState('');
+    const { filteredProcurements, loading, allProcurements, summaryProcurements } = useAppSelector(state => state.procurementLists);
 
     useEffect(() => {
         if (!selectedProduct?.id) return;
+        dispatch(fetchSummaryProcurement({productId: selectedProduct?.id}));
         dispatch(fetchAllProcurements({productId: selectedProduct?.id}));
         const delay = setTimeout(() => {
             if (selectedProduct) {
@@ -44,18 +44,28 @@ export default function ShowData() {
         return () => clearTimeout(delay);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [search, selectedProduct?.id]);
+
+    const chartData = getProcurementChartData(summaryProcurements);
+
     /* ------------------- End Get All Procurement ------------------- */
+
 
     /* ------------------- Get Procurement Notification ------------------- */
 
     const { notifications, loadingNotif } = useAppSelector(state => state.notificationLists);
+    const { data, totalPages, currentPage } = notifications;
 
     useEffect(() => {
         if (selectedProduct) {
-            dispatch(fetchNotificationList({ productId: selectedProduct.id }));
+            dispatch(fetchNotificationList({ productId: selectedProduct.id, page: 1 }));
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [selectedProduct?.id]);
+    }, [selectedProduct?.id, dispatch]);
+
+    const handlePageChange = (newPage: number) => {
+        if (!selectedProduct?.id) return;
+        dispatch(fetchNotificationList({ productId: selectedProduct?.id, page: newPage }));
+    };
 
     /* ------------------- End Get Procurement Notification ------------------- */
 
@@ -78,6 +88,7 @@ export default function ShowData() {
                     if (!selectedProduct?.id) return;
                     enqueueSnackbar("You have successfully deleted the data", { variant: "success" });
                     dispatch(resetDeleteState());
+                    dispatch(fetchSummaryProcurement({productId: selectedProduct?.id}));
                     dispatch(fetchAllProcurements({productId: selectedProduct?.id}));
                     dispatch(fetchFilteredProcurement({
                         productId: selectedProduct.id,
@@ -120,60 +131,76 @@ export default function ShowData() {
                 </div>
             </div>
             <div className="mt-5">
-                <div className="grid grid-cols-4 gap-4">
-                    <div className="col-span-3 bg-white p-5 rounded-[10px]">
+                <div className="flex gap-4 w-full">
+                    <div className="flex flex-col justify-between w-3/4 bg-white p-5 rounded-[10px]">
                         <h2 className="font-bold text-sm">Procurement Chart</h2>
-                        <div className="flex justify-center mt-[15px]">
-                            <div className="w-full h-auto">
-                                <BarChart
-                                    title="Procurement Stats"
-                                    data={chartData}
-                                />
-                            </div>
+                        <div className="flex justify-center">
+                            <BarChart
+                                title="Procurement Stats"
+                                data={chartData}
+                            />
                         </div>
                     </div>
-                    <div className="grid grid-rows-[auto_auto] gap-5">
+                    <div className="flex flex-col gap-3 w-1/4">
                         <div className="bg-white p-5 rounded-[10px] flex flex-col max-h-[120px]">
                             <h3 className="text-sm font-bold">Total Procurement</h3>
-                            <p className="mt-5 text-4xl font-bold text-center">{allProcurements.length}</p>
+                            <p className="mt-5 text-4xl font-bold text-center">{allProcurements}</p>
                         </div>
                         <div className="bg-white p-5 rounded-[10px]">
                             <h3 className="font-bold text-sm">Timeline Notification</h3>
-                            <div className="space-y-2 mt-5">
-                                {loadingNotif ? (
-                                    <div className="flex items-center gap-[10px] p-2 bg-white rounded-[10px] border border-[#F5F5F5]">
-                                        <p className="text-xs font-normal">Loading...</p>
+                            <div className="flex flex-col gap-2 mt-5 relative">
+                                {loadingNotif && (
+                                    <div className="absolute inset-0 flex items-center justify-center bg-white/60 z-10 rounded-[10px]">
+                                        <p className="text-xs text-gray-500">Loading...</p>
                                     </div>
-                                ) : (
-                                    <>
-                                        {notifications.length > 0 ? (
-                                            <>
-                                                {notifications.map((notif) => (
-                                                    <div key={notif.id} className="flex items-center gap-[10px] p-2 bg-white rounded-[10px] border border-[#F5F5F5]">
-                                                        <div className="flex justify-center bg-[#FEF2F3] h-[40px] w-[40px] rounded-[10px]">
-                                                                <Image src="/images/icon/calendar-1.svg" alt="Date Icon" width={18} height={20} />
-                                                        </div>
-                                                        <div className="flex flex-col gap-y-1">
-                                                            <p className="font-bold text-xs">{notif.prNumber}</p>
-                                                            <p className="text-xs text-gray-500">Due Date: {new Date(notif?.etaTarget).toLocaleDateString('en-GB')}</p>
-                                                        </div>
-                                                    </div>
-                                                ))}
-                                                {Array.from({ length: 4 - notifications.length }).map((_, i) => (
-                                                    <div key={`placeholder-${i}`} className="h-[58px] rounded-[10px] border border-[#F5F5F5] bg-[#FAFAFA]"/>
-                                                ))}
-                                            </>
-                                            ) : (
-                                            <>
-                                                <p className="text-sm font-normal">No data found</p>
-                                                {Array.from({ length: 4 }).map((_, i) => (
-                                                    <div key={`placeholder-${i}`} className="h-[58px] rounded-[10px] border border-[#F5F5F5] bg-[#FAFAFA]" />
-                                                ))}
-                                            </>
-                                            )}
-
-                                    </>
                                 )}
+
+                                <div className={`flex flex-col gap-2 transition-opacity duration-300 ${loadingNotif ? "opacity-50" : "opacity-100"}`}>
+                                    {data.length > 0 ? (
+                                    <>
+                                        {data.map((notif) => (
+                                            <div key={notif.id} className="flex items-center gap-[10px] p-2 bg-white rounded-[10px] border border-[#F5F5F5]">
+                                                <div className="flex justify-center bg-[#FEF2F3] h-[40px] w-[40px] rounded-[10px]">
+                                                    <Image src="/images/icon/calendar-1.svg" alt="Date Icon" width={18} height={20} />
+                                                </div>
+                                                <div className="flex flex-col gap-y-1">
+                                                    <p className="font-bold text-xs">{notif.prNumber}</p>
+                                                    <p className="text-xs text-gray-500">
+                                                        Due Date: {new Date(notif?.etaTarget).toLocaleDateString("en-GB")}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                        {Array.from({ length: 4 - data.length }).map((_, i) => (
+                                            <div key={`placeholder-${i}`} className="h-[58px] rounded-[10px] border border-[#F5F5F5] bg-[#FAFAFA]"/>
+                                        ))}
+                                    </>
+                                    ) : (
+                                    <>
+                                        {Array.from({ length: 4 }).map((_, i) => (
+                                        <div key={`placeholder-${i}`} className="h-[58px] rounded-[10px] border border-[#F5F5F5] bg-[#FAFAFA]" />
+                                        ))}
+                                    </>
+                                    )}
+                                </div>
+
+                                <div className="flex justify-between items-center mt-3">
+                                    <button
+                                        disabled={currentPage === 1}
+                                        onClick={() => handlePageChange(currentPage > 1 ? currentPage - 1 : 1)}
+                                        className="text-sm font-medium px-3 py-1 bg-[#FEF2F3] text-[#EB575F] rounded disabled:opacity-50 cursor-pointer"
+                                    >
+                                        Prev
+                                    </button>
+                                    <span className="text-sm font-medium ">{`Page ${currentPage} of ${totalPages}`}</span>
+                                    <button
+                                        onClick={() => handlePageChange(currentPage < totalPages ? currentPage + 1 : totalPages)}
+                                        disabled={currentPage === totalPages}
+                                        className="text-sm font-medium  px-3 py-1 bg-[#FEF2F3] text-[#EB575F] rounded disabled:opacity-50 cursor-pointer"
+                                    >
+                                        Next
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -219,31 +246,27 @@ export default function ShowData() {
                                                     <td className="py-5 px-4 ">{proc.poNumber}</td>
                                                     <td className="py-5 px-4 ">{new Date(proc?.etaTarget).toLocaleDateString('en-GB')}</td>
                                                     <td className="py-5 px-4">
-                                                        <div className="flex justify-center">
-                                                            <p
-                                                                className={`
-                                                                    p-2 rounded-[5px] 
-                                                                    ${(proc?.progress || '') === Progress.PRApproved ? 'text-[#1B5E20] bg-[#E1F3E4]' : ''}
-                                                                    ${(proc?.progress || '') === Progress.POConfirmed? 'text-[#6A1B9A] bg-[#EFE7F6]' : ''}
-                                                                    ${(proc?.progress || '') === Progress.Paid? 'text-[#0D47A1] bg-[#E3EBFA]' : ''}
-                                                                    ${(proc?.progress || '') === Progress.Delivered? 'text-[#424242] bg-[#EEEEEE]' : ''}
-                                                                `}
-                                                            >
-                                                                {formatProgress(proc.progress)}
-                                                            </p>
+                                                        <div 
+                                                            className={`
+                                                                    p-2 rounded-[5px] flex justify-center
+                                                                    ${(proc?.progress || '') === Progress.PRApproved ? 'text-[#3e9c9c] bg-[#DBF2F2]' : ''}
+                                                                    ${(proc?.progress || '') === Progress.POConfirmed? 'text-[#059BFF] bg-[#CDEBFF]' : ''}
+                                                                    ${(proc?.progress || '') === Progress.Paid? 'text-[#9966FF] bg-[#EBE0FF]' : ''}
+                                                                    ${(proc?.progress || '') === Progress.Delivered? 'text-[#7a7b7d] bg-[#F4F5F5]' : ''}
+                                                            `}
+                                                        >
+                                                            <p> {formatProgress(proc.progress)} </p>
                                                         </div>
                                                     </td>
                                                     <td className="py-5 px-4">
-                                                        <div className="flex justify-center">
-                                                            <p
-                                                                className={`
-                                                                    p-2 rounded-[5px] 
-                                                                    ${proc.statusProc === StatusProc.Overdue ? 'text-[#EB575F] bg-[#FEF2F3]' : ''}
-                                                                    ${proc.statusProc === StatusProc.OnProgress ? 'text-[#ae8c02] bg-[#FFF9C4]' : ''}
-                                                                `}
-                                                            >
-                                                                {proc.statusProc.replace(/(?:^|\s)\S/g, (match) => match.toUpperCase())}
-                                                            </p>
+                                                        <div
+                                                            className={`
+                                                                p-2 rounded-[5px] flex justify-center
+                                                                ${proc.statusProc === StatusProc.Overdue ? 'text-[#EB575F] bg-[#FEF2F3]' : ''}
+                                                                ${proc.statusProc === StatusProc.OnProgress ? 'text-[#ae8c02] bg-[#FFF9C4]' : ''}
+                                                            `}
+                                                        >
+                                                            <p>{proc.statusProc.replace(/(?:^|\s)\S/g, (match) => match.toUpperCase())}</p>
                                                         </div>
                                                     </td>
                                                     <td className="py-5 px-4">
