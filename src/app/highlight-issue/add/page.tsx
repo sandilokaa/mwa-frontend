@@ -6,7 +6,7 @@ import InputForm from "@/components/common/input/InputForm";
 import TextAreaForm from "@/components/common/input/TextAreaForm";
 import DateInputForm from "@/components/common/input/DateInputFrom";
 import SubmitButton from "@/components/common/button/SubmitButton";
-import Dropdown from "@/components/common/dropdown/DropdownForm";
+import Dropdown from "@/components/common/dropdown/DropdownString";
 
 export default function AddData() {
 
@@ -67,6 +67,7 @@ export default function AddData() {
                     </div>
                     <div className="flex justify-end">
                         <SubmitButton
+                            onClick={() => ""}
                             buttonText="Add Highlight Issue"
                         />
                     </div>

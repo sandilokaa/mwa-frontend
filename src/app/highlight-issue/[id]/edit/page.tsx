@@ -6,7 +6,7 @@ import InputForm from "@/components/common/input/InputForm";
 import TextAreaForm from "@/components/common/input/TextAreaForm";
 import DateInputForm from "@/components/common/input/DateInputFrom";
 import SubmitButton from "@/components/common/button/SubmitButton";
-import Dropdown from "@/components/common/dropdown/DropdownForm";
+import Dropdown from "@/components/common/dropdown/DropdownString";
 
 export default function EditData() {
     return (
