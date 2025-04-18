@@ -11,6 +11,8 @@ import procGetAllReducer from "./slice/procurement/getAllSlice";
 import procNotifReducer from "./slice/procurement/getNotificationSlice";
 import procDetailReducer from "./slice/procurement/getDetailSlice";
 import procDeleteReducer from "./slice/procurement/deleteSlice";
+import procCreateReducer from "./slice/procurement/createSlice";
+import procUpdateReducer from "./slice/procurement/updateSlice";
 
 const makeStore = () =>
     configureStore({
@@ -21,7 +23,9 @@ const makeStore = () =>
             procurementLists: procGetAllReducer,
             notificationLists: procNotifReducer,
             procurementDetail: procDetailReducer,
-            deleteProcurement: procDeleteReducer
+            deleteProcurement: procDeleteReducer,
+            createProcurement: procCreateReducer,
+            updateProcurement: procUpdateReducer
         },
     });
 
