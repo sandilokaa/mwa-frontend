@@ -53,5 +53,5 @@ export default function BarChart({ data, title }: BarChartProps) {
         },
     };
 
-    return <Bar data={chartData} options={options} />;
+    return <Bar data={chartData} options={options} height={170}/>;
 }
