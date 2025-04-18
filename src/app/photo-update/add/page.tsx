@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import TextAreaForm from "@/components/common/input/TextAreaForm";
 import SubmitButton from "@/components/common/button/SubmitButton";
-import Dropdown from "@/components/common/dropdown/DropdownForm";
+import Dropdown from "@/components/common/dropdown/DropdownString";
 import DateInputForm from "@/components/common/input/DateInputFrom";
 import FileInputForm from "@/components/common/input/FileInputForm";
 
