@@ -35,7 +35,7 @@ export default function DetailData() {
                 <div className="bg-white w-full rounded-[10px] p-5 col-span-3">
                     <div className="flex justify-between">
                         <p className="text-sm font-bold">Procurement Information</p>
-                        <Link className="cursor-pointer" href="/development-status/procurement/:id/edit">
+                        <Link className="cursor-pointer" href={`/development-status/procurement/${id}/edit`}>
                             <Image className="cursor-pointer" src="/images/icon/edit.svg" alt="Edit Icon" width={22} height={22}/>
                         </Link>
                     </div>
@@ -91,10 +91,10 @@ export default function DetailData() {
                             <p
                                 className={`
                                     text-sm font-medium inline-block py-[10px] px-4 rounded-[5px]
-                                    ${(procurementDetail?.progress || '') === Progress.PRApproved ? 'text-[#1B5E20] bg-[#E1F3E4]' : ''}
-                                    ${(procurementDetail?.progress || '') === Progress.POConfirmed? 'text-[#6A1B9A] bg-[#EFE7F6]' : ''}
-                                    ${(procurementDetail?.progress || '') === Progress.Paid? 'text-[#0D47A1] bg-[#E3EBFA]' : ''}
-                                    ${(procurementDetail?.progress || '') === Progress.Delivered? 'text-[#424242] bg-[#EEEEEE]' : ''}
+                                    ${(procurementDetail?.progress || '') === Progress.PRApproved ? 'text-[#3e9c9c] bg-[#DBF2F2]' : ''}
+                                    ${(procurementDetail?.progress || '') === Progress.POConfirmed? 'text-[#059BFF] bg-[#CDEBFF]' : ''}
+                                    ${(procurementDetail?.progress || '') === Progress.Paid? 'text-[#9966FF] bg-[#EBE0FF]' : ''}
+                                    ${(procurementDetail?.progress || '') === Progress.Delivered? 'text-[#7a7b7d] bg-[#F4F5F5]' : ''}
                                 `}
                             >
                                 {formatProgress(procurementDetail?.progress)}
