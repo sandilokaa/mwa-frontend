@@ -29,9 +29,9 @@ interface Procurement {
     productId: number;
     itemName: string;
     prNumber: string;
-    etaTarget: Date;
+    etaTarget: string;
     poNumber: string;
-    submissionDate: Date;
+    submissionDate: string;
     progress: Progress;
     statusProc: StatusProc;
     quantity: string;

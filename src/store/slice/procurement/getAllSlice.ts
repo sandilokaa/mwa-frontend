@@ -16,7 +16,18 @@ export const fetchAllProcurements = createAsyncThunk(
     'procurements/fetchAllProcurements',
     async ({  productId }: { productId: number }) => {
         const response = await axios.get(
-            `http://localhost:8080/api/v1/procurements/search?&productId=${productId}`,
+            `http://localhost:8080/api/v1/procurements/metrics/total?&productId=${productId}`,
+            { withCredentials: true }
+        );
+        return response.data.data.procurement;
+    }
+);
+
+export const fetchSummaryProcurement = createAsyncThunk(
+    'procurements/fetchSummaryProcurement',
+    async ({  productId }: { productId: number }) => {
+        const response = await axios.get(
+            `http://localhost:8080/api/v1/procurements/summary/stat?&productId=${productId}`,
             { withCredentials: true }
         );
         return response.data.data.procurement;
@@ -37,7 +48,8 @@ export enum StatusProc {
 
 interface ProcurementState {
     filteredProcurements: { id: number, productId: number, itemName: string, prNumber: string, etaTarget: Date, poNumber:string, progress: Progress, statusProc: StatusProc }[];
-    allProcurements: {progress: string}[];
+    allProcurements: [];
+    summaryProcurements: {progress: string, count: number}[];
     loading: boolean;
     error: string | null;
 }
@@ -45,6 +57,7 @@ interface ProcurementState {
 const initialState: ProcurementState = {
     filteredProcurements: [],
     allProcurements: [],
+    summaryProcurements: [],
     loading: false,
     error: null,
 };
@@ -55,6 +68,17 @@ const procurementSlice = createSlice({
     reducers: {},
     extraReducers: builder => {
         builder
+            .addCase(fetchSummaryProcurement.pending, state => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(fetchSummaryProcurement.fulfilled, (state, action) => {
+                state.summaryProcurements = action.payload;
+            })
+            .addCase(fetchSummaryProcurement.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message || 'Failed to fetch summary procurement';
+            })
             .addCase(fetchFilteredProcurement.pending, state => {
                 state.loading = true;
                 state.error = null;

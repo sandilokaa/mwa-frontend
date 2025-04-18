@@ -12,7 +12,7 @@ export const fetchProducts = createAsyncThunk('products/fetchProducts', async ()
 });
 
 interface ProductState {
-    products: { id: number, name: string, picture: string }[];
+    products: { id: number, name: string }[];
     loading: boolean;
     error: string | null;
 }
