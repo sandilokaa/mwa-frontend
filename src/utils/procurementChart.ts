@@ -7,7 +7,7 @@ const progressMeta: Record<ProgressKey, { label: string; color: string; borderCo
     'delivered': { label: 'Delivered', color: '#F4F5F5', borderColor: '#C9CBCF' },
 };
 
-export function getProcurementChartData(allProcurements: { progress: string }[]) {
+export function getProcurementChartData(allProcurements: { progress: string, count: number }[]) {
     const countMap: Record<ProgressKey, number> = {
         'pr approved': 0,
         'po confirmed': 0,
@@ -18,7 +18,7 @@ export function getProcurementChartData(allProcurements: { progress: string }[])
     allProcurements.forEach(p => {
         const key = p.progress.toLowerCase() as ProgressKey;
         if (key in countMap) {
-            countMap[key]++;
+            countMap[key] += p.count;
         }
     });
 
