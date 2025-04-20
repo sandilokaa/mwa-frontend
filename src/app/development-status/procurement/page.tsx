@@ -17,6 +17,7 @@ import ConfirmDialog from "@/components/common/modal/ConfirmDialog";
 import BarChart from "@/components/common/chart/BarChart";
 import { getProcurementChartData } from "@/utils/procurementChart";
 import TablePagination from "@/components/common/pagination/TablePagination";
+import NotifPagination from "@/components/common/pagination/NotifPagination";
 
 export default function ShowData() {
 
@@ -200,23 +201,11 @@ export default function ShowData() {
                                     </>
                                     )}
                                 </div>
-                                <div className="flex justify-between items-center mt-3">
-                                    <button
-                                        disabled={currentPage === 1}
-                                        onClick={() => handlePageChange(currentPage > 1 ? currentPage - 1 : 1)}
-                                        className="text-sm font-medium px-3 py-1 bg-[#FEF2F3] text-[#EB575F] rounded disabled:opacity-50 cursor-pointer"
-                                    >
-                                        Prev
-                                    </button>
-                                    <span className="text-sm font-medium ">{`Page ${currentPage} of ${totalPages}`}</span>
-                                    <button
-                                        onClick={() => handlePageChange(currentPage < totalPages ? currentPage + 1 : totalPages)}
-                                        disabled={currentPage === totalPages}
-                                        className="text-sm font-medium  px-3 py-1 bg-[#FEF2F3] text-[#EB575F] rounded disabled:opacity-50 cursor-pointer"
-                                    >
-                                        Next
-                                    </button>
-                                </div>
+                                <NotifPagination
+                                    currentPage={currentPage}
+                                    totalPages={totalPages}
+                                    onPageChange={handlePageChange}
+                                />
                             </div>
                         </div>
                     </div>
