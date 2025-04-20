@@ -3,9 +3,9 @@ import axios from 'axios';
 
 export const fetchFilteredProcurement = createAsyncThunk(
     'procurements/fetchFilteredProcurement',
-    async ({  productId, prNumber }: { productId: number, prNumber: string }) => {
+    async ({  productId, prNumber, page }: { productId: number, prNumber: string, page: number }) => {
         const response = await axios.get(
-            `http://localhost:8080/api/v1/procurements/search?&productId=${productId}&prNumber=${prNumber}`,
+            `http://localhost:8080/api/v1/procurements/search?&productId=${productId}&prNumber=${prNumber}&page=${page}`,
             { withCredentials: true }
         );
         return response.data.data.procurement;
@@ -46,8 +46,26 @@ export enum StatusProc {
     OnProgress = 'on progress'
 }
 
+interface Procurement {
+    id: number, 
+    productId: number, 
+    itemName: string, 
+    prNumber: string, 
+    etaTarget: Date, 
+    poNumber:string, 
+    progress: Progress, 
+    statusProc: StatusProc 
+}
+
+interface PaginatedProcurementData {
+    procurementDataFiltered: Procurement[];
+    totalProc: number;
+    currentPagesProc: number;
+    totalPagesProc: number;
+}
+
 interface ProcurementState {
-    filteredProcurements: { id: number, productId: number, itemName: string, prNumber: string, etaTarget: Date, poNumber:string, progress: Progress, statusProc: StatusProc }[];
+    filteredProcurements: PaginatedProcurementData;
     allProcurements: [];
     summaryProcurements: {progress: string, count: number}[];
     loading: boolean;
@@ -55,7 +73,12 @@ interface ProcurementState {
 }
 
 const initialState: ProcurementState = {
-    filteredProcurements: [],
+    filteredProcurements: {
+        procurementDataFiltered: [],
+        totalProc: 0,
+        currentPagesProc: 1,
+        totalPagesProc: 1,
+    },
     allProcurements: [],
     summaryProcurements: [],
     loading: false,

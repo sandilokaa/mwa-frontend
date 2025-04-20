@@ -26,7 +26,7 @@ export default function ShowData() {
     /* ------------------- Get All Procurement ------------------- */
 
     const [search, setSearch] = useState('');
-    const { filteredProcurements, loading, allProcurements, summaryProcurements } = useAppSelector(state => state.procurementLists);
+    const { filteredProcurements: { procurementDataFiltered, currentPagesProc, totalPagesProc }, loading, allProcurements, summaryProcurements } = useAppSelector(state => state.procurementLists);
 
     useEffect(() => {
         if (!selectedProduct?.id) return;
@@ -36,7 +36,8 @@ export default function ShowData() {
             if (selectedProduct) {
                 dispatch(fetchFilteredProcurement({
                     productId: selectedProduct.id,
-                    prNumber: search
+                    prNumber: search,
+                    page: 1
                 }));
             }
         }, 500);
@@ -46,6 +47,15 @@ export default function ShowData() {
     }, [search, selectedProduct?.id]);
 
     const chartData = getProcurementChartData(summaryProcurements);
+
+    const handlePageProcChange = (newPage: number) => {
+        if (!selectedProduct?.id) return;
+        dispatch(fetchFilteredProcurement({
+            productId: selectedProduct.id,
+            prNumber: search,
+            page: newPage
+        }));
+    };
 
     /* ------------------- End Get All Procurement ------------------- */
 
@@ -92,7 +102,8 @@ export default function ShowData() {
                     dispatch(fetchAllProcurements({productId: selectedProduct?.id}));
                     dispatch(fetchFilteredProcurement({
                         productId: selectedProduct.id,
-                        prNumber: search
+                        prNumber: search,
+                        page: 1
                     }));
                 })
                 .catch(() => {
@@ -104,6 +115,11 @@ export default function ShowData() {
     };
 
     /* ------------------- End Delete Procurement ------------------- */
+
+
+    /* ------------------- Modal Progress Procurement ------------------- */
+
+    /* ------------------- End Modal Progress Procurement ------------------- */
 
     return (
         <div>
@@ -183,7 +199,6 @@ export default function ShowData() {
                                     </>
                                     )}
                                 </div>
-
                                 <div className="flex justify-between items-center mt-3">
                                     <button
                                         disabled={currentPage === 1}
@@ -230,13 +245,15 @@ export default function ShowData() {
                                 </tr>
                             ) : (
                                 <>
-                                    {filteredProcurements.length > 0 ? (
-                                        filteredProcurements.map((proc, index) => {
+                                    {procurementDataFiltered.length > 0 ? (
+                                        procurementDataFiltered.map((proc, index) => {
                                             const colStyle = {
                                                 backgroundColor: index % 2 === 0 ? '#FFFFFF' : '#FAFAFA'
                                             };
 
-                                            const displayIndex = (index + 1).toString().padStart(2, '0');
+                                            const limit = 5;
+
+                                            const displayIndex = ((currentPagesProc - 1) * limit + index + 1).toString().padStart(2, '0');
 
                                             return (
                                                 <tr className="text-sm font-medium text-center" key={proc.id} style={colStyle}>
@@ -245,20 +262,27 @@ export default function ShowData() {
                                                     <td className="py-5 px-4">{proc.prNumber}</td>
                                                     <td className="py-5 px-4 ">{proc.poNumber}</td>
                                                     <td className="py-5 px-4 ">{new Date(proc?.etaTarget).toLocaleDateString('en-GB')}</td>
-                                                    <td className="py-5 px-4">
-                                                        <div 
-                                                            className={`
-                                                                    p-2 rounded-[5px] flex justify-center
-                                                                    ${(proc?.progress || '') === Progress.PRApproved ? 'text-[#3e9c9c] bg-[#DBF2F2]' : ''}
-                                                                    ${(proc?.progress || '') === Progress.POConfirmed? 'text-[#059BFF] bg-[#CDEBFF]' : ''}
-                                                                    ${(proc?.progress || '') === Progress.Paid? 'text-[#9966FF] bg-[#EBE0FF]' : ''}
-                                                                    ${(proc?.progress || '') === Progress.Delivered? 'text-[#7a7b7d] bg-[#F4F5F5]' : ''}
-                                                            `}
-                                                        >
-                                                            <p> {formatProgress(proc.progress)} </p>
+                                                    <td className="py-5 px-4 text-xs">
+                                                        <div className="flex justify-between gap-1">
+                                                            <div 
+                                                                className={`
+                                                                        p-2 rounded-[5px] flex justify-center w-full
+                                                                        ${(proc?.progress || '') === Progress.PRApproved ? 'text-[#3e9c9c] bg-[#DBF2F2]' : ''}
+                                                                        ${(proc?.progress || '') === Progress.POConfirmed? 'text-[#059BFF] bg-[#CDEBFF]' : ''}
+                                                                        ${(proc?.progress || '') === Progress.Paid? 'text-[#9966FF] bg-[#EBE0FF]' : ''}
+                                                                        ${(proc?.progress || '') === Progress.Delivered? 'text-[#7a7b7d] bg-[#F4F5F5]' : ''}
+                                                                `}
+                                                            >
+                                                                <p> {formatProgress(proc.progress)} </p>
+                                                            </div>
+                                                            <div
+                                                                className="flex justify-center items-center cursor-pointer"
+                                                            >
+                                                                <Image src="/images/icon/menu.svg" alt="Menu Icon" width={15} height={15}/>
+                                                            </div>
                                                         </div>
                                                     </td>
-                                                    <td className="py-5 px-4">
+                                                    <td className="py-5 px-4 text-xs">
                                                         <div
                                                             className={`
                                                                 p-2 rounded-[5px] flex justify-center
@@ -266,7 +290,7 @@ export default function ShowData() {
                                                                 ${proc.statusProc === StatusProc.OnProgress ? 'text-[#ae8c02] bg-[#FFF9C4]' : ''}
                                                             `}
                                                         >
-                                                            <p>{proc.statusProc.replace(/(?:^|\s)\S/g, (match) => match.toUpperCase())}</p>
+                                                            <p>{proc.statusProc.replace(/(?:^|\s)\S/g, (match: string) => match.toUpperCase())}</p>
                                                         </div>
                                                     </td>
                                                     <td className="py-5 px-4">
@@ -304,6 +328,38 @@ export default function ShowData() {
                             )}
                         </tbody>
                     </table>
+                    <div className="flex justify-center items-center gap-2 mt-3">
+                        {Array.from({ length: totalPagesProc }).map((_, index) => {
+                            const page = index + 1;
+                            const isActive = currentPagesProc === page;
+
+                            const shouldRender =
+                            page === 1 ||
+                            page === totalPagesProc ||
+                            (page >= currentPagesProc - 1 && page <= currentPagesProc + 1);
+
+                            if (
+                                (page === 2 && currentPagesProc > 4) ||
+                                (page === totalPagesProc - 1 && currentPagesProc < totalPagesProc - 3)
+                            ) {
+                                return <span key={page}>...</span>;
+                            }
+
+                            return (
+                                shouldRender && (
+                                    <button
+                                        key={page}
+                                        onClick={() => handlePageProcChange(page)}
+                                        className={`text-sm font-medium px-3 py-1 rounded cursor-pointer ${
+                                            isActive ? 'bg-[#EB575F] text-white' : 'bg-[#FEF2F3] text-[#EB575F]'
+                                        }`}
+                                    >
+                                        {page}
+                                    </button>
+                                )
+                            );
+                        })}
+                    </div>
                 </div>
             </div>
         </div>
