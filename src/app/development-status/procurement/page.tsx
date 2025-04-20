@@ -16,6 +16,7 @@ import { formatProgress } from "@/utils/formatProgress";
 import ConfirmDialog from "@/components/common/modal/ConfirmDialog";
 import BarChart from "@/components/common/chart/BarChart";
 import { getProcurementChartData } from "@/utils/procurementChart";
+import TablePagination from "@/components/common/pagination/TablePagination";
 
 export default function ShowData() {
 
@@ -328,38 +329,11 @@ export default function ShowData() {
                             )}
                         </tbody>
                     </table>
-                    <div className="flex justify-center items-center gap-2 mt-3">
-                        {Array.from({ length: totalPagesProc }).map((_, index) => {
-                            const page = index + 1;
-                            const isActive = currentPagesProc === page;
-
-                            const shouldRender =
-                            page === 1 ||
-                            page === totalPagesProc ||
-                            (page >= currentPagesProc - 1 && page <= currentPagesProc + 1);
-
-                            if (
-                                (page === 2 && currentPagesProc > 4) ||
-                                (page === totalPagesProc - 1 && currentPagesProc < totalPagesProc - 3)
-                            ) {
-                                return <span key={page}>...</span>;
-                            }
-
-                            return (
-                                shouldRender && (
-                                    <button
-                                        key={page}
-                                        onClick={() => handlePageProcChange(page)}
-                                        className={`text-sm font-medium px-3 py-1 rounded cursor-pointer ${
-                                            isActive ? 'bg-[#EB575F] text-white' : 'bg-[#FEF2F3] text-[#EB575F]'
-                                        }`}
-                                    >
-                                        {page}
-                                    </button>
-                                )
-                            );
-                        })}
-                    </div>
+                    <TablePagination
+                        currentPage={currentPagesProc}
+                        totalPages={totalPagesProc}
+                        onPageChange={handlePageProcChange}
+                    />
                 </div>
             </div>
         </div>
