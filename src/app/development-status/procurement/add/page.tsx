@@ -30,10 +30,23 @@ export default function AddData() {
     const selectedProductIdRef = useRef<number>(0);
 
     const handleSubmit = () => {
+
+        const isEmpty = 
+            !selectedProductIdRef.current || 
+            !itemNameRef.current?.value?.trim() ||
+            !prNumberRef.current?.value?.trim() ||
+            !poNumberRef.current?.value?.trim() ||
+            !vendorRef.current?.value?.trim() ||
+            !quantityRef.current?.value?.trim() ||
+            !submissionDateRef.current?.value?.trim() ||
+            !etaTargetRef.current?.value?.trim();
+
+        if (isEmpty) {
+            enqueueSnackbar("All fields are required", { variant: "error" });
+            return;
+        }
+
         try {
-            if (selectedProductIdRef.current === null) {
-                throw new Error("Product ID is required");
-            }
     
             const payload = {
                 productId: selectedProductIdRef.current,

@@ -8,6 +8,7 @@ import { useProductFilter } from "@/context/ProductFilterContext";
 import { fetchFilteredProcurement, Progress, StatusProc, fetchAllProcurements, fetchSummaryProcurement } from "@/store/slice/procurement/getAllSlice";
 import { fetchNotificationList } from "@/store/slice/procurement/getNotificationSlice";
 import { deleteProcurement, resetDeleteState } from "@/store/slice/procurement/deleteSlice";
+import { updateProgressProcData, resetUpdatedProgressProcurement } from "@/store/slice/procurement/progressUpdateSlice";
 import { useSnackbar } from "notistack";
 
 import AddButton from "@/components/common/button/AddButton";
@@ -18,6 +19,7 @@ import BarChart from "@/components/common/chart/BarChart";
 import { getProcurementChartData } from "@/utils/procurementChart";
 import TablePagination from "@/components/common/pagination/TablePagination";
 import NotifPagination from "@/components/common/pagination/NotifPagination";
+import ProgressMenu from "@/components/common/modal/ProgressMenu";
 
 export default function ShowData() {
 
@@ -120,6 +122,37 @@ export default function ShowData() {
 
 
     /* ------------------- Modal Progress Procurement ------------------- */
+
+    const [selectedProgress, setSelectedProgress] = useState<string>('');
+    const [showProgressMenuId, setShowProgressMenuId] = useState<number | null>(null);
+
+    const toggleProgress = (value: string) => {
+        setSelectedProgress(value)
+    };
+
+    const handleUpdateProgress = (id: number) => {
+        if (!selectedProduct?.id || !selectedProgress) return;
+    
+        dispatch(updateProgressProcData({ id, progress: selectedProgress.toLowerCase() }))
+            .unwrap()
+            .then(() => {
+                enqueueSnackbar("Progress updated successfully", { variant: "success" });
+                dispatch(resetUpdatedProgressProcurement());
+                dispatch(fetchSummaryProcurement({productId: selectedProduct?.id}));
+                dispatch(fetchAllProcurements({productId: selectedProduct?.id}));
+                dispatch(fetchFilteredProcurement({
+                    productId: selectedProduct.id,
+                    prNumber: search,
+                    page: 1
+                }));
+            })
+            .catch(() => {
+                enqueueSnackbar("Failed to update progress", { variant: "error" });
+                dispatch(resetUpdatedProgressProcurement());
+            });
+    
+        setShowProgressMenuId(null);
+    }
 
     /* ------------------- End Modal Progress Procurement ------------------- */
 
@@ -252,7 +285,7 @@ export default function ShowData() {
                                                     <td className="py-5 px-4">{proc.prNumber}</td>
                                                     <td className="py-5 px-4 ">{proc.poNumber}</td>
                                                     <td className="py-5 px-4 ">{new Date(proc?.etaTarget).toLocaleDateString('en-GB')}</td>
-                                                    <td className="py-5 px-4 text-xs">
+                                                    <td className="py-5 px-4 text-xs relative">
                                                         <div className="flex justify-between gap-1">
                                                             <div 
                                                                 className={`
@@ -266,11 +299,28 @@ export default function ShowData() {
                                                                 <p> {formatProgress(proc.progress)} </p>
                                                             </div>
                                                             <div
+                                                                onClick={() => {
+                                                                    setShowProgressMenuId(prevId => {
+                                                                        const newId = prevId === proc.id ? null : proc.id;
+                                                                        if (newId !== null) {
+                                                                            setSelectedProgress(proc.progress);
+                                                                        }
+                                                                        return newId;
+                                                                    });
+                                                                }}
                                                                 className="flex justify-center items-center cursor-pointer"
                                                             >
                                                                 <Image src="/images/icon/menu.svg" alt="Menu Icon" width={15} height={15}/>
                                                             </div>
                                                         </div>
+                                                        {showProgressMenuId === proc.id && (
+                                                            <ProgressMenu
+                                                                selectedProgress={selectedProgress}
+                                                                onToggle={toggleProgress}
+                                                                onSave={() => handleUpdateProgress(proc.id)}
+                                                                onClose={() => setShowProgressMenuId(null)}
+                                                            />
+                                                        )}
                                                     </td>
                                                     <td className="py-5 px-4 text-xs">
                                                         <div
