@@ -52,6 +52,7 @@ export default function AddData() {
                     </div>
                     <div className="flex justify-end">
                         <SubmitButton
+                            onClick={() => ""}
                             buttonText="Add Photo Update"
                         />
                     </div>
