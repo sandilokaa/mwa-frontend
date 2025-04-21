@@ -10,6 +10,7 @@ import { fetchNotificationList } from "@/store/slice/procurement/getNotification
 import { deleteProcurement, resetDeleteState } from "@/store/slice/procurement/deleteSlice";
 import { updateProgressProcData, resetUpdatedProgressProcurement } from "@/store/slice/procurement/progressUpdateSlice";
 import { useSnackbar } from "notistack";
+import { refetchProcurements } from "@/utils/refetchProcurements";
 
 import AddButton from "@/components/common/button/AddButton";
 import SearchInput from "@/components/common/input/SearchInput";
@@ -102,13 +103,7 @@ export default function ShowData() {
                     if (!selectedProduct?.id) return;
                     enqueueSnackbar("You have successfully deleted the data", { variant: "success" });
                     dispatch(resetDeleteState());
-                    dispatch(fetchSummaryProcurement({productId: selectedProduct?.id}));
-                    dispatch(fetchAllProcurements({productId: selectedProduct?.id}));
-                    dispatch(fetchFilteredProcurement({
-                        productId: selectedProduct.id,
-                        prNumber: search,
-                        page: 1
-                    }));
+                    refetchProcurements(dispatch, selectedProduct.id, search);
                 })
                 .catch(() => {
                     enqueueSnackbar("You failed to delete data", { variant: "error" });
@@ -138,13 +133,7 @@ export default function ShowData() {
             .then(() => {
                 enqueueSnackbar("Progress updated successfully", { variant: "success" });
                 dispatch(resetUpdatedProgressProcurement());
-                dispatch(fetchSummaryProcurement({productId: selectedProduct?.id}));
-                dispatch(fetchAllProcurements({productId: selectedProduct?.id}));
-                dispatch(fetchFilteredProcurement({
-                    productId: selectedProduct.id,
-                    prNumber: search,
-                    page: 1
-                }));
+                refetchProcurements(dispatch, selectedProduct.id, search);
             })
             .catch(() => {
                 enqueueSnackbar("Failed to update progress", { variant: "error" });
