@@ -13,6 +13,7 @@ import procDetailReducer from "./slice/procurement/getDetailSlice";
 import procDeleteReducer from "./slice/procurement/deleteSlice";
 import procCreateReducer from "./slice/procurement/createSlice";
 import procUpdateReducer from "./slice/procurement/updateSlice";
+import procUpdateProgressReducer from "./slice/procurement/progressUpdateSlice";
 
 const makeStore = () =>
     configureStore({
@@ -25,7 +26,8 @@ const makeStore = () =>
             procurementDetail: procDetailReducer,
             deleteProcurement: procDeleteReducer,
             createProcurement: procCreateReducer,
-            updateProcurement: procUpdateReducer
+            updateProcurement: procUpdateReducer,
+            updateProgress: procUpdateProgressReducer
         },
     });
 
