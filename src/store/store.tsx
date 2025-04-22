@@ -15,19 +15,28 @@ import procCreateReducer from "./slice/procurement/createSlice";
 import procUpdateReducer from "./slice/procurement/updateSlice";
 import procUpdateProgressReducer from "./slice/procurement/progressUpdateSlice";
 
+import recGetAllReducer from "./slice/recruitment/getAllSlice";
+import recDeleteReducer from "./slice/recruitment/deleteSlice";
+
 const makeStore = () =>
     configureStore({
         reducer: {
             auth: authReducer,
+
             productList: productGetAllReducer,
+
             photoUpdateLists: photoUpdateGetAllReducer,
+
             procurementLists: procGetAllReducer,
-            notificationLists: procNotifReducer,
+            notificationProcLists: procNotifReducer,
             procurementDetail: procDetailReducer,
             deleteProcurement: procDeleteReducer,
             createProcurement: procCreateReducer,
             updateProcurement: procUpdateReducer,
-            updateProgress: procUpdateProgressReducer
+            updateProgress: procUpdateProgressReducer,
+
+            recruitmentList: recGetAllReducer,
+            deleteRecruitment: recDeleteReducer
         },
     });
 
