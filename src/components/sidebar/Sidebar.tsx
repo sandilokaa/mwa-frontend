@@ -44,67 +44,78 @@ const Sidebar = React.memo(function Sidebar() {
                         <MenuItem component={<Link href="/dashboard" prefetch/>} active={pathname === "/dashboard"} icon={<Image src="/images/icon/dashboard.svg" alt="icon" width={20} height={20}/>}>
                             Dashboard
                         </MenuItem>
-                        <MenuItem 
-                            component={<Link href="/project-target" prefetch/>} 
-                            active={pathname.startsWith("/project-target")} 
-                            icon={<Image src="/images/icon/project-target.svg" alt="icon" width={20} height={20}/>}
-                        >
-                            Project Target
-                        </MenuItem>
-                        <SubMenu label="Development Status" icon={<Image src="/images/icon/development-status.svg" alt="icon" width={20} height={20}/>}>
-                            <div className="flex flex-col gap-y-1">
-                                <MenuItem 
-                                    component={<Link href="/development-status/styling-design" prefetch/>} 
-                                    active={pathname.startsWith("/development-status/styling-design")} 
-                                    icon={<Image src="/images/icon/styling-design.svg" alt="icon" width={20} height={20}/>}
-                                >
-                                    Styling Design
-                                </MenuItem>
-                                <MenuItem 
-                                    component={<Link href="/development-status/engineering" prefetch/>} 
-                                    active={pathname.startsWith("/development-status/engineering")} 
-                                    icon={<Image src="/images/icon/design-engineering.svg" alt="icon" width={20} height={20}/>}
-                                >
-                                    Design Engineering
-                                </MenuItem>
-                                <MenuItem 
-                                    component={<Link href="/development-status/production" prefetch/>} 
-                                    active={pathname.startsWith("/development-status/production")} 
-                                    icon={<Image src="/images/icon/production.svg" alt="icon" width={20} height={20}/>}
-                                >
-                                    Production
-                                </MenuItem>
-                                <MenuItem 
-                                    component={<Link href="/development-status/procurement" prefetch/>} 
-                                    active={pathname.startsWith("/development-status/procurement")} 
-                                    icon={<Image src="/images/icon/procurement.svg" alt="icon" width={20} height={20}/>}
-                                >
-                                    Procurement
-                                </MenuItem>
-                            </div>
-                        </SubMenu>
-                        <SubMenu label="Budget Status" icon={<Image src="/images/icon/budget-status.svg" alt="icon" width={20} height={20}/>}>
-                            <MenuItem component={<Link href="#" prefetch/>} active={pathname === "#"} icon={<Image src="/images/icon/dashboard.svg" alt="icon" width={20} height={20}/>}>
-                                Overall Result
+                        <SubMenu label="Project" icon={<Image src="/images/icon/project.svg" alt="icon" width={20} height={20}/>}>
+                            <MenuItem 
+                                component={<Link href="/project-target" prefetch/>} 
+                                active={pathname.startsWith("/project-target")} 
+                                icon={<Image src="/images/icon/project-target.svg" alt="icon" width={20} height={20}/>}
+                            >
+                                Project Target
                             </MenuItem>
-                            <MenuItem component={<Link href="#" prefetch/>} active={pathname === "#"} icon={<Image src="/images/icon/dashboard.svg" alt="icon" width={20} height={20}/>}>
-                                Result Month
+                            <SubMenu label="Development Status" icon={<Image src="/images/icon/development-status.svg" alt="icon" width={20} height={20}/>}>
+                                <div className="flex flex-col gap-y-1">
+                                    <MenuItem 
+                                        component={<Link href="/development-status/styling-design" prefetch/>} 
+                                        active={pathname.startsWith("/development-status/styling-design")} 
+                                        icon={<Image src="/images/icon/styling-design.svg" alt="icon" width={20} height={20}/>}
+                                    >
+                                        Styling Design
+                                    </MenuItem>
+                                    <MenuItem 
+                                        component={<Link href="/development-status/engineering" prefetch/>} 
+                                        active={pathname.startsWith("/development-status/engineering")} 
+                                        icon={<Image src="/images/icon/design-engineering.svg" alt="icon" width={20} height={20}/>}
+                                    >
+                                        Design Engineering
+                                    </MenuItem>
+                                    <MenuItem 
+                                        component={<Link href="/development-status/production" prefetch/>} 
+                                        active={pathname.startsWith("/development-status/production")} 
+                                        icon={<Image src="/images/icon/production.svg" alt="icon" width={20} height={20}/>}
+                                    >
+                                        Production
+                                    </MenuItem>
+                                    <MenuItem 
+                                        component={<Link href="/development-status/procurement" prefetch/>} 
+                                        active={pathname.startsWith("/development-status/procurement")} 
+                                        icon={<Image src="/images/icon/procurement.svg" alt="icon" width={20} height={20}/>}
+                                    >
+                                        Procurement
+                                    </MenuItem>
+                                </div>
+                            </SubMenu>
+                            <SubMenu label="Budget Status" icon={<Image src="/images/icon/budget-status.svg" alt="icon" width={20} height={20}/>}>
+                                <MenuItem component={<Link href="#" prefetch/>} active={pathname === "#"} icon={<Image src="/images/icon/dashboard.svg" alt="icon" width={20} height={20}/>}>
+                                    Overall Result
+                                </MenuItem>
+                                <MenuItem component={<Link href="#" prefetch/>} active={pathname === "#"} icon={<Image src="/images/icon/dashboard.svg" alt="icon" width={20} height={20}/>}>
+                                    Result Month
+                                </MenuItem>
+                            </SubMenu>
+                            <MenuItem 
+                                component={<Link href="/highlight-issue" prefetch/>} 
+                                active={pathname.startsWith("/highlight-issue")}  
+                                icon={<Image src="/images/icon/highlight-issue.svg" alt="icon" width={20} height={20}/>}
+                            >
+                                Highlight Issue
+                            </MenuItem>
+                            <MenuItem 
+                                component={<Link href="/photo-update" prefetch/>} 
+                                active={pathname.startsWith("/photo-update")}
+                                icon={<Image src="/images/icon/photo-update.svg" alt="icon" width={20} height={20}/>}
+                            >
+                                Photo Update
                             </MenuItem>
                         </SubMenu>
-                        <MenuItem 
-                            component={<Link href="/highlight-issue" prefetch/>} 
-                            active={pathname.startsWith("/highlight-issue")}  
-                            icon={<Image src="/images/icon/highlight-issue.svg" alt="icon" width={20} height={20}/>}
-                        >
-                            Highlight Issue
-                        </MenuItem>
-                        <MenuItem 
-                            component={<Link href="/photo-update" prefetch/>} 
-                            active={pathname.startsWith("/photo-update")}
-                            icon={<Image src="/images/icon/photo-update.svg" alt="icon" width={20} height={20}/>}
-                        >
-                            Photo Update
-                        </MenuItem>
+                        <SubMenu label="People" icon={<Image src="/images/icon/people.svg" alt="icon" width={20} height={20}/>}>
+                            <MenuItem 
+                                component={<Link href="/recruitment" prefetch/>} 
+                                active={pathname.startsWith("/recruitment")}
+                                icon={<Image src="/images/icon/recruitment.svg" alt="icon" width={20} height={20}/>}
+                            >
+                                Recruitment
+                            </MenuItem>
+                        </SubMenu>
                     </div>
                 </Menu>
             </ProSidebar>
