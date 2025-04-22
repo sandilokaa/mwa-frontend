@@ -14,7 +14,7 @@ import { refetchProcurements } from "@/utils/refetchProcurements";
 
 import AddButton from "@/components/common/button/AddButton";
 import SearchInput from "@/components/common/input/SearchInput";
-import { formatProgress } from "@/utils/formatProgress";
+import { formatProgressProc } from "@/utils/formatProgress";
 import ConfirmDialog from "@/components/common/modal/ConfirmDialog";
 import BarChart from "@/components/common/chart/BarChart";
 import { getProcurementChartData } from "@/utils/procurementChart";
@@ -67,7 +67,7 @@ export default function ShowData() {
 
     /* ------------------- Get Procurement Notification ------------------- */
 
-    const { notifications, loadingNotif } = useAppSelector(state => state.notificationLists);
+    const { notifications, loadingNotif } = useAppSelector(state => state.notificationProcLists);
     const { data, totalPages, currentPage } = notifications;
 
     useEffect(() => {
@@ -181,7 +181,7 @@ export default function ShowData() {
                             />
                         </div>
                     </div>
-                    <div className="flex flex-col gap-3 w-1/4">
+                    <div className="flex flex-col gap-3 w-1/4 h-full">
                         <div className="bg-white p-5 rounded-[10px] flex flex-col max-h-[120px]">
                             <h3 className="text-sm font-bold">Total Procurement</h3>
                             <p className="mt-5 text-4xl font-bold text-center">{allProcurements}</p>
@@ -285,7 +285,7 @@ export default function ShowData() {
                                                                         ${(proc?.progress || '') === Progress.Delivered? 'text-[#7a7b7d] bg-[#F4F5F5]' : ''}
                                                                 `}
                                                             >
-                                                                <p> {formatProgress(proc.progress)} </p>
+                                                                <p> {formatProgressProc(proc.progress)} </p>
                                                             </div>
                                                             <div
                                                                 onClick={() => {
@@ -317,6 +317,7 @@ export default function ShowData() {
                                                                 p-2 rounded-[5px] flex justify-center
                                                                 ${proc.statusProc === StatusProc.Overdue ? 'text-[#EB575F] bg-[#FEF2F3]' : ''}
                                                                 ${proc.statusProc === StatusProc.OnProgress ? 'text-[#ae8c02] bg-[#FFF9C4]' : ''}
+                                                                ${proc.statusProc === StatusProc.Done ? 'text-[#3e9c9c] bg-[#DBF2F2]' : ''}
                                                             `}
                                                         >
                                                             <p>{proc.statusProc.replace(/(?:^|\s)\S/g, (match: string) => match.toUpperCase())}</p>

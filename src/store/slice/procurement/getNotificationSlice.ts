@@ -41,7 +41,7 @@ const initialState: NotificationState = {
 };
 
 const notificationSlice = createSlice({
-    name: 'notificationLists',
+    name: 'notificationProcLists',
     initialState,
     reducers: {},
     extraReducers: builder => {

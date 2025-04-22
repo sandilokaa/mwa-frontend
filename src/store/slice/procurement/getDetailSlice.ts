@@ -21,7 +21,8 @@ export enum Progress {
 
 export enum StatusProc {
     Overdue = 'overdue',
-    OnProgress = 'on progress'
+    OnProgress = 'on progress',
+    Done = 'done'
 }
 
 interface Procurement {

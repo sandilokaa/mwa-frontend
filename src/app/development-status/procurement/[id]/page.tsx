@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { fetchProcurementDetail, Progress, StatusProc } from "@/store/slice/procurement/getDetailSlice";
-import { formatProgress } from "@/utils/formatProgress";
+import { formatProgressProc } from "@/utils/formatProgress";
 import { formatDate } from "@/utils/formatDate";
 
 export default function DetailData() {
@@ -97,7 +97,7 @@ export default function DetailData() {
                                     ${(procurementDetail?.progress || '') === Progress.Delivered? 'text-[#7a7b7d] bg-[#F4F5F5]' : ''}
                                 `}
                             >
-                                {formatProgress(procurementDetail?.progress)}
+                                {formatProgressProc(procurementDetail?.progress)}
                             </p>
                         </div>
                     </div>
@@ -109,6 +109,7 @@ export default function DetailData() {
                                     text-sm font-medium inline-block py-[10px] px-4 rounded-[5px] 
                                     ${(procurementDetail?.statusProc || '') === StatusProc.Overdue ? 'text-[#EB575F] bg-[#FEF2F3]' : ''}
                                     ${(procurementDetail?.statusProc || '') === StatusProc.OnProgress ? 'text-[#ae8c02] bg-[#FFF9C4]' : ''}
+                                    ${(procurementDetail?.statusProc || '') === StatusProc.Done ? 'text-[#3e9c9c] bg-[#DBF2F2]' : ''}
                                 `}
                             >
                                 {procurementDetail?.statusProc.replace(/(?:^|\s)\S/g, (match) => match.toUpperCase())}
