@@ -264,12 +264,12 @@ export default function ShowData() {
                                                     </td>
                                                     <td className="py-5 px-4">
                                                         <div className="flex gap-[10px] justify-center">
-                                                            <Link href={`/development-status/procurement/${rec.id}`} prefetch>
+                                                            <Link href={`/recruitment/${rec.id}`} prefetch>
                                                                 <div className="p-2 rounded-sm bg-[#2181E8] cursor-pointer">
                                                                     <Image src="/images/icon/eye.svg" alt="view icon" height={16} width={16}/>
                                                                 </div>
                                                             </Link>
-                                                            <Link href={`/development-status/procurement/${rec.id}/edit`} prefetch>
+                                                            <Link href={`/recruitment/${rec.id}/edit`} prefetch>
                                                                 <div className="p-2 rounded-sm bg-[#FDBE1B] cursor-pointer">
                                                                     <Image src="/images/icon/edit-2.svg" alt="view icon" height={16} width={16}/>
                                                                 </div>
