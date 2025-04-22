@@ -1,43 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { createWrapper } from "next-redux-wrapper";
-
-import authReducer from "./slice/auth/authSlice";
-
-import productGetAllReducer from "./slice/product/getAllSlice";
-
-import photoUpdateGetAllReducer from "./slice/photoUpdate/getAllSlice";
-
-import procGetAllReducer from "./slice/procurement/getAllSlice";
-import procNotifReducer from "./slice/procurement/getNotificationSlice";
-import procDetailReducer from "./slice/procurement/getDetailSlice";
-import procDeleteReducer from "./slice/procurement/deleteSlice";
-import procCreateReducer from "./slice/procurement/createSlice";
-import procUpdateReducer from "./slice/procurement/updateSlice";
-import procUpdateProgressReducer from "./slice/procurement/progressUpdateSlice";
-
-import recGetAllReducer from "./slice/recruitment/getAllSlice";
-import recDeleteReducer from "./slice/recruitment/deleteSlice";
+import { rootReducer } from "./reducers";
 
 const makeStore = () =>
     configureStore({
-        reducer: {
-            auth: authReducer,
-
-            productList: productGetAllReducer,
-
-            photoUpdateLists: photoUpdateGetAllReducer,
-
-            procurementLists: procGetAllReducer,
-            notificationProcLists: procNotifReducer,
-            procurementDetail: procDetailReducer,
-            deleteProcurement: procDeleteReducer,
-            createProcurement: procCreateReducer,
-            updateProcurement: procUpdateReducer,
-            updateProgress: procUpdateProgressReducer,
-
-            recruitmentList: recGetAllReducer,
-            deleteRecruitment: recDeleteReducer
-        },
+        reducer: rootReducer,
     });
 
 export  const store = makeStore();
