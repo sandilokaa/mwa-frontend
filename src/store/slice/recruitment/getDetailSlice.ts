@@ -30,8 +30,8 @@ interface Recruitment {
     name:string,
     position: string,
     division: string, 
-    submissionDate: Date,
-    joinDate: Date,
+    submissionDate: string,
+    joinDate: string,
     progress: Progress, 
     statusRec: StatusRec 
 }
