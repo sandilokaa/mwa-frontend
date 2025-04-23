@@ -67,7 +67,7 @@ export default function EditData() {
                 etaTarget: etaTargetRef.current?.value || '',
             };
             dispatch(updateProcurementData(payload));
-            enqueueSnackbar("You have successfully created the data", { variant: "success" });
+            enqueueSnackbar("You have successfully updated the data", { variant: "success" });
 
             router.push("/development-status/procurement");
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -155,7 +155,7 @@ export default function EditData() {
                     </div>
                     <div className="flex justify-end">
                         <SubmitButton
-                            buttonText="Add Procurement"
+                            buttonText="Change Procurement"
                             onClick={handleUpdate}
                         />
                     </div>
