@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { fetchFilteredRecruitment, Progress, StatusRec, fetchAllRecruitments } from "@/store/slice/recruitment/getAllSlice";
 import { deleteRecruitment, resetDeleteState } from "@/store/slice/recruitment/deleteSlice";
+import { fetchNotificationList } from "@/store/slice/recruitment/getNotificationSlice";
 import { useSnackbar } from "notistack";
 import { refetchRecruitments } from "@/utils/refetchRecruitment";
 
@@ -16,7 +17,7 @@ import ConfirmDialog from "@/components/common/modal/ConfirmDialog";
 // import BarChart from "@/components/common/chart/BarChart";
 // import { getProcurementChartData } from "@/utils/procurementChart";
 import TablePagination from "@/components/common/pagination/TablePagination";
-// import NotifPagination from "@/components/common/pagination/NotifPagination";
+import NotifPagination from "@/components/common/pagination/NotifPagination";
 // import ProgressMenu from "@/components/common/modal/ProgressMenu";
 
 export default function ShowData() {
@@ -81,7 +82,23 @@ export default function ShowData() {
             setOpenConfirm(false);
         };
     
-        /* ------------------- End Delete Procurement ------------------- */
+    /* ------------------- End Delete Procurement ------------------- */
+
+
+    /* ------------------- Get Procurement Notification ------------------- */
+    
+        const { notifications, loadingNotif } = useAppSelector(state => state.notificationProcLists);
+        const { data, totalPages, currentPage } = notifications;
+    
+        useEffect(() => {
+                dispatch(fetchNotificationList({ page: 1 }));
+        }, [dispatch]);
+    
+        const handlePageChange = (newPage: number) => {
+            dispatch(fetchNotificationList({ page: newPage }));
+        };
+    
+    /* ------------------- End Get Procurement Notification ------------------- */
 
 
     return (
@@ -127,7 +144,7 @@ export default function ShowData() {
                         </div>
                         <div className="bg-white p-5 rounded-[10px]">
                             <h3 className="font-bold text-sm">Timeline Notification</h3>
-                            {/* <div className="flex flex-col gap-2 mt-5 relative">
+                            <div className="flex flex-col gap-2 mt-5 relative">
                                 {loadingNotif && (
                                     <div className="absolute inset-0 flex items-center justify-center bg-white/60 z-10 rounded-[10px]">
                                         <p className="text-xs text-gray-500">Loading...</p>
@@ -167,7 +184,7 @@ export default function ShowData() {
                                     totalPages={totalPages}
                                     onPageChange={handlePageChange}
                                 />
-                            </div> */}
+                            </div>
                         </div>
                     </div>
                 </div>
