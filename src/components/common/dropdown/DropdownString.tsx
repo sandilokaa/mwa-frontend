@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 
 
@@ -8,11 +8,19 @@ interface DropdownStringProps {
     label: string;
     options: string[];
     onSelect: (value: string) => void;
+    defaultValue?: string;
 }
 
-export default function DropdownString({ label, options, onSelect }: DropdownStringProps) {
+export default function DropdownString({ label, options, onSelect, defaultValue }: DropdownStringProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [selected, setSelected] = useState("");
+
+    useEffect(() => {
+        if (defaultValue && options.length > 0) {
+            const found = options.find(p => p === defaultValue);
+            if (found) setSelected(found);
+        }
+    }, [defaultValue, options]);
 
     const handleSelect = (option: string) => {
         setSelected(option);
