@@ -16,11 +16,11 @@ import AddButton from "@/components/common/button/AddButton";
 import SearchInput from "@/components/common/input/SearchInput";
 import { formatProgressProc } from "@/utils/formatProgress";
 import ConfirmDialog from "@/components/common/modal/ConfirmDialog";
-import BarChart from "@/components/common/chart/BarChart";
+import ProcurementBarChart from "@/components/common/chart/ProcumentBarChart";
 import { getProcurementChartData } from "@/utils/procurementChart";
 import TablePagination from "@/components/common/pagination/TablePagination";
 import NotifPagination from "@/components/common/pagination/NotifPagination";
-import ProgressMenu from "@/components/common/modal/ProgressMenu";
+import ProgressProcMenu from "@/components/common/modal/ProgressProcMenu";
 
 export default function ShowData() {
 
@@ -175,7 +175,7 @@ export default function ShowData() {
                     <div className="flex flex-col justify-between w-3/4 bg-white p-5 rounded-[10px]">
                         <h2 className="font-bold text-sm">Procurement Chart</h2>
                         <div className="flex justify-center">
-                            <BarChart
+                            <ProcurementBarChart
                                 title="Procurement Stats"
                                 data={chartData}
                             />
@@ -303,7 +303,7 @@ export default function ShowData() {
                                                             </div>
                                                         </div>
                                                         {showProgressMenuId === proc.id && (
-                                                            <ProgressMenu
+                                                            <ProgressProcMenu
                                                                 selectedProgress={selectedProgress}
                                                                 onToggle={toggleProgress}
                                                                 onSave={() => handleUpdateProgress(proc.id)}
