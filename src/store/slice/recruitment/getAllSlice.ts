@@ -23,6 +23,17 @@ export const fetchAllRecruitments = createAsyncThunk(
     }
 );
 
+export const fetchSummaryRecruitment = createAsyncThunk(
+    'recruitments/fetchSummaryRecruitment',
+    async () => {
+        const response = await axios.get(
+            `http://localhost:8080/api/v1/recruitments/summary/stat`,
+            { withCredentials: true }
+        );
+        return response.data.data.recruitment;
+    }
+);
+
 export enum Progress {
     InterviewHR = 'interview hr',
     InterviewUser = 'interview user',
@@ -53,9 +64,16 @@ interface PaginatedRecruitmentData {
     totalPagesRec: number;
 }
 
+interface RecruitmentSummary {
+    progress: string;
+    division: { [divisionName: string]: number }[];
+    count: number;
+}
+
 interface RecruitmentState {
     filteredRecruitments: PaginatedRecruitmentData;
     allRecruitments: [];
+    summaryRecruitments: RecruitmentSummary[],
     loading: boolean;
     error: string | null;
 }
@@ -68,6 +86,7 @@ const initialState: RecruitmentState = {
         totalPagesRec: 1,
     },
     allRecruitments: [],
+    summaryRecruitments: [],
     loading: false,
     error: null,
 };
@@ -100,6 +119,17 @@ const recruitmentSlice = createSlice({
             .addCase(fetchAllRecruitments.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.error.message || 'Failed to fetch recruitment';
+            })
+            .addCase(fetchSummaryRecruitment.pending, state => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(fetchSummaryRecruitment.fulfilled, (state, action) => {
+                state.summaryRecruitments = action.payload;
+            })
+            .addCase(fetchSummaryRecruitment.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message || 'Failed to fetch summary procurement';
             })
     },
 });

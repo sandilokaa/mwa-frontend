@@ -4,21 +4,22 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { fetchFilteredRecruitment, Progress, StatusRec, fetchAllRecruitments } from "@/store/slice/recruitment/getAllSlice";
+import { fetchFilteredRecruitment, Progress, StatusRec, fetchAllRecruitments, fetchSummaryRecruitment } from "@/store/slice/recruitment/getAllSlice";
 import { deleteRecruitment, resetDeleteState } from "@/store/slice/recruitment/deleteSlice";
 import { fetchNotificationList } from "@/store/slice/recruitment/getNotificationSlice";
 import { useSnackbar } from "notistack";
 import { refetchRecruitments } from "@/utils/refetchRecruitment";
+import { updateProgressRecData, resetUpdatedProgressRecruitment } from "@/store/slice/recruitment/progressUpdateSlice";
 
 import AddButton from "@/components/common/button/AddButton";
 import SearchInput from "@/components/common/input/SearchInput";
 import { formatProgressRec } from "@/utils/formatProgress";
 import ConfirmDialog from "@/components/common/modal/ConfirmDialog";
-// import BarChart from "@/components/common/chart/BarChart";
-// import { getProcurementChartData } from "@/utils/procurementChart";
+import BarChart from "@/components/common/chart/RecruitmentBarChart";
+import { getRecruitmentChartData } from "@/utils/recruitmentChart";
 import TablePagination from "@/components/common/pagination/TablePagination";
 import NotifPagination from "@/components/common/pagination/NotifPagination";
-// import ProgressMenu from "@/components/common/modal/ProgressMenu";
+import ProgressRecMenu from "@/components/common/modal/ProgressRecMenu";
 
 export default function ShowData() {
 
@@ -28,9 +29,10 @@ export default function ShowData() {
     /* ------------------- Get All Recruitment ------------------- */
 
     const [search, setSearch] = useState('');
-    const { filteredRecruitments: { recruitmentDataFiltered, currentPagesRec, totalPagesRec }, loading, allRecruitments } = useAppSelector(state => state.recruitmentList);
+    const { filteredRecruitments: { recruitmentDataFiltered, currentPagesRec, totalPagesRec }, loading, allRecruitments, summaryRecruitments } = useAppSelector(state => state.recruitmentList);
 
     useEffect(() => {
+        dispatch(fetchSummaryRecruitment());
         dispatch(fetchAllRecruitments());
         const delay = setTimeout(() => {
             dispatch(fetchFilteredRecruitment({
@@ -43,7 +45,7 @@ export default function ShowData() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [search]);
 
-    // const chartData = getProcurementChartData(summaryProcurements);
+    const chartData = getRecruitmentChartData(summaryRecruitments);
 
     const handlePageProcChange = (newPage: number) => {
         dispatch(fetchFilteredRecruitment({
@@ -55,7 +57,7 @@ export default function ShowData() {
     /* ------------------- End Get All Recruitment ------------------- */
 
 
-    /* ------------------- Delete Procurement ------------------- */
+    /* ------------------- Delete Recruitment ------------------- */
     
         const [openConfirm, setOpenConfirm] = useState(false);
         const [targetId, setTargetId] = useState<number | null>(null);
@@ -82,12 +84,12 @@ export default function ShowData() {
             setOpenConfirm(false);
         };
     
-    /* ------------------- End Delete Procurement ------------------- */
+    /* ------------------- End Delete Recruitment ------------------- */
 
 
-    /* ------------------- Get Procurement Notification ------------------- */
+    /* ------------------- Get Recruitment Notification ------------------- */
     
-        const { notifications, loadingNotif } = useAppSelector(state => state.notificationProcLists);
+        const { notifications, loadingNotif } = useAppSelector(state => state.notificationRecLists);
         const { data, totalPages, currentPage } = notifications;
     
         useEffect(() => {
@@ -98,7 +100,36 @@ export default function ShowData() {
             dispatch(fetchNotificationList({ page: newPage }));
         };
     
-    /* ------------------- End Get Procurement Notification ------------------- */
+    /* ------------------- End Get Recruitment Notification ------------------- */
+
+
+    /* ------------------- Modal Progress Recruitment ------------------- */
+
+    const [selectedProgress, setSelectedProgress] = useState<string>('');
+    const [showProgressMenuId, setShowProgressMenuId] = useState<number | null>(null);
+
+    const toggleProgress = (value: string) => {
+        setSelectedProgress(value)
+    };
+
+    const handleUpdateProgress = (id: number) => {
+    
+        dispatch(updateProgressRecData({ id, progress: selectedProgress.toLowerCase() }))
+            .unwrap()
+            .then(() => {
+                enqueueSnackbar("Progress updated successfully", { variant: "success" });
+                dispatch(resetUpdatedProgressRecruitment());
+                refetchRecruitments(dispatch, search);
+            })
+            .catch(() => {
+                enqueueSnackbar("Failed to update progress", { variant: "error" });
+                dispatch(resetUpdatedProgressRecruitment());
+            });
+    
+        setShowProgressMenuId(null);
+    }
+
+    /* ------------------- End Modal Progress Recruitment ------------------- */
 
 
     return (
@@ -131,10 +162,9 @@ export default function ShowData() {
                     <div className="flex flex-col justify-between w-3/4 bg-white p-5 rounded-[10px]">
                         <h2 className="font-bold text-sm">Recruitment Chart</h2>
                         <div className="flex justify-center">
-                            {/* <BarChart
-                                title="Procurement Stats"
+                            <BarChart
                                 data={chartData}
-                            /> */}
+                            />
                         </div>
                     </div>
                     <div className="flex flex-col gap-3 w-1/4 h-full">
@@ -160,9 +190,9 @@ export default function ShowData() {
                                                     <Image src="/images/icon/calendar-1.svg" alt="Date Icon" width={18} height={20} />
                                                 </div>
                                                 <div className="flex flex-col gap-y-1">
-                                                    <p className="font-bold text-xs">{notif.prNumber}</p>
+                                                    <p className="font-bold text-xs">{notif?.name}</p>
                                                     <p className="text-xs text-gray-500">
-                                                        Due Date: {new Date(notif?.etaTarget).toLocaleDateString("en-GB")}
+                                                        Due Date: {new Date(notif?.joinDate).toLocaleDateString("en-GB")}
                                                     </p>
                                                 </div>
                                             </div>
@@ -243,12 +273,12 @@ export default function ShowData() {
                                                             >
                                                                 <p> {formatProgressRec(rec.progress)} </p>
                                                             </div>
-                                                            {/* <div
+                                                            <div
                                                                 onClick={() => {
                                                                     setShowProgressMenuId(prevId => {
-                                                                        const newId = prevId === proc.id ? null : proc.id;
+                                                                        const newId = prevId === rec.id ? null : rec.id;
                                                                         if (newId !== null) {
-                                                                            setSelectedProgress(proc.progress);
+                                                                            setSelectedProgress(rec.progress);
                                                                         }
                                                                         return newId;
                                                                     });
@@ -256,16 +286,16 @@ export default function ShowData() {
                                                                 className="flex justify-center items-center cursor-pointer"
                                                             >
                                                                 <Image src="/images/icon/menu.svg" alt="Menu Icon" width={15} height={15}/>
-                                                            </div> */}
+                                                            </div>
                                                         </div>
-                                                        {/* {showProgressMenuId === proc.id && (
-                                                            <ProgressMenu
+                                                        {showProgressMenuId === rec.id && (
+                                                            <ProgressRecMenu
                                                                 selectedProgress={selectedProgress}
                                                                 onToggle={toggleProgress}
-                                                                onSave={() => handleUpdateProgress(proc.id)}
+                                                                onSave={() => handleUpdateProgress(rec.id)}
                                                                 onClose={() => setShowProgressMenuId(null)}
                                                             />
-                                                        )} */}
+                                                        )}
                                                     </td>
                                                     <td className="py-5 px-4 text-xs">
                                                         <div

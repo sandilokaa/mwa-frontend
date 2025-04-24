@@ -4,6 +4,7 @@ import recDetailReducer from "../../slice/recruitment/getDetailSlice";
 import recCreateReducer from "../../slice/recruitment/createSlice";
 import recNotificationReducer from "../../slice/recruitment/getNotificationSlice";
 import recUpdateReducer from "../../slice/recruitment/updateSlice";
+import recUpdateProgress from "../../slice/recruitment/progressUpdateSlice";
 
 
 export const recruitmentReducers = {
@@ -12,5 +13,6 @@ export const recruitmentReducers = {
     recruitmentDetail: recDetailReducer,
     createRecruitment: recCreateReducer,
     notificationRecLists: recNotificationReducer,
-    updateRecruitment: recUpdateReducer
+    updateRecruitment: recUpdateReducer,
+    updateProgress: recUpdateProgress
 };
