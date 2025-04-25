@@ -1,4 +1,4 @@
-import productGetAllReducer from "../../slice/product/getAllSlice";
+import productGetAllReducer from "@/store/slice/product/getAllSlice";
 
 
 export const productReducers = {

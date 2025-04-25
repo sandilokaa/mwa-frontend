@@ -1,15 +1,18 @@
-import { useRef, useState } from "react";
+import { useRef, useState, forwardRef, useImperativeHandle } from "react";
 import Image from "next/image";
 import { X } from "lucide-react";
 
 interface FileInputFormProps {
     label: string;
+    acceptFile?: string;
 }
 
-const FileInputForm = ({ label }: FileInputFormProps) => {
+const FileInputForm = forwardRef<HTMLInputElement, FileInputFormProps>(({ label, acceptFile }, ref) => {
 
     const [files, setFiles] = useState<File[]>([]);
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    useImperativeHandle(ref, () => fileInputRef.current as HTMLInputElement);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -43,6 +46,7 @@ const FileInputForm = ({ label }: FileInputFormProps) => {
                     ref={fileInputRef}
                     className="hidden"
                     onChange={handleFileChange}
+                    accept={acceptFile}
                 />
 
                 {files.length > 0 && files[0] ? (
@@ -77,6 +81,8 @@ const FileInputForm = ({ label }: FileInputFormProps) => {
             </div>
         </div>
     );
-};
+});
+
+FileInputForm.displayName = 'FileInputForm';
 
 export default FileInputForm;

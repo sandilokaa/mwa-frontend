@@ -59,46 +59,46 @@ export default function ShowData() {
 
     /* ------------------- Delete Recruitment ------------------- */
     
-        const [openConfirm, setOpenConfirm] = useState(false);
-        const [targetId, setTargetId] = useState<number | null>(null);
-    
-        const confirmDelete = (id: number) => {
-            setTargetId(id);
-            setOpenConfirm(true);
-        };
-    
-        const handleConfirmedDelete = () => {
-            if (targetId !== null) {
-                dispatch(deleteRecruitment({ id: targetId }))
-                    .unwrap()
-                    .then(() => {
-                        enqueueSnackbar("You have successfully deleted the data", { variant: "success" });
-                        dispatch(resetDeleteState());
-                        refetchRecruitments(dispatch, search);
-                    })
-                    .catch(() => {
-                        enqueueSnackbar("You failed to delete data", { variant: "error" });
-                        dispatch(resetDeleteState());
-                    })
-            }
-            setOpenConfirm(false);
-        };
+    const [openConfirm, setOpenConfirm] = useState(false);
+    const [targetId, setTargetId] = useState<number | null>(null);
+
+    const confirmDelete = (id: number) => {
+        setTargetId(id);
+        setOpenConfirm(true);
+    };
+
+    const handleConfirmedDelete = () => {
+        if (targetId !== null) {
+            dispatch(deleteRecruitment({ id: targetId }))
+                .unwrap()
+                .then(() => {
+                    enqueueSnackbar("You have successfully deleted the data", { variant: "success" });
+                    dispatch(resetDeleteState());
+                    refetchRecruitments(dispatch, search);
+                })
+                .catch(() => {
+                    enqueueSnackbar("You failed to delete data", { variant: "error" });
+                    dispatch(resetDeleteState());
+                })
+        }
+        setOpenConfirm(false);
+    };
     
     /* ------------------- End Delete Recruitment ------------------- */
 
 
     /* ------------------- Get Recruitment Notification ------------------- */
     
-        const { notifications, loadingNotif } = useAppSelector(state => state.notificationRecLists);
-        const { data, totalPages, currentPage } = notifications;
-    
-        useEffect(() => {
-                dispatch(fetchNotificationList({ page: 1 }));
-        }, [dispatch]);
-    
-        const handlePageChange = (newPage: number) => {
-            dispatch(fetchNotificationList({ page: newPage }));
-        };
+    const { notifications, loadingNotif } = useAppSelector(state => state.notificationRecLists);
+    const { data, totalPages, currentPage } = notifications;
+
+    useEffect(() => {
+            dispatch(fetchNotificationList({ page: 1 }));
+    }, [dispatch]);
+
+    const handlePageChange = (newPage: number) => {
+        dispatch(fetchNotificationList({ page: newPage }));
+    };
     
     /* ------------------- End Get Recruitment Notification ------------------- */
 

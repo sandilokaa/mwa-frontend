@@ -1,10 +1,10 @@
-import recGetAllReducer from "../../slice/recruitment/getAllSlice";
-import recDeleteReducer from "../../slice/recruitment/deleteSlice";
-import recDetailReducer from "../../slice/recruitment/getDetailSlice";
-import recCreateReducer from "../../slice/recruitment/createSlice";
-import recNotificationReducer from "../../slice/recruitment/getNotificationSlice";
-import recUpdateReducer from "../../slice/recruitment/updateSlice";
-import recUpdateProgress from "../../slice/recruitment/progressUpdateSlice";
+import recGetAllReducer from "@/store/slice/recruitment/getAllSlice";
+import recDeleteReducer from "@/store/slice/recruitment/deleteSlice";
+import recDetailReducer from "@/store/slice/recruitment/getDetailSlice";
+import recCreateReducer from "@/store/slice/recruitment/createSlice";
+import recNotificationReducer from "@/store/slice/recruitment/getNotificationSlice";
+import recUpdateReducer from "@/store/slice/recruitment/updateSlice";
+import recUpdateProgress from "@/store/slice/recruitment/progressUpdateSlice";
 
 
 export const recruitmentReducers = {

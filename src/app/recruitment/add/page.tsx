@@ -31,7 +31,7 @@ export default function AddData() {
             !nameRef.current?.value?.trim() ||
             !submissionDateRef.current?.value?.trim() ||
             !joinDateRef.current?.value?.trim() ||
-            !positionRef ||
+            !positionRef.current?.value?.trim() ||
             !division;
 
         if (isEmpty) {
