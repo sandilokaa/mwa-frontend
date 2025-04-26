@@ -9,9 +9,9 @@ interface PhotoUpdate {
     picture: string | File;
 }
 
-export const createdPhotoUpdateData = createAsyncThunk(
-    'photo-updates/createdPhotoUpdateData',
-    async (newPhotoUpdate: PhotoUpdate, { rejectWithValue }) => {
+export const updatedPhotoUpdateData = createAsyncThunk(
+    'photo-updates/updatedPhotoUpdateData',
+    async (newPhotoUpdate: PhotoUpdate & { id: number }, { rejectWithValue }) => {
         try {
             const formData = new FormData();
             formData.append('productId', newPhotoUpdate.productId.toString());
@@ -20,9 +20,9 @@ export const createdPhotoUpdateData = createAsyncThunk(
             formData.append('category', newPhotoUpdate.category);
             formData.append('picture', newPhotoUpdate.picture);
 
-            const response = await axios.post(
-                'http://localhost:8080/api/v1/photo-updates/create',
-                formData,
+            const response = await axios.put(
+                `http://localhost:8080/api/v1/photo-updates/update/${newPhotoUpdate.id}`,
+                newPhotoUpdate,
                 { 
                     withCredentials: true,
                     headers: {
@@ -33,47 +33,42 @@ export const createdPhotoUpdateData = createAsyncThunk(
             return response.data.data.photoUpdate;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
-            return rejectWithValue(err.response?.data?.message || 'Create failed');
+            return rejectWithValue(err.response?.data?.message || 'Update failed');
         }
     }
 );
 
 interface PhotoUpdateState {
-    createdPhotoUpdate: PhotoUpdate | null;
+    updatedPhotoUpdate: PhotoUpdate | null;
     loading: boolean;
     error: string | null;
 }
 
 const initialState: PhotoUpdateState = {
-    createdPhotoUpdate: null,
+    updatedPhotoUpdate: null,
     loading: false,
     error: null,
 };
 
-const createPhotoUpdate = createSlice({
-    name: 'createPhotoUpdate',
+const updatePhotoUpdate = createSlice({
+    name: 'updatePhotoUpdate',
     initialState,
-    reducers: {
-        resetCreatedPhotoUpdate(state) {
-            state.createdPhotoUpdate = null;
-            state.error = null;
-        }
-    },
+    reducers: {},
     extraReducers: builder => {
         builder
-            .addCase(createdPhotoUpdateData.pending, state => {
+            .addCase(updatedPhotoUpdateData.pending, state => {
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(createdPhotoUpdateData.fulfilled, (state, action) => {
+            .addCase(updatedPhotoUpdateData.fulfilled, (state, action) => {
                 state.loading = false;
-                state.createdPhotoUpdate = action.payload;
+                state.updatedPhotoUpdate = action.payload;
             })
-            .addCase(createdPhotoUpdateData.rejected, (state, action) => {
+            .addCase(updatedPhotoUpdateData.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload as string;
             })
     },
 });
 
-export default createPhotoUpdate.reducer;
+export default updatePhotoUpdate.reducer;

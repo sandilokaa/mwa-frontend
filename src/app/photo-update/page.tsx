@@ -114,11 +114,9 @@ export default function ShowData() {
                                                         <p className="text-sm font-medium mt-1">{photo?.information}</p>
                                                     </div>
                                                     <div className="flex gap-[10px] justify-end">
-                                                        <Link href={`/photo-update/${photo.id}`}>
-                                                            <div className="p-2 rounded-sm bg-[#2181E8] cursor-pointer">
-                                                                <Image src="/images/icon/eye.svg" alt="view icon" height={16} width={16} />
-                                                            </div>
-                                                        </Link>
+                                                        <div className="p-2 rounded-sm bg-[#2181E8] cursor-pointer">
+                                                            <Image src="/images/icon/eye.svg" alt="view icon" height={16} width={16} />
+                                                        </div>
                                                         <Link href={`/photo-update/${photo.id}/edit`}>
                                                             <div className="p-2 rounded-sm bg-[#FDBE1B] cursor-pointer">
                                                                 <Image src="/images/icon/edit-2.svg" alt="view icon" height={16} width={16} />

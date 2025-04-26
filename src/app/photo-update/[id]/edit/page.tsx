@@ -5,7 +5,10 @@ import Link from "next/link";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { fetchPhotoUpdateDetail } from "@/store/slice/photoUpdate/getDetailSlice";
 import { useParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
+import { updatedPhotoUpdateData } from "@/store/slice/photoUpdate/updateSlice";
+import { useSnackbar } from "notistack";
+import { useRouter } from "next/navigation";
 
 import DropdownProductForm from "@/components/common/dropdown/DropdownProductForm";
 import DropdownString from "@/components/common/dropdown/DropdownString";
@@ -17,6 +20,9 @@ import SubmitButton from "@/components/common/button/SubmitButton";
 export default function EditData() {
 
     const dispatch = useAppDispatch();
+    const { enqueueSnackbar } = useSnackbar();
+    const router = useRouter();
+
     const params = useParams();
     const id = Number(params.id);
     
@@ -32,7 +38,48 @@ export default function EditData() {
         }
     }, [id, dispatch]);
 
+    useEffect(() => {
+        if (photoUpdateDetail?.productId) {
+            selectedProductIdRef.current = photoUpdateDetail.productId;
+        }
+    }, [photoUpdateDetail]);
+
     /* ------------------ End Get Detail ------------------ */
+
+
+    /* ------------------ Update Data ------------------ */
+
+    const [category, setCategory] = useState("");
+    const dateInputRef = useRef<HTMLInputElement>(null);
+    const informationRef = useRef<HTMLTextAreaElement | null>(null);
+    const pictureRef = useRef<HTMLInputElement>(null);
+    const selectedProductIdRef = useRef<number>(0);
+
+    const handleUpdate = () => {
+        try {
+            if (!photoUpdateDetail?.id) {
+                throw new Error("Procurement ID is required");
+            }
+
+            const payload = {
+                id: photoUpdateDetail?.id,
+                productId: selectedProductIdRef.current,
+                dateInput: dateInputRef.current?.value || '',
+                information: informationRef.current?.value || '',
+                picture: pictureRef.current?.files?.[0] || '',
+                category,
+            };
+            dispatch(updatedPhotoUpdateData(payload));
+            enqueueSnackbar("You have successfully updated the data", { variant: "success" });
+
+            router.push("/photo-update");
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+            enqueueSnackbar(error.message, { variant: "error" });
+        }
+    };
+
+    /* ------------------ End Update Data ------------------ */
 
     return (
         <div>
@@ -50,13 +97,15 @@ export default function EditData() {
                             <DropdownProductForm
                                 label="Product *"
                                 options={products}
-                                onSelect={() => ""}
+                                onSelect={(value) => {
+                                    selectedProductIdRef.current = value.id;
+                                }}
                                 defaultValue={photoUpdateDetail?.productId}
                             />
                             <DropdownString
                                 label="Category *"
                                 options={["Chassis", "Under Body", "Upper Body", "Exterior", "Interior"]}
-                                onSelect={() => ""}
+                                onSelect={(value) => setCategory(value)}
                                 defaultValue={photoUpdateDetail?.category}
                             />
                             <DateInputForm
@@ -66,6 +115,7 @@ export default function EditData() {
                                         ? photoUpdateDetail.dateInput.split("T")[0]
                                         : ""
                                 }
+                                ref={dateInputRef}
                             />
                         </div>  
                         <div className="grid grid-cols-1">
@@ -74,6 +124,7 @@ export default function EditData() {
                                 placeholder="Example: Describe the issue"
                                 rows={3}
                                 defaultValue={photoUpdateDetail?.information}
+                                ref={informationRef}
                             />
                         </div>
                         <div className="grid grid-cols-1">
@@ -81,12 +132,13 @@ export default function EditData() {
                                 label="Upload Photo *"
                                 acceptFile=".jpg,.jpeg,.png"
                                 defaultFile={photoUpdateDetail?.picture}
+                                ref={pictureRef}
                             />
                         </div>
                     </div>
                     <div className="flex justify-end">
                         <SubmitButton
-                            onClick={() => ""}
+                            onClick={handleUpdate}
                             buttonText="Change Photo Update"
                         />
                     </div>
