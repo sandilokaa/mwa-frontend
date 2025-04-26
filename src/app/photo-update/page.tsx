@@ -22,6 +22,8 @@ export default function ShowData() {
     const { selectedProduct } = useProductFilter();
     const { photoUpdates, loading } = useAppSelector(state => state.photoUpdateLists);
 
+    const [visibleCount, setVisibleCount] = useState(4);
+
 
     /* ------------------- Get All Photo Update ------------------- */
 
@@ -31,6 +33,10 @@ export default function ShowData() {
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedProduct?.id, selectedCategory]);
+
+    useEffect(() => {
+        setVisibleCount(8);
+    }, [selectedCategory, selectedProduct?.id]);
 
     /* ------------------- End Get All Photo Update ------------------- */
 
@@ -101,43 +107,55 @@ export default function ShowData() {
                     {loading ? (
                         <p>Loading...</p>
                     ) : (
-                        <div className="grid grid-cols-4 gap-2">
-                            {photoUpdates.length > 0 ? (
-                                photoUpdates.map((photo) => {
-                                    return (
-                                        <div key={photo.id} className="relative group cursor-pointer max-w-[275px] max-h-[370px]">
-                                            <Image className="w-[275px] h-[370px] rounded-lg" src={`http://localhost:8080/${photo.picture}`} alt="Item Image" width={275} height={370} />
-                                            <div className="absolute left-0 inset-0 bg-[rgba(0,0,0,0.5)] opacity-0 group-hover:opacity-100 flex flex-col justify-end text-white p-4 transition-opacity duration-300 rounded-lg">
-                                                <div className="flex flex-col gap-4">
-                                                    <div className="flex flex-col gap-1">
-                                                        <p className="text-sm font-medium">{new Date(photo?.dateInput).toLocaleDateString('en-GB')}</p>
-                                                        <p className="text-sm font-medium mt-1">{photo?.information}</p>
-                                                    </div>
-                                                    <div className="flex gap-[10px] justify-end">
-                                                        <div className="p-2 rounded-sm bg-[#2181E8] cursor-pointer">
-                                                            <Image src="/images/icon/eye.svg" alt="view icon" height={16} width={16} />
+                        <>
+                            <div className="grid grid-cols-4 gap-x-2 gap-y-4">
+                                {photoUpdates.length > 0 ? (
+                                    photoUpdates.slice(0, visibleCount).map((photo) => {
+                                        return (
+                                            <div key={photo.id} className="relative group cursor-pointer max-w-[275px] max-h-[370px]">
+                                                <Image className="w-[275px] h-[370px] rounded-lg" src={`http://localhost:8080/${photo.picture}`} alt="Item Image" width={275} height={370} />
+                                                <div className="absolute left-0 inset-0 bg-[rgba(0,0,0,0.5)] opacity-0 group-hover:opacity-100 flex flex-col justify-end text-white p-4 transition-opacity duration-300 rounded-lg">
+                                                    <div className="flex flex-col gap-4">
+                                                        <div className="flex flex-col gap-1">
+                                                            <p className="text-sm font-medium">{new Date(photo?.dateInput).toLocaleDateString('en-GB')}</p>
+                                                            <p className="text-sm font-medium mt-1">{photo?.information}</p>
                                                         </div>
-                                                        <Link href={`/photo-update/${photo.id}/edit`}>
-                                                            <div className="p-2 rounded-sm bg-[#FDBE1B] cursor-pointer">
-                                                                <Image src="/images/icon/edit-2.svg" alt="view icon" height={16} width={16} />
+                                                        <div className="flex gap-[10px] justify-end">
+                                                            <div className="p-2 rounded-sm bg-[#2181E8] cursor-pointer">
+                                                                <Image src="/images/icon/eye.svg" alt="view icon" height={16} width={16} />
                                                             </div>
-                                                        </Link>
-                                                        <div 
-                                                            onClick={() => confirmDelete(photo.id)}
-                                                            className="p-2 rounded-sm bg-[#D62C35] cursor-pointer"
-                                                        >
-                                                            <Image src="/images/icon/trash.svg" alt="view icon" height={16} width={16} />
+                                                            <Link href={`/photo-update/${photo.id}/edit`}>
+                                                                <div className="p-2 rounded-sm bg-[#FDBE1B] cursor-pointer">
+                                                                    <Image src="/images/icon/edit-2.svg" alt="view icon" height={16} width={16} />
+                                                                </div>
+                                                            </Link>
+                                                            <div 
+                                                                onClick={() => confirmDelete(photo.id)}
+                                                                className="p-2 rounded-sm bg-[#D62C35] cursor-pointer"
+                                                            >
+                                                                <Image src="/images/icon/trash.svg" alt="view icon" height={16} width={16} />
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    )
-                                })
-                            ) : (
-                                <p>No data found.</p>
+                                        )
+                                    })
+                                ) : (
+                                    <p>No data found.</p>
+                                )}
+                            </div>
+                            {visibleCount < photoUpdates.length && (
+                                <div className="flex justify-center mt-6">
+                                    <button
+                                        onClick={() => setVisibleCount(prev => prev + 4)}
+                                        className="px-6 py-2 text-center items-center bg-[#144C68] text-white rounded-md hover:bg-[#0E3549] transition-colors cursor-pointer h-[45px]"
+                                    >
+                                        Load More
+                                    </button>
+                                </div>
                             )}
-                        </div>
+                        </>
                     )}
                 </div>
             </div>
