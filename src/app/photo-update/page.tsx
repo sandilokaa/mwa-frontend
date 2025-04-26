@@ -13,6 +13,7 @@ import { refetchPhotoUpdates } from "@/utils/refetchPhotoUpdate";
 import AddButton from "@/components/common/button/AddButton";
 import DropdownCategory from "@/components/common/dropdown/DropdownFilterCategory";
 import ConfirmDialog from "@/components/common/modal/ConfirmDialog";
+import VisibleButton from "@/components/common/button/VisibleButton";
 
 export default function ShowData() {
     const dispatch = useAppDispatch();
@@ -146,14 +147,9 @@ export default function ShowData() {
                                 )}
                             </div>
                             {visibleCount < photoUpdates.length && (
-                                <div className="flex justify-center mt-6">
-                                    <button
-                                        onClick={() => setVisibleCount(prev => prev + 4)}
-                                        className="px-6 py-2 text-center items-center bg-[#144C68] text-white rounded-md hover:bg-[#0E3549] transition-colors cursor-pointer h-[45px]"
-                                    >
-                                        Load More
-                                    </button>
-                                </div>
+                                <VisibleButton
+                                    onClick={() => setVisibleCount(prev => prev + 4)}
+                                />
                             )}
                         </>
                     )}
