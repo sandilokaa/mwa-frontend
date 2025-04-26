@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 export const fetchNotificationList = createAsyncThunk(
@@ -43,7 +43,12 @@ const initialState: NotificationState = {
 const notificationSlice = createSlice({
     name: 'notificationRecLists',
     initialState,
-    reducers: {},
+    reducers: {
+        removeNotification: (state, action: PayloadAction<number>) => {
+            state.notifications.data = state.notifications.data.filter((notif) => notif.id !== action.payload);
+            state.notifications.total -= 1;
+        },
+    },
     extraReducers: builder => {
         builder
             .addCase(fetchNotificationList.pending, state => {
@@ -51,7 +56,10 @@ const notificationSlice = createSlice({
                 state.error = null;
             })
             .addCase(fetchNotificationList.fulfilled, (state, action) => {
-                state.notifications = action.payload;
+                state.notifications.data = action.payload.data;
+                state.notifications.total = action.payload.total;
+                state.notifications.currentPage = action.payload.currentPage;
+                state.notifications.totalPages = action.payload.totalPages;
                 state.loadingNotif = false;
             })
             .addCase(fetchNotificationList.rejected, (state, action) => {
@@ -61,4 +69,5 @@ const notificationSlice = createSlice({
     },
 });
 
+export const { removeNotification } = notificationSlice.actions;
 export default notificationSlice.reducer;

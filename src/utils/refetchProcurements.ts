@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { fetchFilteredProcurement, fetchAllProcurements, fetchSummaryProcurement } from "@/store/slice/procurement/getAllSlice";
+import { removeNotification } from "@/store/slice/procurement/getNotificationSlice";
 
-export const refetchProcurements = (dispatch: any, productId: any, search: any, page = 1) => {
+export const refetchProcurements = (dispatch: any, productId: any, search: any, targetId: any, page = 1) => {
     dispatch(fetchSummaryProcurement({ productId }));
     dispatch(fetchAllProcurements({ productId }));
     dispatch(fetchFilteredProcurement({
@@ -9,4 +10,5 @@ export const refetchProcurements = (dispatch: any, productId: any, search: any, 
         prNumber: search,
         page
     }));
+    dispatch(removeNotification(targetId));
 };

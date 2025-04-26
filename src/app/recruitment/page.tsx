@@ -57,6 +57,22 @@ export default function ShowData() {
     /* ------------------- End Get All Recruitment ------------------- */
 
 
+    /* ------------------- Get Recruitment Notification ------------------- */
+    
+    const { notifications, loadingNotif } = useAppSelector(state => state.notificationRecLists);
+    const { data, totalPages, currentPage } = notifications;
+
+    useEffect(() => {
+            dispatch(fetchNotificationList({ page: 1 }));
+    }, [dispatch]);
+
+    const handlePageChange = (newPage: number) => {
+        dispatch(fetchNotificationList({ page: newPage }));
+    };
+    
+    /* ------------------- End Get Recruitment Notification ------------------- */
+
+
     /* ------------------- Delete Recruitment ------------------- */
     
     const [openConfirm, setOpenConfirm] = useState(false);
@@ -74,7 +90,7 @@ export default function ShowData() {
                 .then(() => {
                     enqueueSnackbar("You have successfully deleted the data", { variant: "success" });
                     dispatch(resetDeleteState());
-                    refetchRecruitments(dispatch, search);
+                    refetchRecruitments(dispatch, search, targetId);
                 })
                 .catch(() => {
                     enqueueSnackbar("You failed to delete data", { variant: "error" });
@@ -85,22 +101,6 @@ export default function ShowData() {
     };
     
     /* ------------------- End Delete Recruitment ------------------- */
-
-
-    /* ------------------- Get Recruitment Notification ------------------- */
-    
-    const { notifications, loadingNotif } = useAppSelector(state => state.notificationRecLists);
-    const { data, totalPages, currentPage } = notifications;
-
-    useEffect(() => {
-            dispatch(fetchNotificationList({ page: 1 }));
-    }, [dispatch]);
-
-    const handlePageChange = (newPage: number) => {
-        dispatch(fetchNotificationList({ page: newPage }));
-    };
-    
-    /* ------------------- End Get Recruitment Notification ------------------- */
 
 
     /* ------------------- Modal Progress Recruitment ------------------- */
@@ -119,7 +119,7 @@ export default function ShowData() {
             .then(() => {
                 enqueueSnackbar("Progress updated successfully", { variant: "success" });
                 dispatch(resetUpdatedProgressRecruitment());
-                refetchRecruitments(dispatch, search);
+                refetchRecruitments(dispatch, search, targetId);
             })
             .catch(() => {
                 enqueueSnackbar("Failed to update progress", { variant: "error" });

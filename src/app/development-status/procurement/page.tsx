@@ -103,7 +103,7 @@ export default function ShowData() {
                     if (!selectedProduct?.id) return;
                     enqueueSnackbar("You have successfully deleted the data", { variant: "success" });
                     dispatch(resetDeleteState());
-                    refetchProcurements(dispatch, selectedProduct.id, search);
+                    refetchProcurements(dispatch, selectedProduct.id, search, targetId);
                 })
                 .catch(() => {
                     enqueueSnackbar("You failed to delete data", { variant: "error" });
@@ -133,7 +133,7 @@ export default function ShowData() {
             .then(() => {
                 enqueueSnackbar("Progress updated successfully", { variant: "success" });
                 dispatch(resetUpdatedProgressProcurement());
-                refetchProcurements(dispatch, selectedProduct.id, search);
+                refetchProcurements(dispatch, selectedProduct.id, search, targetId);
             })
             .catch(() => {
                 enqueueSnackbar("Failed to update progress", { variant: "error" });
