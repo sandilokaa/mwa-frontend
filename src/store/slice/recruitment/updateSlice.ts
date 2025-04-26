@@ -45,12 +45,7 @@ const initialState: RecruitmentState = {
 const updateRecruitment = createSlice({
     name: 'updateRecruitment',
     initialState,
-    reducers: {
-        resetUpdatedRecruitment(state) {
-            state.updatedRecruitment = null;
-            state.error = null;
-        }
-    },
+    reducers: {},
     extraReducers: builder => {
         builder
             .addCase(updateRecruitmentData.pending, state => {
