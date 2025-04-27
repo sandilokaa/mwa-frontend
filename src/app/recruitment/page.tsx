@@ -192,7 +192,7 @@ export default function ShowData() {
                                                 <div className="flex flex-col gap-y-1">
                                                     <p className="font-bold text-xs">{notif?.name}</p>
                                                     <p className="text-xs text-gray-500">
-                                                        Due Date: {new Date(notif?.joinDate).toLocaleDateString("en-GB")}
+                                                        Join Date: {new Date(notif?.joinDate).toLocaleDateString("en-GB")}
                                                     </p>
                                                 </div>
                                             </div>
