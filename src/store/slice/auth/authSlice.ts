@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import api from '@/utils/axios';
 
 interface AuthState {
     isAuthenticated: boolean;
@@ -25,14 +25,8 @@ export const loginUser = createAsyncThunk(
         { rejectWithValue }
     ) => {
         try {
-        const res = await axios.post(
-            'http://localhost:8080/api/v1/auth/session/login',
-            payload,
-            {
-                withCredentials: true,
-            }
-        );
-        return res.data;
+            const res = await api.post('/api/v1/auth/session/login',payload);
+            return res.data;
         } catch (err: any) {
             return rejectWithValue(err.response?.data?.message || err.message);
         }
@@ -44,14 +38,8 @@ export const logoutUser = createAsyncThunk(
     'auth/logoutUser',
     async (_, { rejectWithValue }) => {
         try {
-        const res = await axios.post(
-            'http://localhost:8080/api/v1/auth/session/logout',
-            {},
-            {
-            withCredentials: true,
-            }
-        );
-        return res.data;
+            const res = await api.post('/api/v1/auth/session/logout',{},);
+            return res.data;
         } catch (err: any) {
             return rejectWithValue(err.response?.data?.message || err.message);
         }
@@ -63,13 +51,8 @@ export const fetchCurrentUser = createAsyncThunk(
     'auth/fetchCurrentUser',
     async (_, { rejectWithValue }) => {
         try {
-        const res = await axios.get(
-            'http://localhost:8080/api/v1/auth/session/me',
-            {
-            withCredentials: true,
-            }
-        );
-        return res.data.data.currentUser;
+            const res = await api.get('/api/v1/auth/session/me');
+            return res.data.data.currentUser;
         } catch (err: any) {
             return rejectWithValue(err.response?.data?.message || err.message);
         }

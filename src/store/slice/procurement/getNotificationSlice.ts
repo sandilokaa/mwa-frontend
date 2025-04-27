@@ -1,13 +1,10 @@
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-import axios from 'axios';
+import api from '@/utils/axios';
 
 export const fetchNotificationList = createAsyncThunk(
     'notifications/fetchNotificationList',
     async ({  productId, page }: { productId: number, page: number }) => {
-        const response = await axios.get(
-            `http://localhost:8080/api/v1/procurements/notification/timeline?&productId=${productId}&page=${page}`,
-            { withCredentials: true }
-        );
+        const response = await api.get(`/api/v1/procurements/notification/timeline?&productId=${productId}&page=${page}`);
         return response.data.data.procurement;
     }
 );

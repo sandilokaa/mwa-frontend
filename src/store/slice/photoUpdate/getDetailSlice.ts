@@ -1,13 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import api from '@/utils/axios';
 
 export const fetchPhotoUpdateDetail = createAsyncThunk(
     'photo-updates/fetchPhotoUpdateDetail',
     async ({  id }: { id: number }) => {
-        const response = await axios.get(
-            `http://localhost:8080/api/v1/photo-updates/${id}`,
-            { withCredentials: true }
-        );
+        const response = await api.get(`/api/v1/photo-updates/${id}`);
         return response.data.data.photoUpdate;
     }
 );

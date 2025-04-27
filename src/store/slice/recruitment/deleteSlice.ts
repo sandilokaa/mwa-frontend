@@ -1,13 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import api from '@/utils/axios';
 
 export const deleteRecruitment = createAsyncThunk(
     'recruitments/deleteRecruitment',
     async ({ id }: { id: number }) => {
-        const response = await axios.delete(
-            `http://localhost:8080/api/v1/recruitments/delete/${id}`,
-            { withCredentials: true }
-        );
+        const response = await api.delete(`/api/v1/recruitments/delete/${id}`);
         return response.data.data.recruitment;
     }
 );

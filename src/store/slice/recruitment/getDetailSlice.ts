@@ -1,13 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import api from '@/utils/axios';
 
 export const fetchRecruitmentDetail = createAsyncThunk(
     'recruitments/fetchRecruitmentDetail',
     async ({ id }: { id: number }) => {
-        const response = await axios.get(
-            `http://localhost:8080/api/v1/recruitments/${id}`,
-            { withCredentials: true }
-        );
+        const response = await api.get(`/api/v1/recruitments/${id}`);
         return response.data.data.recruitment;
     }
 );

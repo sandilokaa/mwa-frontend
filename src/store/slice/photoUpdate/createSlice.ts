@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import api from '@/utils/axios';
 
 interface PhotoUpdate {
     productId: number,
@@ -20,11 +20,10 @@ export const createdPhotoUpdateData = createAsyncThunk(
             formData.append('category', newPhotoUpdate.category);
             formData.append('picture', newPhotoUpdate.picture);
 
-            const response = await axios.post(
-                'http://localhost:8080/api/v1/photo-updates/create',
+            const response = await api.post(
+                '/api/v1/photo-updates/create',
                 formData,
-                { 
-                    withCredentials: true,
+                {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     } 

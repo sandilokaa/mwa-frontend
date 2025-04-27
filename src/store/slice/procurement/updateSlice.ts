@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import api from '@/utils/axios';
 
 interface Procurement {
     productId: number;
@@ -20,10 +20,9 @@ export const updateProcurementData = createAsyncThunk(
     ) => {
         try {
             const { id, ...data } = updatedProcurement;
-            const response = await axios.put(
-                `http://localhost:8080/api/v1/procurements/update/${id}`,
+            const response = await api.put(
+                `/api/v1/procurements/update/${id}`,
                 data,
-                { withCredentials: true }
             );
             return response.data.data.procurement;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

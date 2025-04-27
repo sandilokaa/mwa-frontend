@@ -1,13 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import api from '@/utils/axios';
 
 export const fetchFilteredProcurement = createAsyncThunk(
     'procurements/fetchFilteredProcurement',
     async ({  productId, prNumber, page }: { productId: number, prNumber: string, page: number }) => {
-        const response = await axios.get(
-            `http://localhost:8080/api/v1/procurements/search?&productId=${productId}&prNumber=${prNumber}&page=${page}`,
-            { withCredentials: true }
-        );
+        const response = await api.get(`/api/v1/procurements/search?&productId=${productId}&prNumber=${prNumber}&page=${page}`);
         return response.data.data.procurement;
     }
 );
@@ -15,10 +12,8 @@ export const fetchFilteredProcurement = createAsyncThunk(
 export const fetchAllProcurements = createAsyncThunk(
     'procurements/fetchAllProcurements',
     async ({  productId }: { productId: number }) => {
-        const response = await axios.get(
-            `http://localhost:8080/api/v1/procurements/metrics/total?&productId=${productId}`,
-            { withCredentials: true }
-        );
+        const response = await api.get(
+            `/api/v1/procurements/metrics/total?&productId=${productId}`);
         return response.data.data.procurement;
     }
 );
@@ -26,10 +21,8 @@ export const fetchAllProcurements = createAsyncThunk(
 export const fetchSummaryProcurement = createAsyncThunk(
     'procurements/fetchSummaryProcurement',
     async ({  productId }: { productId: number }) => {
-        const response = await axios.get(
-            `http://localhost:8080/api/v1/procurements/summary/stat?&productId=${productId}`,
-            { withCredentials: true }
-        );
+        const response = await api.get(
+            `/api/v1/procurements/summary/stat?&productId=${productId}`);
         return response.data.data.procurement;
     }
 );

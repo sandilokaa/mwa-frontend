@@ -1,13 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import api from '@/utils/axios';
 
 export const fetchFilteredRecruitment = createAsyncThunk(
     'recruitments/fetchFilteredRecruitment',
     async ({  name, page }: { name: string, page: number }) => {
-        const response = await axios.get(
-            `http://localhost:8080/api/v1/recruitments/search?&name=${name}&page=${page}`,
-            { withCredentials: true }
-        );
+        const response = await api.get(`/api/v1/recruitments/search?&name=${name}&page=${page}`);
         return response.data.data.recruitment;
     }
 );
@@ -15,10 +12,7 @@ export const fetchFilteredRecruitment = createAsyncThunk(
 export const fetchAllRecruitments = createAsyncThunk(
     'recruitments/fetchAllRecruitments',
     async () => {
-        const response = await axios.get(
-            `http://localhost:8080/api/v1/recruitments/metrics/total`,
-            { withCredentials: true }
-        );
+        const response = await api.get(`/api/v1/recruitments/metrics/total`);
         return response.data.data.recruitment;
     }
 );
@@ -26,10 +20,7 @@ export const fetchAllRecruitments = createAsyncThunk(
 export const fetchSummaryRecruitment = createAsyncThunk(
     'recruitments/fetchSummaryRecruitment',
     async () => {
-        const response = await axios.get(
-            `http://localhost:8080/api/v1/recruitments/summary/stat`,
-            { withCredentials: true }
-        );
+        const response = await api.get(`/api/v1/recruitments/summary/stat`);
         return response.data.data.recruitment;
     }
 );

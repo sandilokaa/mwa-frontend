@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import api from '@/utils/axios';
 
 interface Recruitment {
     name: string,
@@ -13,10 +13,9 @@ export const createdRecruitmentData = createAsyncThunk(
     'recruitments/createdRecruitmentData',
     async (newRecruitment: Recruitment, { rejectWithValue }) => {
         try {
-            const response = await axios.post(
-                'http://localhost:8080/api/v1/recruitments/create',
+            const response = await api.post(
+                '/api/v1/recruitments/create',
                 newRecruitment,
-                { withCredentials: true }
             );
             return response.data.data.recruitment;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
