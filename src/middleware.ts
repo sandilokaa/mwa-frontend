@@ -15,6 +15,7 @@ export function middleware(request: NextRequest) {
         '/development-status',
         '/highlight-issue',
         '/photo-update',
+        '/recruitment',
     ]
     const isProtected = protectedPaths.some((path) => pathname.startsWith(path))
 
@@ -33,5 +34,6 @@ export const config = {
         '/development-status/:path*',
         '/highlight-issue/:path*',
         '/photo-update/:path*',
+        '/recruitment/:path*',
     ],
 }
