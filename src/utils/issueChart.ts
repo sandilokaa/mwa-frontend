@@ -6,8 +6,8 @@ const picMeta: Record<PICKey, { label: string; color: string; borderColor: strin
     'System Engineering Issue': { label: 'System Engineering Issue', color: '#EBE0FF', borderColor: '#9966FF' },
     'Industrial Design Issue': { label: 'Industrial Design Issue', color: '#F4F5F5', borderColor: '#C9CBCF' },
     'Testing Issue': { label: 'Testing Issue', color: '#FDF7F2', borderColor: '#F3C5A5' },
-    'Production Issue': { label: 'Production Issue', color: '#FFF8F2', borderColor: '#F1D6B8' },
-    'Procurement Issue': { label: 'Procurement Issue', color: '#F5F3FF', borderColor: '#D3C8F1' },
+    'Production Issue': { label: 'Production Issue', color: '#FEF7F6', borderColor: '#F4B9B4' },
+    'Procurement Issue': { label: 'Procurement Issue', color: '#F8F8F6', borderColor: '#C7C4B8' },
 };
 
 export function getIssueChartData(allIssues: { pic: string, count: number }[]) {
