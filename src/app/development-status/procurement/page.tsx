@@ -16,7 +16,7 @@ import AddButton from "@/components/common/button/AddButton";
 import SearchInput from "@/components/common/input/SearchInput";
 import { formatProgressProc } from "@/utils/formatProgress";
 import ConfirmDialog from "@/components/common/modal/ConfirmDialog";
-import ProcurementBarChart from "@/components/common/chart/ProcumentBarChart";
+import ProjectBarChart from "@/components/common/chart/ProjectBarChart";
 import { getProcurementChartData } from "@/utils/procurementChart";
 import TablePagination from "@/components/common/pagination/TablePagination";
 import NotifPagination from "@/components/common/pagination/NotifPagination";
@@ -175,7 +175,7 @@ export default function ShowData() {
                     <div className="flex flex-col justify-between w-3/4 bg-white p-5 rounded-[10px]">
                         <h2 className="font-bold text-sm">Procurement Chart</h2>
                         <div className="flex justify-center">
-                            <ProcurementBarChart
+                            <ProjectBarChart
                                 title="Procurement Stats"
                                 data={chartData}
                             />

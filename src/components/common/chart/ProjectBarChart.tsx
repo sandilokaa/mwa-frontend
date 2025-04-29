@@ -26,7 +26,7 @@ interface BarChartProps {
     title?: string;
 }
 
-export default function BarChart({ data, title }: BarChartProps) {
+export default function ProjectBarChart({ data, title }: BarChartProps) {
     const chartData = {
         labels: data.map(d => d.label),
         datasets: [

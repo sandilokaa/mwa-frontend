@@ -116,7 +116,7 @@ export default function EditData() {
                             />
                             <DropdownString
                                 label="Division *"
-                                options={["Vehicle Engineering", "System Engineering", "Industrial Design"]}
+                                options={["Vehicle Engineering", "System Engineering", "Industrial Design", "Testing"]}
                                 onSelect={(value) => setDivision(value)}
                                 defaultValue={recruitmentDetail?.division}
                             />
