@@ -61,7 +61,7 @@ export default function LoginData() {
                         <div className="flex justify-center items-center h-full">
                             <div className="flex flex-col">
                                 <div className="flex">
-                                    <Image className="w-[180px] h-auto" src="/images/icon/prodflow-logo.svg" alt="Logo Image" width={100} height={100}/>
+                                    <Image className="w-[180px] h-auto" src="/images/icon/mwr-logo.svg" alt="Logo Image" width={100} height={100}/>
                                 </div>
                                 <div className="flex flex-col gap-4 w-[90%] mt-5">
                                     <p className="text-[32px] font-bold">Welcome to the Merpati Wahana Raya Dashboard</p>
