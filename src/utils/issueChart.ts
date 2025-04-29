@@ -1,7 +1,7 @@
 type PICKey = 'RnE Issue' | 'Vehicle Engineering Issue' | 'System Engineering Issue' | 'Industrial Design Issue' | 'Testing Issue' | 'Production Issue' | 'Procurement Issue';
 
 const picMeta: Record<PICKey, { label: string; color: string; borderColor: string }> = {
-    'RnE Issue': { label: 'Rne Issue', color: '#DBF2F2', borderColor: '#96DADA' },
+    'RnE Issue': { label: 'RnE Issue', color: '#DBF2F2', borderColor: '#96DADA' },
     'Vehicle Engineering Issue': { label: 'Vehicle Engineering Issue', color: '#CDEBFF', borderColor: '#059BFF' },
     'System Engineering Issue': { label: 'System Engineering Issue', color: '#EBE0FF', borderColor: '#9966FF' },
     'Industrial Design Issue': { label: 'Industrial Design Issue', color: '#F4F5F5', borderColor: '#C9CBCF' },
