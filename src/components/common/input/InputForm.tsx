@@ -6,10 +6,11 @@ interface InputFormProps {
     type?: string;
     placeholder?: string;
     defaultValue?: string;
+    disable?: boolean;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const InputForm = forwardRef<HTMLInputElement, InputFormProps>(({ label, type = "text", placeholder, onChange, defaultValue }, ref) => {
+const InputForm = forwardRef<HTMLInputElement, InputFormProps>(({ label, type = "text", placeholder, onChange, defaultValue, disable}, ref) => {
 
     const [showPassword, setShowPassword] = useState(false);
     const isPassword = type === "password";
@@ -25,6 +26,7 @@ const InputForm = forwardRef<HTMLInputElement, InputFormProps>(({ label, type = 
                     placeholder={placeholder}
                     onChange={onChange}
                     defaultValue={defaultValue}
+                    disabled={disable}
                     className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-300 placeholder:text-sm h-[45px] text-sm"
                 />
                 {isPassword && (
