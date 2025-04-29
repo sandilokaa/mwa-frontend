@@ -18,7 +18,7 @@ export default function AddData() {
                 <Link className="cursor-pointer" href="/development-status/production">
                     <Image src="/images/icon/chevron-down.svg" width={24} height={24} alt="Back Icon"/>
                 </Link>
-                <p className="font-bold">Add Production</p>
+                <p className="font-bold">Add Designed Production</p>
             </div>
             <div className="mt-5 bg-white w-full rounded-[10px] p-5">
                 <p className="text-sm font-bold">Designed Production Form</p>
@@ -57,7 +57,7 @@ export default function AddData() {
                         </div>
                         <div className="grid grid-cols-1">
                             <TextAreaForm
-                                label="Remarks *"
+                                label="Information *"
                                 placeholder="Example: Describe the remark"
                                 rows={3}
                             />
@@ -72,7 +72,7 @@ export default function AddData() {
                     <div className="flex justify-end">
                         <SubmitButton
                             onClick={() => ""}
-                            buttonText="Add Production"
+                            buttonText="Add Designed Production"
                         />
                     </div>
                 </div>

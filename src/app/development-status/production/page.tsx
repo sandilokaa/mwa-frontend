@@ -43,7 +43,7 @@ export default function ShowData() {
                                 <th className="py-5 px-4 text-left min-w-[200px]">Part Name</th>
                                 <th className="py-5 px-4 min-w-[170px]">Drawing Number</th>
                                 <th className="py-5 px-4 min-w-[170px]">Part Number</th>
-                                <th className="py-5 px-4 min-w-[170px]">Remarks</th>
+                                <th className="py-5 px-4 min-w-[170px]">Information</th>
                                 <th className="py-5 px-4 min-w-[150px]">Status</th>
                                 <th className="py-5 px-4 min-w-[150px]">Action</th>
                             </tr>
