@@ -9,6 +9,7 @@ import DropdownString from "@/components/common/dropdown/DropdownString";
 import TextAreaForm from "@/components/common/input/TextAreaForm";
 import FileInputForm from "@/components/common/input/FileInputForm";
 import SubmitButton from "@/components/common/button/SubmitButton";
+import DateInputForm from "@/components/common/input/DateInputFrom";
 
 export default function AddData() {
 
@@ -85,6 +86,14 @@ export default function AddData() {
                                 label="Total Price *"
                                 placeholder="Example: Chassis Assy"
                                 disable
+                            />
+                        </div>
+                        <div className="grid grid-cols-3 gap-4">
+                            <DateInputForm
+                                label="Submission Date *"
+                            />
+                            <DateInputForm
+                                label="Required Date *"
                             />
                         </div>
                         <div className="grid grid-cols-1">
