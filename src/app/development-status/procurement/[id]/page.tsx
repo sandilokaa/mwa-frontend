@@ -6,8 +6,8 @@ import { useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { fetchProcurementDetail, Progress, StatusProc } from "@/store/slice/procurement/getDetailSlice";
-import { formatProgressProc } from "@/utils/formatProgress";
-import { formatDate } from "@/utils/formatDate";
+import { formatProgressProc } from "@/utils/format/formatProgress";
+import { formatDate } from "@/utils/format/formatDate";
 
 export default function DetailData() {
 

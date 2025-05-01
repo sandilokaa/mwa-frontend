@@ -10,14 +10,14 @@ import { fetchNotificationList } from "@/store/slice/procurement/getNotification
 import { deleteProcurement, resetDeleteState } from "@/store/slice/procurement/deleteSlice";
 import { updateProgressProcData, resetUpdatedProgressProcurement } from "@/store/slice/procurement/progressUpdateSlice";
 import { useSnackbar } from "notistack";
-import { refetchProcurements } from "@/utils/refetchProcurements";
+import { refetchProcurements } from "@/utils/refetch/refetchProcurements";
 
 import AddButton from "@/components/common/button/AddButton";
 import SearchInput from "@/components/common/input/SearchInput";
-import { formatProgressProc } from "@/utils/formatProgress";
+import { formatProgressProc } from "@/utils/format/formatProgress";
 import ConfirmDialog from "@/components/common/modal/ConfirmDialog";
 import ProjectBarChart from "@/components/common/chart/ProjectBarChart";
-import { getProcurementChartData } from "@/utils/procurementChart";
+import { getProcurementChartData } from "@/utils/chart/procurementChart";
 import TablePagination from "@/components/common/pagination/TablePagination";
 import NotifPagination from "@/components/common/pagination/NotifPagination";
 import ProgressProcMenu from "@/components/common/modal/ProgressProcMenu";
