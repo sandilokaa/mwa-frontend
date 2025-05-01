@@ -2,14 +2,32 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useParams } from "next/navigation";
+import { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { fetchProductionDetail, ProductionStatus } from "@/store/slice/production/getDetailSlice";
 
 import DocumentBadge from "@/components/common/badge/DocumentBadge";
 
 export default function DetailData() {
+
+    const dispatch = useAppDispatch();
+    const params = useParams();
+    const id = Number(params.id);
+
+    const { productionDetail } = useAppSelector(state => state.productionDetail);
+
+    useEffect(() => {
+        if (id) {
+            dispatch(fetchProductionDetail({ id }));
+        }
+    }, [id, dispatch]);
+
+
     return (
         <div>
             <div className="flex gap-2">   
-                <Link className="cursor-pointer" href="/development-status/production/:id/edit">
+                <Link className="cursor-pointer" href="/development-status/production/">
                     <Image src="/images/icon/chevron-down.svg" width={24} height={24} alt="Back Icon"/>
                 </Link>
                 <p className="font-bold">Designed Production Detail</p>
@@ -18,7 +36,7 @@ export default function DetailData() {
                 <div className="bg-white w-full rounded-[10px] p-5 col-span-3">
                     <div className="flex justify-between">
                         <p className="text-sm font-bold">Designed Production Information</p>
-                        <Link className="cursor-pointer" href="/development-status/production/:id/edit">
+                        <Link className="cursor-pointer" href={`/development-status/production/${id}/edit`}>
                             <Image className="cursor-pointer" src="/images/icon/edit.svg" alt="Edit Icon" width={22} height={22}/>
                         </Link>
                     </div>
@@ -26,27 +44,27 @@ export default function DetailData() {
                         <div className="grid grid-cols-1">
                             <div className="flex flex-col gap-2">
                                 <p className="text-sm text-[#989898]">Part Name</p>
-                                <p>Example: XXXXXXX</p>
+                                <p>{productionDetail?.partName}</p>
                             </div>
                         </div>
                         <div className="grid grid-cols-3">
                             <div className="flex flex-col gap-2">
                                 <p className="text-sm text-[#989898]">PIC Production</p>
-                                <p>Example: XXXXXXX</p>
+                                <p>{productionDetail?.picProduction}</p>
                             </div>
                             <div className="flex flex-col gap-2">
                                 <p className="text-sm text-[#989898]">Part Number</p>
-                                <p>Example: XXXXXXX</p>
+                                <p>{productionDetail?.partNumber}</p>
                             </div>
                             <div className="flex flex-col gap-2">
                                 <p className="text-sm text-[#989898]">Drawing Number</p>
-                                <p>Example: XXXXXXX</p>
+                                <p>{productionDetail?.drawingNumber}</p>
                             </div>
                         </div>
                         <div className="grid grid-cols-1">
                             <div className="flex flex-col gap-2">
                                 <p className="text-sm text-[#989898]">Information</p>
-                                <p>Example: XXXXXXX</p>
+                                <p>{productionDetail?.information}</p>
                             </div>
                         </div>
                         <div className="grid grid-cols-1">
@@ -65,9 +83,11 @@ export default function DetailData() {
                         <p
                             className={`
                                 text-sm font-medium inline-block py-[10px] px-4 rounded-[5px]
+                                ${productionDetail?.productionStatus === ProductionStatus.OnProgress ? 'text-[#EB575F] bg-[#FEF2F3]' : ''}
+                                ${productionDetail?.productionStatus === ProductionStatus.Done ? 'text-[#3e9c9c] bg-[#DBF2F2]' : ''}
                             `}
                         >
-                            On Progress
+                            {productionDetail?.productionStatus.replace(/(?:^|\s)\S/g, (match: string) => match.toUpperCase())}
                         </p>
                     </div>
                 </div>

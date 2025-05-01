@@ -5,6 +5,7 @@ import { photoUpdateReducers } from "./photoUpdate";
 import { recruitmentReducers } from "./recruitment";
 import { procurmentReducers } from "./procurement";
 import { issueReducer } from "./highlightIssue";
+import { productionReducer } from "./production";
 
 export const rootReducer = combineReducers({
     ...authReducers,
@@ -12,5 +13,6 @@ export const rootReducer = combineReducers({
     ...photoUpdateReducers,
     ...procurmentReducers,
     ...recruitmentReducers,
-    ...issueReducer
+    ...issueReducer,
+    ...productionReducer
 });

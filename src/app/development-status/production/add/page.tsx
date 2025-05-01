@@ -2,6 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRef, useState } from "react";
+import { createdProductionData } from "@/store/slice/production/createSlice";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { useSnackbar } from "notistack";
+import { useRouter } from "next/navigation";
 
 import SubmitButton from "@/components/common/button/SubmitButton";
 import InputForm from "@/components/common/input/InputForm";
@@ -11,6 +16,57 @@ import TextAreaForm from "@/components/common/input/TextAreaForm";
 import FileInputForm from "@/components/common/input/FileInputForm";
 
 export default function AddData() {
+
+    const dispatch = useAppDispatch();
+    const { enqueueSnackbar } = useSnackbar();
+    const router = useRouter();
+
+    const { products } = useAppSelector((state) => state.productList);
+
+    const [picProduction, setPICProduction] = useState("");
+    const partNameRef = useRef<HTMLInputElement>(null);
+    const partNumberRef = useRef<HTMLInputElement>(null);
+    const drawingNumberRef = useRef<HTMLInputElement>(null);
+    const informationRef = useRef<HTMLTextAreaElement | null>(null);
+    const prodFileRef = useRef<HTMLInputElement>(null);
+    const selectedProductIdRef = useRef<number>(0);
+
+    const handleSubmit = () => {
+        const isEmpty = 
+            !selectedProductIdRef.current || 
+            !partNameRef.current?.value?.trim() ||
+            !partNumberRef.current?.value?.trim() ||
+            !drawingNumberRef.current?.value?.trim() ||
+            !informationRef.current?.value?.trim() ||
+            !prodFileRef.current?.files?.[0] ||
+            !picProduction
+        ;
+
+        if (isEmpty) {
+            enqueueSnackbar("All fields are required", { variant: "error" });
+            return;
+        }
+
+        try {
+            const payload = {
+                productId: selectedProductIdRef.current,
+                partName: partNumberRef.current?.value || '',
+                partNumber: partNumberRef.current?.value || '',
+                drawingNumber: drawingNumberRef.current?.value || '',
+                picProduction,
+                information: informationRef.current?.value || '',
+                prodFile: prodFileRef.current?.files?.[0] || '',
+
+            };
+            dispatch(createdProductionData(payload));
+            enqueueSnackbar("You have successfully created the data", { variant: "success" });
+
+            router.push("/development-status/production");
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (err: any) {
+            enqueueSnackbar(err.message, { variant: "error" });
+        }
+    };
 
     return (
         <div>
@@ -28,31 +84,31 @@ export default function AddData() {
                             <InputForm
                                 label="Part Name *"
                                 placeholder="Example: Chassis Assy"
+                                ref={partNameRef}
                             />
                             <InputForm
                                 label="Part Number *"
                                 placeholder="Example: Chassis Assy"
+                                ref={partNumberRef}
                             />
                             <InputForm
                                 label="Drawing Number *"
                                 placeholder="Example: Chassis Assy"
+                                ref={drawingNumberRef}
                             />
                         </div>
                         <div className="grid grid-cols-3 gap-4">
                             <DropdownProductForm
                                 label="Product *"
-                                options={[]}
-                                onSelect={() => ""}
-                            />
-                            <DropdownString
-                                label="Production Status *"
-                                options={["Mechanical Engineering"]}
-                                onSelect={() => ""}
+                                options={products}
+                                onSelect={(value) => {
+                                    selectedProductIdRef.current = value.id;
+                                }}
                             />
                             <DropdownString
                                 label="PIC Production *"
                                 options={["Mechanical Engineering"]}
-                                onSelect={() => ""}
+                                onSelect={(value) => setPICProduction(value)}
                             />
                         </div>
                         <div className="grid grid-cols-1">
@@ -60,18 +116,20 @@ export default function AddData() {
                                 label="Information *"
                                 placeholder="Example: Describe the remark"
                                 rows={3}
+                                ref={informationRef}
                             />
                         </div>
                         <div className="grid grid-cols-1">
                             <FileInputForm
                                 label="Upload Documents *"
                                 acceptFile=".pdf"
+                                ref={prodFileRef}
                             />
                         </div>
                     </div>
                     <div className="flex justify-end">
                         <SubmitButton
-                            onClick={() => ""}
+                            onClick={handleSubmit}
                             buttonText="Add Designed Production"
                         />
                     </div>
