@@ -1,7 +1,7 @@
 'use client';
 
 import { Bar } from 'react-chartjs-2';
-import { getRecruitmentChartData } from '@/utils/recruitmentChart';
+import { getRecruitmentChartData } from '@/utils/chart/recruitmentChart';
 import {
     Chart as ChartJS,
     CategoryScale,
