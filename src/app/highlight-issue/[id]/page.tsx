@@ -5,7 +5,7 @@ import Image from "next/image";
 import { useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { formatDate } from "@/utils/formatDate";
+import { formatDate } from "@/utils/format/formatDate";
 import { fetchIssueDetail, StatusIssue } from "@/store/slice/highlightIssue/getDetailSlice";
 
 export default function DetailData() {

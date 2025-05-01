@@ -9,9 +9,9 @@ import { fetchNotificationList } from "@/store/slice/highlightIssue/getNotificat
 import { fetchFilteredIssue, fetchIssueMetrics, StatusIssue, fetchSummaryIssue} from "@/store/slice/highlightIssue/getAllSlice";
 import { deleteIssue, resetDeleteState } from "@/store/slice/highlightIssue/deleteSlice";
 import { useSnackbar } from "notistack";
-import { refetchHighlightIssues } from "@/utils/refetchHighlightIssue";
+import { refetchHighlightIssues } from "@/utils/refetch/refetchHighlightIssue";
 import { resetUpdatedStatusIssue, updateStatusIssueData } from "@/store/slice/highlightIssue/statusUpdateSlice";
-import { getIssueChartData } from "@/utils/issueChart";
+import { getIssueChartData } from "@/utils/chart/issueChart";
 
 import AddButton from "@/components/common/button/AddButton";
 import SearchInput from "@/components/common/input/SearchInput";

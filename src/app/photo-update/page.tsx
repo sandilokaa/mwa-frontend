@@ -8,7 +8,7 @@ import { fetchPhotoUpdateLists } from "@/store/slice/photoUpdate/getAllSlice";
 import { useProductFilter } from "@/context/ProductFilterContext";
 import { deletePhotoUpdate, resetDeleteState } from "@/store/slice/photoUpdate/deleteSlice";
 import { useSnackbar } from "notistack";
-import { refetchPhotoUpdates } from "@/utils/refetchPhotoUpdate";
+import { refetchPhotoUpdates } from "@/utils/refetch/refetchPhotoUpdate";
 
 import AddButton from "@/components/common/button/AddButton";
 import DropdownCategory from "@/components/common/dropdown/DropdownFilterCategory";

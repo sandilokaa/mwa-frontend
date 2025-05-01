@@ -8,15 +8,15 @@ import { fetchFilteredRecruitment, Progress, StatusRec, fetchAllRecruitments, fe
 import { deleteRecruitment, resetDeleteState } from "@/store/slice/recruitment/deleteSlice";
 import { fetchNotificationList } from "@/store/slice/recruitment/getNotificationSlice";
 import { useSnackbar } from "notistack";
-import { refetchRecruitments } from "@/utils/refetchRecruitment";
+import { refetchRecruitments } from "@/utils/refetch/refetchRecruitment";
 import { updateProgressRecData, resetUpdatedProgressRecruitment } from "@/store/slice/recruitment/progressUpdateSlice";
 
 import AddButton from "@/components/common/button/AddButton";
 import SearchInput from "@/components/common/input/SearchInput";
-import { formatProgressRec } from "@/utils/formatProgress";
+import { formatProgressRec } from "@/utils/format/formatProgress";
 import ConfirmDialog from "@/components/common/modal/ConfirmDialog";
 import BarChart from "@/components/common/chart/RecruitmentBarChart";
-import { getRecruitmentChartData } from "@/utils/recruitmentChart";
+import { getRecruitmentChartData } from "@/utils/chart/recruitmentChart";
 import TablePagination from "@/components/common/pagination/TablePagination";
 import NotifPagination from "@/components/common/pagination/NotifPagination";
 import ProgressRecMenu from "@/components/common/modal/ProgressRecMenu";

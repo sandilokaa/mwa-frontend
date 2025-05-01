@@ -6,8 +6,8 @@ import { useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { fetchRecruitmentDetail, Progress, StatusRec } from "@/store/slice/recruitment/getDetailSlice";
-import { formatProgressRec } from "@/utils/formatProgress";
-import { formatDate } from "@/utils/formatDate";
+import { formatProgressRec } from "@/utils/format/formatProgress";
+import { formatDate } from "@/utils/format/formatDate";
 
 export default function DetailData() {
 
