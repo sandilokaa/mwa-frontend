@@ -16,7 +16,6 @@ import { useRouter } from "next/navigation";
 
 export default function EditData() {
 
-    
     const dispatch = useAppDispatch();
     const router = useRouter();
     const { enqueueSnackbar } = useSnackbar();
@@ -155,7 +154,7 @@ export default function EditData() {
                     </div>
                     <div className="flex justify-end">
                         <SubmitButton
-                            buttonText="Change Procurement"
+                            buttonText="Save Change"
                             onClick={handleUpdate}
                         />
                     </div>

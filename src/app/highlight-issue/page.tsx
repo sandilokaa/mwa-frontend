@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { useProductFilter } from "@/context/ProductFilterContext";
 import { fetchNotificationList } from "@/store/slice/highlightIssue/getNotificationSlice";
-import { fetchFilteredIssue, fetchIssueMetrics, StatusIssue, fetchSummaryIssue} from "@/store/slice/highlightIssue/getAllSlice";
+import { fetchFilteredIssue, StatusIssue} from "@/store/slice/highlightIssue/getAllSlice";
 import { deleteIssue, resetDeleteState } from "@/store/slice/highlightIssue/deleteSlice";
 import { useSnackbar } from "notistack";
 import { refetchHighlightIssues } from "@/utils/refetch/refetchHighlightIssue";
@@ -20,6 +20,7 @@ import TablePagination from "@/components/common/pagination/TablePagination";
 import ConfirmDialog from "@/components/common/modal/ConfirmDialog";
 import StatusMenu from "@/components/common/modal/StatusMenu";
 import ProjectBarChart from "@/components/common/chart/ProjectBarChart";
+import { StatusIssueOptions } from "@/utils/status/statusOption";
 
 export default function ShowData() {
 
@@ -34,15 +35,9 @@ export default function ShowData() {
 
     useEffect(() => {
         if (!selectedProduct?.id) return;
-        dispatch(fetchSummaryIssue({ productId: selectedProduct?.id}))
-        dispatch(fetchIssueMetrics({productId: selectedProduct?.id}));
         const delay = setTimeout(() => {
             if (selectedProduct) {
-                dispatch(fetchFilteredIssue({
-                    productId: selectedProduct.id,
-                    itemName: search,
-                    page: 1
-                }));
+                refetchHighlightIssues(dispatch, selectedProduct.id, search, 1);
             }
         }, 500);
         
@@ -233,7 +228,7 @@ export default function ShowData() {
                 </div>
             </div>
             <div className="mt-5">
-                <div className="overflow-x-auto rounded-lg bg-white p-[10px]">
+                <div className="rounded-lg bg-white p-[10px]">
                     <table className="w-full border-collapse">
                         <thead className="border-b border-[#F5F5F5]">
                             <tr className="text-sm font-bold text-center">
@@ -309,6 +304,7 @@ export default function ShowData() {
                                                                 onToggle={toggleStatus}
                                                                 onSave={() => handleUpdateStatus(issue.id)}
                                                                 onClose={() => setShowStatusMenuId(null)}
+                                                                statusOptions={StatusIssueOptions}
                                                             />
                                                         )}
                                                     </td>

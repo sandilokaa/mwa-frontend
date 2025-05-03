@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useProductFilter } from "@/context/ProductFilterContext";
-import { fetchFilteredProcurement, Progress, StatusProc, fetchAllProcurements, fetchSummaryProcurement } from "@/store/slice/procurement/getAllSlice";
+import { fetchFilteredProcurement, Progress, StatusProc } from "@/store/slice/procurement/getAllSlice";
 import { fetchNotificationList } from "@/store/slice/procurement/getNotificationSlice";
 import { deleteProcurement, resetDeleteState } from "@/store/slice/procurement/deleteSlice";
 import { updateProgressProcData, resetUpdatedProgressProcurement } from "@/store/slice/procurement/progressUpdateSlice";
@@ -35,15 +35,9 @@ export default function ShowData() {
 
     useEffect(() => {
         if (!selectedProduct?.id) return;
-        dispatch(fetchSummaryProcurement({productId: selectedProduct?.id}));
-        dispatch(fetchAllProcurements({productId: selectedProduct?.id}));
         const delay = setTimeout(() => {
             if (selectedProduct) {
-                dispatch(fetchFilteredProcurement({
-                    productId: selectedProduct.id,
-                    prNumber: search,
-                    page: 1
-                }));
+                refetchProcurements(dispatch, selectedProduct.id, search, 1);
             }
         }, 500);
         
@@ -234,7 +228,7 @@ export default function ShowData() {
                 </div>
             </div>
             <div className="mt-5">
-                <div className="overflow-x-auto rounded-lg bg-white p-[10px]">
+                <div className="rounded-lg bg-white p-[10px]">
                     <table className="w-full border-collapse">
                         <thead className="border-b border-[#F5F5F5]">
                             <tr className="text-sm font-bold text-center">

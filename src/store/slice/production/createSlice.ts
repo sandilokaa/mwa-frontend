@@ -5,7 +5,7 @@ interface Production {
     productId: number;
     partName: string, 
     drawingNumber: string, 
-    partNumber: string, 
+    category: string, 
     information: string, 
     prodFile: string | File,
     picProduction: string 
@@ -18,7 +18,7 @@ export const createdProductionData = createAsyncThunk(
             const formData = new FormData();
             formData.append('productId', newProduction.productId.toString());
             formData.append('partName', newProduction.partName);
-            formData.append('partNumber', newProduction.partNumber);
+            formData.append('category', newProduction.category);
             formData.append('drawingNumber', newProduction.drawingNumber);
             formData.append('picProduction', newProduction.picProduction);
             formData.append('information', newProduction.information);
@@ -27,6 +27,11 @@ export const createdProductionData = createAsyncThunk(
             const response = await api.post(
                 '/api/v1/productions/create',
                 formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    } 
+                }
             );
             return response.data.data.production;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

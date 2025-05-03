@@ -124,7 +124,7 @@ export default function EditData() {
                     </div>
                     <div className="flex justify-end">
                         <SubmitButton
-                            buttonText="Change Recruitment"
+                            buttonText="Save Change"
                             onClick={handleUpdate}
                         />
                     </div>

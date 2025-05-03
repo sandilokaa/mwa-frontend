@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { fetchFilteredProduction } from "@/store/slice/production/getAllSlice";
+import { fetchFilteredProduction, fetchSummaryProductionStatus } from "@/store/slice/production/getAllSlice";
 
-export const refetchProductions = (dispatch: any, productId: any, search: any, page = 1) => {
+export const refetchProductions = (dispatch: any, productId: any, search: any, category: any, page = 1) => {
+    dispatch(fetchSummaryProductionStatus({ productId, category}))
     dispatch(fetchFilteredProduction({
         productId,
-        partNumber: search,
+        partName: search,
+        category,
         page
     }));
 };

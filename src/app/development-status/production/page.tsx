@@ -9,11 +9,18 @@ import { fetchFilteredProduction, ProductionStatus } from "@/store/slice/product
 import { deleteProduction, resetDeleteState } from "@/store/slice/production/deleteSlice";
 import { refetchProductions } from "@/utils/refetch/refetchProduction";
 import { useSnackbar } from "notistack";
+import { updateProductionStatusData, resetUpdatedStatusProduction } from "@/store/slice/production/statusUpdateSlice";
+import { getProductionChartData } from "@/utils/chart/productionChart";
+import { getEffectiveCategory } from "@/utils/filter/effetiveCategory";
 
 import AddButton from "@/components/common/button/AddButton";
 import SearchInput from "@/components/common/input/SearchInput";
 import TablePagination from "@/components/common/pagination/TablePagination";
 import ConfirmDialog from "@/components/common/modal/ConfirmDialog";
+import StatusMenu from "@/components/common/modal/StatusMenu";
+import { StatusProductionOptions } from "@/utils/status/statusOption";
+import DropdownCategory from "@/components/common/dropdown/DropdownFilterCategory";
+import DoughnutChart from "@/components/common/chart/DoughnutChart";
 
 export default function ShowData() {
 
@@ -21,37 +28,34 @@ export default function ShowData() {
     const { selectedProduct } = useProductFilter();
     const { enqueueSnackbar } = useSnackbar();
 
+    
     /* ------------------- Get All Production ------------------- */
     
     const [search, setSearch] = useState('');
-    const { filteredProductions: { productionDataFiltered, currentPagesProd, totalPagesProd }, loading } = useAppSelector(state => state.productionLists);
-
-    console.log(productionDataFiltered)
+    const [selectedCategory, setSelectedCategory] = useState("Overall");
+    const { filteredProductions: { productionDataFiltered, currentPagesProd, totalPagesProd }, loading, summaryProductionStatus } = useAppSelector(state => state.productionLists);
 
     useEffect(() => {
         if (!selectedProduct?.id) return;
         const delay = setTimeout(() => {
             if (selectedProduct) {
-                dispatch(fetchFilteredProduction({
-                    productId: selectedProduct.id,
-                    partNumber: search,
-                    page: 1
-                }));
+                refetchProductions(dispatch, selectedProduct.id, search, getEffectiveCategory(selectedCategory));
             }
         }, 500);
         
         return () => clearTimeout(delay);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [search, selectedProduct?.id]);
+    }, [search, selectedCategory, selectedProduct?.id]);
 
-    // const chartData = getProcurementChartData(summaryProcurements);
+    const chartData = getProductionChartData(summaryProductionStatus);
 
     const handlePageProdChange = (newPage: number) => {
         if (!selectedProduct?.id) return;
         dispatch(fetchFilteredProduction({
             productId: selectedProduct.id,
-            partNumber: search,
-            page: newPage
+            partName: search,
+            page: newPage,
+            category: selectedCategory
         }));
     };
 
@@ -76,7 +80,7 @@ export default function ShowData() {
                     if (!selectedProduct?.id) return;
                     enqueueSnackbar("You have successfully deleted the data", { variant: "success" });
                     dispatch(resetDeleteState());
-                    refetchProductions(dispatch, selectedProduct.id, search);
+                    refetchProductions(dispatch, selectedProduct.id, search, getEffectiveCategory(selectedCategory));
                 })
                 .catch(() => {
                     enqueueSnackbar("You failed to delete data", { variant: "error" });
@@ -87,6 +91,36 @@ export default function ShowData() {
     };
 
     /* ------------------- End Delete Production ------------------- */
+
+
+    /* ------------------- Modal Status Produciton ------------------- */
+    
+    const [selectedStatus, setSelectedStatus] = useState<string>('');
+    const [showStatusMenuId, setShowStatusMenuId] = useState<number | null>(null);
+
+    const toggleStatus = (value: string) => {
+        setSelectedStatus(value)
+    };
+
+    const handleUpdateStatus = (id: number) => {
+        if (!selectedProduct?.id || !selectedStatus) return; 
+    
+        dispatch(updateProductionStatusData({ id, productionStatus: selectedStatus.toLowerCase() }))
+            .unwrap()
+            .then(() => {
+                enqueueSnackbar("Progress updated successfully", { variant: "success" });
+                dispatch(resetUpdatedStatusProduction());
+                refetchProductions(dispatch, selectedProduct.id, search, getEffectiveCategory(selectedCategory));
+            })
+            .catch(() => {
+                enqueueSnackbar("Failed to update progress", { variant: "error" });
+                dispatch(resetUpdatedStatusProduction());
+            });
+    
+            setShowStatusMenuId(null);
+    }
+
+    /* ------------------- End Modal Status Produciton ------------------- */
 
     return (
         <div>
@@ -107,10 +141,16 @@ export default function ShowData() {
                             buttonText="Add Production"
                         />
                     </Link>
-                    <SearchInput
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                    />
+                    <div className="flex gap-4">
+                        <DropdownCategory
+                            options={["Overall", "Chassis", "Under Body", "Upper Body"]}
+                            onSelect={(value) => setSelectedCategory(value)}
+                        />
+                        <SearchInput
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                        />
+                    </div>
                 </div>
             </div>
             <div className="mt-5">
@@ -120,20 +160,26 @@ export default function ShowData() {
                         <div className="flex justify-center">
                         </div>
                     </div>
-                    <div className="flex flex-col w-1/3 h-full bg-white p-5 rounded-[10px]">
+                    <div className="flex flex-col w-1/3 h-full bg-white p-5 rounded-[10px] gap-5">
                         <h2 className="font-bold text-sm">Production Status Overview</h2>
+                        <div className="flex justify-center">
+                            <DoughnutChart
+                                title="Status Overview"
+                                data={chartData}
+                            />
+                        </div>
                     </div>
                 </div>
             </div>
             <div className="mt-5">
-                <div className="overflow-x-auto rounded-lg bg-white p-[10px]">
+                <div className="rounded-lg bg-white p-[10px]">
                     <table className="w-full border-collapse">
                         <thead className="border-b border-[#F5F5F5]">
                             <tr className="text-sm font-bold text-center">
                                 <th className="py-5 px-4 text-left">No</th>
                                 <th className="py-5 px-4 text-left min-w-[200px]">Part Name</th>
                                 <th className="py-5 px-4 min-w-[170px]">Drawing Number</th>
-                                <th className="py-5 px-4 min-w-[170px]">Part Number</th>
+                                <th className="py-5 px-4 min-w-[170px]">Category</th>
                                 <th className="py-5 px-4 min-w-[170px]">Information</th>
                                 <th className="py-5 px-4 min-w-[150px]">Status</th>
                                 <th className="py-5 px-4 min-w-[150px]">Action</th>
@@ -163,7 +209,7 @@ export default function ShowData() {
                                                     <td className="py-5 px-4 text-left">{displayIndex}</td>
                                                     <td className="py-5 px-4 text-left">{prod.partName}</td>
                                                     <td className="py-5 px-4">{prod.drawingNumber}</td>
-                                                    <td className="py-5 px-4 ">{prod.partNumber}</td>
+                                                    <td className="py-5 px-4 ">{prod.category}</td>
                                                     <td className="py-5 px-4 text-left">
                                                         <div className="flex line-clamp-3">
                                                             {prod.information}
@@ -174,35 +220,37 @@ export default function ShowData() {
                                                             <div 
                                                                 className={`
                                                                         p-2 rounded-[5px] flex justify-center w-full
-                                                                        ${prod.productionStatus === ProductionStatus.OnProgress ? 'text-[#EB575F] bg-[#FEF2F3]' : ''}
+                                                                        ${prod.productionStatus === ProductionStatus.NotYet ? 'text-[#7a7b7d] bg-[#F4F5F5]' : ''}
+                                                                        ${prod.productionStatus === ProductionStatus.OnGoing ? 'text-[#ae8c02] bg-[#FFF9C4]' : ''}
                                                                         ${prod.productionStatus === ProductionStatus.Done ? 'text-[#3e9c9c] bg-[#DBF2F2]' : ''}
                                                                 `}
                                                             >
                                                                 <p>{prod.productionStatus.replace(/(?:^|\s)\S/g, (match: string) => match.toUpperCase())}</p>
                                                             </div>
                                                             <div
-                                                                // onClick={() => {
-                                                                //     setShowProgressMenuId(prevId => {
-                                                                //         const newId = prevId === proc.id ? null : proc.id;
-                                                                //         if (newId !== null) {
-                                                                //             setSelectedProgress(proc.progress);
-                                                                //         }
-                                                                //         return newId;
-                                                                //     });
-                                                                // }}
+                                                                onClick={() => {
+                                                                    setShowStatusMenuId(prevId => {
+                                                                        const newId = prevId === prod.id ? null : prod.id;
+                                                                        if (newId !== null) {
+                                                                            setSelectedStatus(prod.productionStatus);
+                                                                        }
+                                                                        return newId;
+                                                                    });
+                                                                }}
                                                                 className="flex justify-center items-center cursor-pointer"
                                                             >
                                                                 <Image src="/images/icon/menu.svg" alt="Menu Icon" width={15} height={15}/>
                                                             </div>
                                                         </div>
-                                                        {/* {showProgressMenuId === proc.id && (
-                                                            <ProgressProcMenu
-                                                                selectedProgress={selectedProgress}
-                                                                onToggle={toggleProgress}
-                                                                onSave={() => handleUpdateProgress(proc.id)}
-                                                                onClose={() => setShowProgressMenuId(null)}
+                                                        {showStatusMenuId === prod.id && (
+                                                            <StatusMenu
+                                                                selectedStatus={selectedStatus}
+                                                                onToggle={toggleStatus}
+                                                                onSave={() => handleUpdateStatus(prod.id)}
+                                                                onClose={() => setShowStatusMenuId(null)}
+                                                                statusOptions={StatusProductionOptions}
                                                             />
-                                                        )} */}
+                                                        )}
                                                     </td>
                                                     <td className="py-5 px-4">
                                                         <div className="flex gap-[10px] justify-center">

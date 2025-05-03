@@ -47,8 +47,6 @@ export default function ShowData() {
     const [openConfirm, setOpenConfirm] = useState(false);
     const [targetId, setTargetId] = useState<number | null>(null);
 
-    console.log(targetId);
-
     const confirmDelete = (id: number) => {
         setTargetId(id);
         setOpenConfirm(true);

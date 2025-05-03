@@ -10,7 +10,8 @@ export const fetchProductionDetail = createAsyncThunk(
 );
 
 export enum ProductionStatus {
-    OnProgress = 'on progress',
+    NotYet = 'not yet',
+    OnGoing = 'on going',
     Done = 'done'
 }
 
@@ -19,7 +20,7 @@ interface Production {
     productId: number;
     partName: string, 
     drawingNumber: string, 
-    partNumber: string, 
+    category: string, 
     information:string, 
     productionStatus: ProductionStatus,
     prodFile: string,

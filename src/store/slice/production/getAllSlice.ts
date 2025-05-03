@@ -3,14 +3,24 @@ import api from '@/utils/axios';
 
 export const fetchFilteredProduction = createAsyncThunk(
     'productions/fetchFilteredProduction',
-    async ({  productId, partNumber, page }: { productId: number, partNumber: string, page: number }) => {
-        const response = await api.get(`/api/v1/productions/search?&productId=${productId}&partNumber=${partNumber}&page=${page}`);
+    async ({  productId, partName, page, category }: { productId: number, partName: string, page: number, category: string }) => {
+        const response = await api.get(`/api/v1/productions/search?&productId=${productId}&partName=${partName}&page=${page}&category=${category}`);
+        return response.data.data.production;
+    }
+);
+
+export const fetchSummaryProductionStatus = createAsyncThunk(
+    'productions/fetchSummaryProductionStatus',
+    async ({ productId, category }: { productId: number, category: string }) => {
+        const response = await api.get(
+            `/api/v1/productions/summary/status/stat?&productId=${productId}&category=${category}`);
         return response.data.data.production;
     }
 );
 
 export enum ProductionStatus {
-    OnProgress = 'on progress',
+    NotYet = 'not yet',
+    OnGoing = 'on going',
     Done = 'done'
 }
 
@@ -19,7 +29,7 @@ interface Production {
     productId: number, 
     partName: string, 
     drawingNumber: string, 
-    partNumber: string, 
+    category: string, 
     information:string, 
     productionStatus: ProductionStatus 
 }
@@ -33,6 +43,7 @@ interface PaginatedProductionData {
 
 interface ProductionState {
     filteredProductions: PaginatedProductionData;
+    summaryProductionStatus: {productionStatus: string, count: number}[];
     loading: boolean;
     error: string | null;
 }
@@ -44,6 +55,7 @@ const initialState: ProductionState = {
         currentPagesProd: 1,
         totalPagesProd: 1,
     },
+    summaryProductionStatus: [],
     loading: false,
     error: null,
 };
@@ -65,6 +77,17 @@ const productionSlice = createSlice({
             .addCase(fetchFilteredProduction.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.error.message || 'Failed to fetch production';
+            })
+            .addCase(fetchSummaryProductionStatus.pending, state => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(fetchSummaryProductionStatus.fulfilled, (state, action) => {
+                state.summaryProductionStatus = action.payload;
+            })
+            .addCase(fetchSummaryProductionStatus.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message || 'Failed to fetch summary production';
             })
     },
 });

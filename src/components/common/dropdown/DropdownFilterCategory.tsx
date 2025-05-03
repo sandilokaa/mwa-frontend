@@ -10,7 +10,7 @@ interface DropdownCategoryProps {
 
 export default function DropdownCategory({ options, onSelect }: DropdownCategoryProps) {
     const [isOpen, setIsOpen] = useState(false);
-    const [selected, setSelected] = useState("Chassis");
+    const [selected, setSelected] = useState("Overall");
 
     const handleSelect = (option: string) => {
         setSelected(option);

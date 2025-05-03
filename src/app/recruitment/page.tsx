@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { fetchFilteredRecruitment, Progress, StatusRec, fetchAllRecruitments, fetchSummaryRecruitment } from "@/store/slice/recruitment/getAllSlice";
+import { fetchFilteredRecruitment, Progress, StatusRec } from "@/store/slice/recruitment/getAllSlice";
 import { deleteRecruitment, resetDeleteState } from "@/store/slice/recruitment/deleteSlice";
 import { fetchNotificationList } from "@/store/slice/recruitment/getNotificationSlice";
 import { useSnackbar } from "notistack";
@@ -32,13 +32,8 @@ export default function ShowData() {
     const { filteredRecruitments: { recruitmentDataFiltered, currentPagesRec, totalPagesRec }, loading, allRecruitments, summaryRecruitments } = useAppSelector(state => state.recruitmentList);
 
     useEffect(() => {
-        dispatch(fetchSummaryRecruitment());
-        dispatch(fetchAllRecruitments());
         const delay = setTimeout(() => {
-            dispatch(fetchFilteredRecruitment({
-                name: search,
-                page: 1
-            }));
+            refetchRecruitments(dispatch, search, 1);
         }, 500);
         
         return () => clearTimeout(delay);
@@ -220,7 +215,7 @@ export default function ShowData() {
                 </div>
             </div>
             <div className="mt-5">
-                <div className="overflow-x-auto rounded-lg bg-white p-[10px]">
+                <div className="rounded-lg bg-white p-[10px]">
                     <table className="w-full border-collapse">
                         <thead className="border-b border-[#F5F5F5]">
                             <tr className="text-sm font-bold text-center">

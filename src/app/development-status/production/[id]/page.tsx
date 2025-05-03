@@ -53,12 +53,12 @@ export default function DetailData() {
                                 <p>{productionDetail?.picProduction}</p>
                             </div>
                             <div className="flex flex-col gap-2">
-                                <p className="text-sm text-[#989898]">Part Number</p>
-                                <p>{productionDetail?.partNumber}</p>
-                            </div>
-                            <div className="flex flex-col gap-2">
                                 <p className="text-sm text-[#989898]">Drawing Number</p>
                                 <p>{productionDetail?.drawingNumber}</p>
+                            </div>
+                            <div className="flex flex-col gap-2">
+                                <p className="text-sm text-[#989898]">Category</p>
+                                <p>{productionDetail?.category}</p>
                             </div>
                         </div>
                         <div className="grid grid-cols-1">
@@ -83,7 +83,8 @@ export default function DetailData() {
                         <p
                             className={`
                                 text-sm font-medium inline-block py-[10px] px-4 rounded-[5px]
-                                ${productionDetail?.productionStatus === ProductionStatus.OnProgress ? 'text-[#EB575F] bg-[#FEF2F3]' : ''}
+                                ${productionDetail?.productionStatus === ProductionStatus.NotYet ? 'text-[#7a7b7d] bg-[#F4F5F5]' : ''}
+                                ${productionDetail?.productionStatus === ProductionStatus.OnGoing ? 'text-[#ae8c02] bg-[#FFF9C4]' : ''}
                                 ${productionDetail?.productionStatus === ProductionStatus.Done ? 'text-[#3e9c9c] bg-[#DBF2F2]' : ''}
                             `}
                         >

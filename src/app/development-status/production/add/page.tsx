@@ -24,8 +24,8 @@ export default function AddData() {
     const { products } = useAppSelector((state) => state.productList);
 
     const [picProduction, setPICProduction] = useState("");
+    const [category, setCategory] = useState("");
     const partNameRef = useRef<HTMLInputElement>(null);
-    const partNumberRef = useRef<HTMLInputElement>(null);
     const drawingNumberRef = useRef<HTMLInputElement>(null);
     const informationRef = useRef<HTMLTextAreaElement | null>(null);
     const prodFileRef = useRef<HTMLInputElement>(null);
@@ -35,7 +35,7 @@ export default function AddData() {
         const isEmpty = 
             !selectedProductIdRef.current || 
             !partNameRef.current?.value?.trim() ||
-            !partNumberRef.current?.value?.trim() ||
+            !category ||
             !drawingNumberRef.current?.value?.trim() ||
             !informationRef.current?.value?.trim() ||
             !prodFileRef.current?.files?.[0] ||
@@ -50,14 +50,14 @@ export default function AddData() {
         try {
             const payload = {
                 productId: selectedProductIdRef.current,
-                partName: partNumberRef.current?.value || '',
-                partNumber: partNumberRef.current?.value || '',
+                partName: partNameRef.current?.value || '',
+                category,
                 drawingNumber: drawingNumberRef.current?.value || '',
                 picProduction,
                 information: informationRef.current?.value || '',
                 prodFile: prodFileRef.current?.files?.[0] || '',
-
             };
+            
             dispatch(createdProductionData(payload));
             enqueueSnackbar("You have successfully created the data", { variant: "success" });
 
@@ -87,14 +87,14 @@ export default function AddData() {
                                 ref={partNameRef}
                             />
                             <InputForm
-                                label="Part Number *"
-                                placeholder="Example: Chassis Assy"
-                                ref={partNumberRef}
-                            />
-                            <InputForm
                                 label="Drawing Number *"
                                 placeholder="Example: Chassis Assy"
                                 ref={drawingNumberRef}
+                            />
+                            <DropdownString
+                                label="Category *"
+                                options={["Chassis", "Under Body", "Upper Body"]}
+                                onSelect={(value) => setCategory(value)}
                             />
                         </div>
                         <div className="grid grid-cols-3 gap-4">
@@ -114,15 +114,15 @@ export default function AddData() {
                         <div className="grid grid-cols-1">
                             <TextAreaForm
                                 label="Information *"
-                                placeholder="Example: Describe the remark"
+                                placeholder="Example: Describe the information"
                                 rows={3}
                                 ref={informationRef}
                             />
                         </div>
                         <div className="grid grid-cols-1">
                             <FileInputForm
-                                label="Upload Documents *"
-                                acceptFile=".pdf"
+                                label="Upload Photo *"
+                                acceptFile=".jpg,.jpeg,.png"
                                 ref={prodFileRef}
                             />
                         </div>
