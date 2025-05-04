@@ -6,7 +6,7 @@ interface Production {
     partName: string, 
     drawingNumber: string, 
     category: string, 
-    information: string, 
+    remark: string, 
     prodFile: string | File,
     picProduction: string 
 }
@@ -21,7 +21,7 @@ export const createdProductionData = createAsyncThunk(
             formData.append('category', newProduction.category);
             formData.append('drawingNumber', newProduction.drawingNumber);
             formData.append('picProduction', newProduction.picProduction);
-            formData.append('information', newProduction.information);
+            formData.append('remark', newProduction.remark);
             formData.append('prodFile', newProduction.prodFile);
 
             const response = await api.post(

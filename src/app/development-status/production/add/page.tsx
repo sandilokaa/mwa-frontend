@@ -27,7 +27,7 @@ export default function AddData() {
     const [category, setCategory] = useState("");
     const partNameRef = useRef<HTMLInputElement>(null);
     const drawingNumberRef = useRef<HTMLInputElement>(null);
-    const informationRef = useRef<HTMLTextAreaElement | null>(null);
+    const remarkRef = useRef<HTMLTextAreaElement | null>(null);
     const prodFileRef = useRef<HTMLInputElement>(null);
     const selectedProductIdRef = useRef<number>(0);
 
@@ -37,7 +37,7 @@ export default function AddData() {
             !partNameRef.current?.value?.trim() ||
             !category ||
             !drawingNumberRef.current?.value?.trim() ||
-            !informationRef.current?.value?.trim() ||
+            !remarkRef.current?.value?.trim() ||
             !prodFileRef.current?.files?.[0] ||
             !picProduction
         ;
@@ -54,7 +54,7 @@ export default function AddData() {
                 category,
                 drawingNumber: drawingNumberRef.current?.value || '',
                 picProduction,
-                information: informationRef.current?.value || '',
+                remark: remarkRef.current?.value || '',
                 prodFile: prodFileRef.current?.files?.[0] || '',
             };
             
@@ -113,10 +113,10 @@ export default function AddData() {
                         </div>
                         <div className="grid grid-cols-1">
                             <TextAreaForm
-                                label="Information *"
-                                placeholder="Example: Describe the information"
+                                label="Remarks *"
+                                placeholder="Example: Describe the remarks"
                                 rows={3}
-                                ref={informationRef}
+                                ref={remarkRef}
                             />
                         </div>
                         <div className="grid grid-cols-1">

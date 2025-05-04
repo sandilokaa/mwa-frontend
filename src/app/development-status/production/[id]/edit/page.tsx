@@ -53,7 +53,7 @@ export default function EditData() {
     const [category, setCategory] = useState("");
     const partNameRef = useRef<HTMLInputElement>(null);
     const drawingNumberRef = useRef<HTMLInputElement>(null);
-    const informationRef = useRef<HTMLTextAreaElement | null>(null);
+    const remarkRef = useRef<HTMLTextAreaElement | null>(null);
     const prodFileRef = useRef<HTMLInputElement>(null);
     const selectedProductIdRef = useRef<number>(0);
 
@@ -69,7 +69,7 @@ export default function EditData() {
                 partName: partNameRef.current?.value || '',
                 drawingNumber: drawingNumberRef.current?.value || '',
                 category,
-                information: informationRef.current?.value || '',
+                remark: remarkRef.current?.value || '',
                 prodFile: prodFileRef.current?.files?.[0] || '',
                 picProduction,
             };
@@ -136,11 +136,11 @@ export default function EditData() {
                         </div>
                         <div className="grid grid-cols-1">
                             <TextAreaForm
-                                label="Information *"
-                                placeholder="Example: Describe the remark"
+                                label="Remarks *"
+                                placeholder="Example: Describe the remarks"
                                 rows={3}
-                                defaultValue={productionDetail?.information}
-                                ref={informationRef}
+                                defaultValue={productionDetail?.remark}
+                                ref={remarkRef}
                             />
                         </div>
                         <div className="grid grid-cols-1">

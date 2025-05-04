@@ -89,7 +89,7 @@ export default function EditData() {
                         </div>
                         <div className="grid grid-cols-3 gap-4">
                             <DateInputForm
-                                label="Submission Date *"
+                                label="Start Date *"
                             />
                             <DateInputForm
                                 label="Required Date *"

@@ -21,7 +21,7 @@ interface Production {
     partName: string, 
     drawingNumber: string, 
     category: string, 
-    information:string, 
+    remark:string, 
     productionStatus: ProductionStatus,
     prodFile: string,
     picProduction: string 

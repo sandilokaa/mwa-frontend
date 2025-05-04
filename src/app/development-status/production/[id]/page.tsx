@@ -63,8 +63,8 @@ export default function DetailData() {
                         </div>
                         <div className="grid grid-cols-1">
                             <div className="flex flex-col gap-2">
-                                <p className="text-sm text-[#989898]">Information</p>
-                                <p>{productionDetail?.information}</p>
+                                <p className="text-sm text-[#989898]">Remarks</p>
+                                <p>{productionDetail?.remark}</p>
                             </div>
                         </div>
                         <div className="grid grid-cols-1">
