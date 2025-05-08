@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { fetchFilteredRecruitment, Progress, StatusRec } from "@/store/slice/recruitment/getAllSlice";
+import { fetchFilteredRecruitment, Progress, StatusRec, fetchAllRecruitments, fetchSummaryRecruitment } from "@/store/slice/recruitment/getAllSlice";
 import { deleteRecruitment, resetDeleteState } from "@/store/slice/recruitment/deleteSlice";
 import { fetchNotificationList } from "@/store/slice/recruitment/getNotificationSlice";
 import { useSnackbar } from "notistack";
@@ -33,7 +33,12 @@ export default function ShowData() {
 
     useEffect(() => {
         const delay = setTimeout(() => {
-            refetchRecruitments(dispatch, search, 1);
+            dispatch(fetchSummaryRecruitment());
+            dispatch(fetchAllRecruitments())
+            dispatch(fetchFilteredRecruitment({
+                name: search,
+                page: 1
+            }));
         }, 500);
         
         return () => clearTimeout(delay);

@@ -28,7 +28,7 @@ export const fetchSummaryIssue= createAsyncThunk(
 );
 
 export enum StatusIssue {
-    Late = 'late',
+    Overdue = 'overdue',
     OnProgress = 'on progress',
     Finish = 'finish'
 }

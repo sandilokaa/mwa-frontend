@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useProductFilter } from "@/context/ProductFilterContext";
-import { fetchFilteredProcurement, Progress, StatusProc } from "@/store/slice/procurement/getAllSlice";
+import { fetchFilteredProcurement, Progress, StatusProc, fetchSummaryProcurement, fetchAllProcurements } from "@/store/slice/procurement/getAllSlice";
 import { fetchNotificationList } from "@/store/slice/procurement/getNotificationSlice";
 import { deleteProcurement, resetDeleteState } from "@/store/slice/procurement/deleteSlice";
 import { updateProgressProcData, resetUpdatedProgressProcurement } from "@/store/slice/procurement/progressUpdateSlice";
@@ -36,8 +36,14 @@ export default function ShowData() {
     useEffect(() => {
         if (!selectedProduct?.id) return;
         const delay = setTimeout(() => {
+            dispatch(fetchSummaryProcurement({ productId: selectedProduct.id }));
+            dispatch(fetchAllProcurements({ productId: selectedProduct.id }))
             if (selectedProduct) {
-                refetchProcurements(dispatch, selectedProduct.id, search, 1);
+                dispatch(fetchFilteredProcurement({
+                    productId: selectedProduct.id,
+                    prNumber: search,
+                    page: 1
+                }));
             }
         }, 500);
         
@@ -176,7 +182,7 @@ export default function ShowData() {
                         </div>
                     </div>
                     <div className="flex flex-col gap-3 w-1/4 h-full">
-                        <div className="bg-white p-5 rounded-[10px] flex flex-col max-h-[120px]">
+                        <div className="bg-white p-5 rounded-[10px] flex flex-col">
                             <h3 className="text-sm font-bold">Total Procurement</h3>
                             <p className="mt-5 text-4xl font-bold text-center">{allProcurements}</p>
                         </div>

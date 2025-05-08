@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { useProductFilter } from "@/context/ProductFilterContext";
 import { fetchNotificationList } from "@/store/slice/highlightIssue/getNotificationSlice";
-import { fetchFilteredIssue, StatusIssue} from "@/store/slice/highlightIssue/getAllSlice";
+import { fetchFilteredIssue, fetchSummaryIssue, StatusIssue, fetchIssueMetrics} from "@/store/slice/highlightIssue/getAllSlice";
 import { deleteIssue, resetDeleteState } from "@/store/slice/highlightIssue/deleteSlice";
 import { useSnackbar } from "notistack";
 import { refetchHighlightIssues } from "@/utils/refetch/refetchHighlightIssue";
@@ -36,8 +36,14 @@ export default function ShowData() {
     useEffect(() => {
         if (!selectedProduct?.id) return;
         const delay = setTimeout(() => {
+            dispatch(fetchSummaryIssue({ productId: selectedProduct.id }));
+            dispatch(fetchIssueMetrics({ productId: selectedProduct.id }))
             if (selectedProduct) {
-                refetchHighlightIssues(dispatch, selectedProduct.id, search, 1);
+                dispatch(fetchFilteredIssue({
+                    productId: selectedProduct.id,
+                    itemName: search,
+                    page: 1
+                }));
             }
         }, 500);
         
@@ -276,7 +282,7 @@ export default function ShowData() {
                                                             <div 
                                                                 className={`
                                                                     p-2 rounded-[5px] flex justify-center w-full
-                                                                    ${issue.statusIssue === StatusIssue.Late ? 'text-[#EB575F] bg-[#FEF2F3]' : ''}
+                                                                    ${issue.statusIssue === StatusIssue.Overdue ? 'text-[#EB575F] bg-[#FEF2F3]' : ''}
                                                                     ${issue.statusIssue === StatusIssue.OnProgress ? 'text-[#ae8c02] bg-[#FFF9C4]' : ''}
                                                                     ${issue.statusIssue === StatusIssue.Finish ? 'text-[#3e9c9c] bg-[#DBF2F2]' : ''}
                                                                 `}
