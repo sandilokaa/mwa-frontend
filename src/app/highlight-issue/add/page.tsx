@@ -89,12 +89,12 @@ export default function AddData() {
                             </div>
                             <DropdownString
                                 label="Category *"
-                                options={["Chassis", "Under Body", "Upper Body", "Exterior", "Interior", "Production"]}
+                                options={["Chassis", "Under Body", "Upper Body", "Exterior", "Interior", "Production", "Procurement"]}
                                 onSelect={(value) => setCategory(value)}
                             />
                             <DropdownString
                                 label="PIC (C/M) *"
-                                options={["RnE Issue", "Vehicle Engineering Issue", "System Engineering Issue", "Industrial Design Issue" , "Production Issue", "Procurement Issue", "Testing Issue"]}
+                                options={["RnE", "Vehicle Engineering", "System Engineering", "Industrial Design" , "Production", "Procurement", "Testing"]}
                                 onSelect={(value) => setPIC(value)}
                             />
                         </div>  

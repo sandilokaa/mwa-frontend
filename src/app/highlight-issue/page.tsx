@@ -21,6 +21,8 @@ import ConfirmDialog from "@/components/common/modal/ConfirmDialog";
 import StatusMenu from "@/components/common/modal/StatusMenu";
 import ProjectBarChart from "@/components/common/chart/ProjectBarChart";
 import { StatusIssueOptions } from "@/utils/status/statusOption";
+import { AlertCircle } from 'lucide-react';
+import OverdueModal from "@/components/common/modal/OverdueModal";
 
 export default function ShowData() {
 
@@ -146,6 +148,14 @@ export default function ShowData() {
     /* ------------------- End Modal Status Highlight Issue ------------------- */
 
 
+    /* ------------------- Modal Update Revision Date------------------- */
+
+    const [showOverdueModal, setShowOverdueModal] = useState(false);
+    const [selectedIssueForModal, setSelectedIssueForModal] = useState<{ id: number; itemName: string } | null>(null);
+
+    /* ------------------- End Modal Update Revision Date------------------- */
+
+
     return (
         <div>
             <ConfirmDialog
@@ -239,12 +249,13 @@ export default function ShowData() {
                         <thead className="border-b border-[#F5F5F5]">
                             <tr className="text-sm font-bold text-center">
                                 <th className="py-5 px-4 text-left">No</th>
-                                <th className="py-5 px-4 text-left min-w-[200px]">Item</th>
-                                <th className="py-5 px-4 min-w-[250px]">Issue</th>
-                                <th className="py-5 px-4 min-w-[140px]">PIC (C/M)</th>
-                                <th className="py-5 px-4 min-w-[130px]">Due Date</th>
+                                <th className="py-5 px-4 text-left min-w-[180px]">Item</th>
+                                <th className="py-5 px-4 min-w-[200px]">Issue</th>
+                                <th className="py-5 px-4 min-w-[130px]">PIC (C/M)</th>
+                                <th className="py-5 px-4 min-w-[120px]">Due Date</th>
+                                <th className="py-5 px-4 min-w-[130px]">Revision Date</th>
                                 <th className="py-5 px-4 min-w-[150px]">Status</th>
-                                <th className="py-5 px-4 min-w-[150px]">Action</th>
+                                <th className="py-5 px-4 min-w-[140px]">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -277,6 +288,11 @@ export default function ShowData() {
                                                     </td>
                                                     <td className="py-5 px-4">{issue.pic}</td>
                                                     <td className="py-5 px-4">{new Date(issue?.dueDate).toLocaleDateString('en-GB')}</td>
+                                                    <td className="py-5 px-4">
+                                                        <div>
+                                                            <p>-</p>
+                                                        </div>
+                                                    </td>
                                                     <td className="py-5 px-4 text-xs relative">
                                                         <div className="flex justify-between gap-1">
                                                             <div 
@@ -290,18 +306,34 @@ export default function ShowData() {
                                                                 <p>{issue.statusIssue.replace(/(?:^|\s)\S/g, (match: string) => match.toUpperCase())}</p>
                                                             </div>
                                                             <div
-                                                                onClick={() => {
-                                                                    setShowStatusMenuId(prevId => {
-                                                                        const newId = prevId === issue.id ? null : issue.id;
-                                                                        if (newId !== null) {
-                                                                            setSelectedStatus(issue.statusIssue);
-                                                                        }
-                                                                        return newId;
-                                                                    });
-                                                                }}
                                                                 className="flex justify-center items-center cursor-pointer"
                                                             >
-                                                                <Image src="/images/icon/menu.svg" alt="Menu Icon" width={15} height={15}/>
+                                                                {issue.statusIssue === StatusIssue.Overdue ? (
+                                                                    <AlertCircle 
+                                                                        onClick={() => {
+                                                                            setSelectedIssueForModal(issue);
+                                                                            setShowOverdueModal(true);
+                                                                        }}
+                                                                        size={15} 
+                                                                        className="text-red-500" 
+                                                                    />
+                                                                ) : (
+                                                                    <Image 
+                                                                        onClick={() => {
+                                                                            setShowStatusMenuId(prevId => {
+                                                                                const newId = prevId === issue.id ? null : issue.id;
+                                                                                if (newId !== null) {
+                                                                                    setSelectedStatus(issue.statusIssue);
+                                                                                }
+                                                                                return newId;
+                                                                            });
+                                                                        }}
+                                                                        src="/images/icon/menu.svg" 
+                                                                        alt="Menu Icon" 
+                                                                        width={15} 
+                                                                        height={15} 
+                                                                    />
+                                                                )}
                                                             </div>
                                                         </div>
                                                         {showStatusMenuId === issue.id && (
@@ -311,6 +343,13 @@ export default function ShowData() {
                                                                 onSave={() => handleUpdateStatus(issue.id)}
                                                                 onClose={() => setShowStatusMenuId(null)}
                                                                 statusOptions={StatusIssueOptions}
+                                                            />
+                                                        )}
+                                                        {showOverdueModal && selectedIssueForModal && (
+                                                            <OverdueModal
+                                                                open={true}
+                                                                onClose={() => setShowOverdueModal(false)}
+                                                                issue={selectedIssueForModal}
                                                             />
                                                         )}
                                                     </td>

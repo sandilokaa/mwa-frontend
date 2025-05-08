@@ -16,10 +16,10 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
     open,
     onClose,
     onConfirm,
-    title = "Confirm Delete",
-    message = "Are you sure you want to delete this?",
-    confirmText = "Delete",
-    cancelText = "Cancel",
+    title,
+    message,
+    confirmText,
+    cancelText,
 }) => {
     if (!open) return null;
 

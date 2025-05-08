@@ -81,7 +81,7 @@ export default function DetailData() {
                         <p
                             className={`
                                 text-sm font-medium inline-block py-[10px] px-4 rounded-[5px] 
-                                ${(issueDetail?.statusIssue || '') === StatusIssue.Late ? 'text-[#EB575F] bg-[#FEF2F3]' : ''}
+                                ${(issueDetail?.statusIssue || '') === StatusIssue.Overdue ? 'text-[#EB575F] bg-[#FEF2F3]' : ''}
                                 ${(issueDetail?.statusIssue || '') === StatusIssue.OnProgress ? 'text-[#ae8c02] bg-[#FFF9C4]' : ''}
                                 ${(issueDetail?.statusIssue || '') === StatusIssue.Finish ? 'text-[#3e9c9c] bg-[#DBF2F2]' : ''}
                             `}
