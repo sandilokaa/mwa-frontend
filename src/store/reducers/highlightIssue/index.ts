@@ -5,6 +5,7 @@ import issueDetailReducer from "@/store/slice/highlightIssue/getDetailSlice";
 import issueUpdateReducer from "@/store/slice/highlightIssue/updateSlice";
 import issueDeleteReducer from "@/store/slice/highlightIssue/deleteSlice";
 import issueUpdateStatusReducer from "@/store/slice/highlightIssue/statusUpdateSlice";
+import issueRevisionReducer from "@/store/slice/highlightIssue/revisionDateSlice";
 
 export const issueReducer = {
     notificationIssueLists: issueNotifReducer,
@@ -13,5 +14,6 @@ export const issueReducer = {
     issueDetail: issueDetailReducer,
     updateIssueSlice: issueUpdateReducer,
     deleteIssue: issueDeleteReducer,
-    updateStatus: issueUpdateStatusReducer
+    updateStatus: issueUpdateStatusReducer,
+    updateRevision: issueRevisionReducer
 }

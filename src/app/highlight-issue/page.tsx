@@ -2,12 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { useProductFilter } from "@/context/ProductFilterContext";
 import { fetchNotificationList } from "@/store/slice/highlightIssue/getNotificationSlice";
 import { fetchFilteredIssue, fetchSummaryIssue, StatusIssue, fetchIssueMetrics} from "@/store/slice/highlightIssue/getAllSlice";
 import { deleteIssue, resetDeleteState } from "@/store/slice/highlightIssue/deleteSlice";
+import { updateRevisionIssueData, resetUpdatedRevisionIssue } from "@/store/slice/highlightIssue/revisionDateSlice";
 import { useSnackbar } from "notistack";
 import { refetchHighlightIssues } from "@/utils/refetch/refetchHighlightIssue";
 import { resetUpdatedStatusIssue, updateStatusIssueData } from "@/store/slice/highlightIssue/statusUpdateSlice";
@@ -148,12 +149,34 @@ export default function ShowData() {
     /* ------------------- End Modal Status Highlight Issue ------------------- */
 
 
-    /* ------------------- Modal Update Revision Date------------------- */
+    /* ------------------- Modal Update Revision Date ------------------- */
 
     const [showOverdueModal, setShowOverdueModal] = useState(false);
     const [selectedIssueForModal, setSelectedIssueForModal] = useState<{ id: number; itemName: string } | null>(null);
 
-    /* ------------------- End Modal Update Revision Date------------------- */
+    const revisionDateRef = useRef<HTMLInputElement>(null);
+
+    const handleUpdateRevision = (id: number) => {
+        if (!selectedProduct?.id || !revisionDateRef.current?.value) return;
+    
+        const revisionDate = revisionDateRef.current.value;
+    
+        dispatch(updateRevisionIssueData({ id, revisionDate }))
+            .unwrap()
+            .then(() => {
+                enqueueSnackbar("Progress updated successfully", { variant: "success" });
+                dispatch(resetUpdatedRevisionIssue());
+                refetchHighlightIssues(dispatch, selectedProduct.id, search, targetId);
+            })
+            .catch(() => {
+                enqueueSnackbar("Failed to update progress", { variant: "error" });
+                dispatch(resetUpdatedRevisionIssue());
+            });
+    
+        setShowOverdueModal(false);
+    };
+
+    /* ------------------- End Modal Update Revision Date ------------------- */
 
 
     return (
@@ -289,9 +312,11 @@ export default function ShowData() {
                                                     <td className="py-5 px-4">{issue.pic}</td>
                                                     <td className="py-5 px-4">{new Date(issue?.dueDate).toLocaleDateString('en-GB')}</td>
                                                     <td className="py-5 px-4">
-                                                        <div>
+                                                        {issue.revisionDate === null  ? (
                                                             <p>-</p>
-                                                        </div>
+                                                        ): (
+                                                            <p>{new Date(issue?.revisionDate).toLocaleDateString('en-GB')}</p>
+                                                        )}
                                                     </td>
                                                     <td className="py-5 px-4 text-xs relative">
                                                         <div className="flex justify-between gap-1">
@@ -300,7 +325,7 @@ export default function ShowData() {
                                                                     p-2 rounded-[5px] flex justify-center w-full
                                                                     ${issue.statusIssue === StatusIssue.Overdue ? 'text-[#EB575F] bg-[#FEF2F3]' : ''}
                                                                     ${issue.statusIssue === StatusIssue.OnProgress ? 'text-[#ae8c02] bg-[#FFF9C4]' : ''}
-                                                                    ${issue.statusIssue === StatusIssue.Finish ? 'text-[#3e9c9c] bg-[#DBF2F2]' : ''}
+                                                                    ${issue.statusIssue === StatusIssue.Done ? 'text-[#3e9c9c] bg-[#DBF2F2]' : ''}
                                                                 `}
                                                             >
                                                                 <p>{issue.statusIssue.replace(/(?:^|\s)\S/g, (match: string) => match.toUpperCase())}</p>
@@ -348,8 +373,10 @@ export default function ShowData() {
                                                         {showOverdueModal && selectedIssueForModal && (
                                                             <OverdueModal
                                                                 open={true}
+                                                                onSave={() => handleUpdateRevision(issue.id)}
                                                                 onClose={() => setShowOverdueModal(false)}
                                                                 issue={selectedIssueForModal}
+                                                                ref={revisionDateRef}
                                                             />
                                                         )}
                                                     </td>

@@ -1,6 +1,6 @@
 export const StatusIssueOptions = [
     { label: 'On Progress', bgColor: '#FFF9C4', textColor: '#ae8c02' },
-    { label: 'Finish', bgColor: '#DBF2F2', textColor: '#3e9c9c' },
+    { label: 'Done', bgColor: '#DBF2F2', textColor: '#3e9c9c' },
 ];
 
 export const StatusProductionOptions = [

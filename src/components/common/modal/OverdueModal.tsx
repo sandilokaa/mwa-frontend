@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { forwardRef } from "react";
 
 import DateInputForm from "../input/DateInputFrom";
 
@@ -11,13 +11,15 @@ interface OverdueModalProps {
         id: number;
         itemName: string;
     };
+    onSave: () => void;
 }
 
-const OverdueModal: React.FC<OverdueModalProps> = ({
+const OverdueModal = forwardRef<HTMLInputElement, OverdueModalProps>(({
     open,
     onClose,
+    onSave,
     issue
-}) => {
+}, ref) => {
     if (!open) return null;
 
     return (
@@ -30,6 +32,7 @@ const OverdueModal: React.FC<OverdueModalProps> = ({
                     </p>
                     <DateInputForm
                         label="Revision Date *"
+                        ref={ref}
                     />
                 </div>
                 <div className="flex justify-end gap-2">
@@ -37,21 +40,20 @@ const OverdueModal: React.FC<OverdueModalProps> = ({
                         onClick={onClose}
                         className="text-sm px-4 py-2 rounded bg-gray-200 cursor-pointer"
                     >
-                        Batal
+                        Cancel
                     </button>
                     <button
-                        onClick={() => {
-                            // TODO: Simpan revisi jika ada input
-                            onClose();
-                        }}
+                        onClick={onSave}
                         className="text-sm px-4 py-2 rounded bg-[#D62C35] text-white cursor-pointer"
                     >
-                        Simpan
+                        Save Date
                     </button>
                 </div>
             </div>
         </div>
     );
-};
+});
+
+OverdueModal.displayName = "OverdueModal";
 
 export default OverdueModal;

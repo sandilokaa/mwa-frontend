@@ -12,7 +12,7 @@ export const fetchIssueDetail = createAsyncThunk(
 export enum StatusIssue {
     Overdue = 'overdue',
     OnProgress = 'on progress',
-    Finish = 'finish'
+    Done = 'done'
 }
 
 interface Issue {
@@ -24,6 +24,7 @@ interface Issue {
     pic: string,
     countermeassure: string,
     dueDate: string,
+    revisionDate: string,
     statusIssue: StatusIssue 
 }
 
