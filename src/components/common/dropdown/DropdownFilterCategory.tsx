@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 
 interface DropdownCategoryProps {
@@ -11,6 +11,17 @@ interface DropdownCategoryProps {
 export default function DropdownCategory({ options, onSelect }: DropdownCategoryProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [selected, setSelected] = useState("Overall");
+
+    useEffect(() => {
+        if (!options.includes("Overall") && options.length > 0) {
+            setSelected(options[0]);
+            onSelect(options[0]);
+        } else {
+            setSelected("Overall");
+            onSelect("Overall");
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [options]);
 
     const handleSelect = (option: string) => {
         setSelected(option);

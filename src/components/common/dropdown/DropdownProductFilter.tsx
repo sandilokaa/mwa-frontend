@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { useProductFilter } from "@/context/ProductFilterContext";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
@@ -15,6 +15,7 @@ interface Product {
 export default function DropdownProduct() {
     const dispatch = useAppDispatch();
     const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef<HTMLDivElement>(null);
     const { selectedProduct, setSelectedProduct } = useProductFilter(); 
     const { products } = useAppSelector((state: RootState) => state.productList);
 
@@ -22,7 +23,7 @@ export default function DropdownProduct() {
         if (products.length === 0) {
             dispatch(fetchProducts());
         }
-    
+
         if (!selectedProduct) {
             const defaultProduct = products.find(product => product.name === "6x6 Conversion");
             if (defaultProduct) {
@@ -30,7 +31,23 @@ export default function DropdownProduct() {
             }
         }
     }, [dispatch, selectedProduct, products, setSelectedProduct]);
-    
+
+    // Auto-close on outside click
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                dropdownRef.current &&
+                !dropdownRef.current.contains(event.target as Node)
+            ) {
+                setIsOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     const handleSelect = (product: Product) => {
         setIsOpen(false);
@@ -38,17 +55,23 @@ export default function DropdownProduct() {
     };
 
     return (
-        <div className="relative inline-block text-left">
+        <div ref={dropdownRef} className="relative inline-block text-left w-[160px]">
             <div className="flex flex-col gap-1">
                 <button
                     onClick={() => setIsOpen(!isOpen)}
-                    className="bg-[#EFEFEF] rounded-sm px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-300 cursor-pointer w-[160px] h-[45px]"
+                    className="bg-[#EFEFEF] rounded-sm px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-300 cursor-pointer w-full h-[45px]"
                 >
                     <div className="flex justify-between items-center gap-2">
                         <p className="text-sm text-black">
                             {selectedProduct ? selectedProduct.name : "Select Product"}
                         </p>
-                        <Image className="-rotate-90" src="/images/icon/chevron-down.svg" alt="Arrow Icon" height={24} width={24}/>
+                        <Image
+                            className="-rotate-90"
+                            src="/images/icon/chevron-down.svg"
+                            alt="Arrow Icon"
+                            height={24}
+                            width={24}
+                        />
                     </div>
                 </button>
             </div>
