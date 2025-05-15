@@ -2,13 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '@/utils/axios';
 
 interface Production {
-    productId: number;
-    partName: string, 
-    drawingNumber: string, 
-    category: string, 
-    remark: string, 
-    prodFile: string | File,
-    picProduction: string 
+    picProduction: string
 }
 
 export const updateProductionData = createAsyncThunk(
@@ -18,23 +12,11 @@ export const updateProductionData = createAsyncThunk(
         { rejectWithValue }
     ) => {
         try {
-            const formData = new FormData();
-            formData.append('productId', updatedProduction.productId.toString());
-            formData.append('partName', updatedProduction.partName);
-            formData.append('category', updatedProduction.category);
-            formData.append('drawingNumber', updatedProduction.drawingNumber);
-            formData.append('picProduction', updatedProduction.picProduction);
-            formData.append('remark', updatedProduction.remark);
-            formData.append('prodFile', updatedProduction.prodFile);
+            const { id, ...data } = updatedProduction;
             
             const response = await api.put(
-                `/api/v1/productions/update/${updatedProduction.id}`,
-                formData,
-                {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    } 
-                }
+                `/api/v1/productions/update/${id}`,
+                data,
             );
             return response.data.data.production;
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

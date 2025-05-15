@@ -27,10 +27,12 @@ export enum ProductionStatus {
 interface Production {
     id: number, 
     productId: number, 
-    partName: string, 
-    drawingNumber: string, 
-    category: string, 
-    remark:string, 
+    Engineering: {
+        partName: string;
+        drawingNumber: string;
+        category: string;
+        remark: string;
+    };
     productionStatus: ProductionStatus 
 }
 
