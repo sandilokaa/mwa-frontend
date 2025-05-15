@@ -95,6 +95,7 @@ export default function AddData() {
                                 label="Category *"
                                 options={["Chassis", "Under Body", "Upper Body"]}
                                 onSelect={(value) => setCategory(value)}
+                                value={category}
                             />
                         </div>
                         <div className="grid grid-cols-3 gap-4">
@@ -107,8 +108,9 @@ export default function AddData() {
                             />
                             <DropdownString
                                 label="PIC Production *"
-                                options={["Mechanical Engineering"]}
+                                options={["Production", "QA/QC"]}
                                 onSelect={(value) => setPICProduction(value)}
+                                value={picProduction}
                             />
                         </div>
                         <div className="grid grid-cols-1">

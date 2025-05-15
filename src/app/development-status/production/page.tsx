@@ -6,7 +6,6 @@ import { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useProductFilter } from "@/context/ProductFilterContext";
 import { fetchFilteredProduction, ProductionStatus } from "@/store/slice/production/getAllSlice";
-import { deleteProduction, resetDeleteState } from "@/store/slice/production/deleteSlice";
 import { refetchProductions } from "@/utils/refetch/refetchProduction";
 import { useSnackbar } from "notistack";
 import { updateProductionStatusData, resetUpdatedStatusProduction } from "@/store/slice/production/statusUpdateSlice";
@@ -16,7 +15,6 @@ import { getEffectiveCategory } from "@/utils/filter/effetiveCategory";
 import AddButton from "@/components/common/button/AddButton";
 import SearchInput from "@/components/common/input/SearchInput";
 import TablePagination from "@/components/common/pagination/TablePagination";
-import ConfirmDialog from "@/components/common/modal/ConfirmDialog";
 import StatusMenu from "@/components/common/modal/StatusMenu";
 import { StatusProductionOptions } from "@/utils/status/statusOption";
 import DropdownCategory from "@/components/common/dropdown/DropdownFilterCategory";
@@ -55,45 +53,14 @@ export default function ShowData() {
             productId: selectedProduct.id,
             partName: search,
             page: newPage,
-            category: selectedCategory
+            category: getEffectiveCategory(selectedCategory)
         }));
     };
 
     /* ------------------- End Get All Production ------------------- */
 
 
-    /* ------------------- Delete Production ------------------- */
-    
-    const [openConfirm, setOpenConfirm] = useState(false);
-    const [targetId, setTargetId] = useState<number | null>(null);
-
-    const confirmDelete = (id: number) => {
-        setTargetId(id);
-        setOpenConfirm(true);
-    };
-
-    const handleConfirmedDelete = () => {
-        if (targetId !== null) {
-            dispatch(deleteProduction({ id: targetId }))
-                .unwrap()
-                .then(() => {
-                    if (!selectedProduct?.id) return;
-                    enqueueSnackbar("You have successfully deleted the data", { variant: "success" });
-                    dispatch(resetDeleteState());
-                    refetchProductions(dispatch, selectedProduct.id, search, getEffectiveCategory(selectedCategory));
-                })
-                .catch(() => {
-                    enqueueSnackbar("You failed to delete data", { variant: "error" });
-                    dispatch(resetDeleteState());
-                })
-        }
-        setOpenConfirm(false);
-    };
-
-    /* ------------------- End Delete Production ------------------- */
-
-
-    /* ------------------- Modal Status Produciton ------------------- */
+    /* ------------------- Modal Status Production ------------------- */
     
     const [selectedStatus, setSelectedStatus] = useState<string>('');
     const [showStatusMenuId, setShowStatusMenuId] = useState<number | null>(null);
@@ -120,19 +87,10 @@ export default function ShowData() {
             setShowStatusMenuId(null);
     }
 
-    /* ------------------- End Modal Status Produciton ------------------- */
+    /* ------------------- End Modal Status Production ------------------- */
 
     return (
         <div>
-            <ConfirmDialog
-                open={openConfirm}
-                onClose={() => setOpenConfirm(false)}
-                onConfirm={handleConfirmedDelete}
-                title="Delete Production"
-                message="Are you sure you want to delete this production?"
-                confirmText="Delete"
-                cancelText="Cancel"
-            />
             <div className="flex flex-col gap-y-5">
                 <p className="font-bold">Development Status Production</p>
                 <div className="flex justify-between">
@@ -145,6 +103,7 @@ export default function ShowData() {
                         <DropdownCategory
                             options={["Overall", "Chassis", "Under Body", "Upper Body"]}
                             onSelect={(value) => setSelectedCategory(value)}
+                            defaultValue="Overall"
                         />
                         <SearchInput
                             value={search}
@@ -207,12 +166,12 @@ export default function ShowData() {
                                             return (
                                                 <tr className="text-sm font-medium text-center" key={prod.id} style={colStyle}>
                                                     <td className="py-5 px-4 text-left">{displayIndex}</td>
-                                                    <td className="py-5 px-4 text-left">{prod.partName}</td>
-                                                    <td className="py-5 px-4">{prod.drawingNumber}</td>
-                                                    <td className="py-5 px-4 ">{prod.category}</td>
+                                                    <td className="py-5 px-4 text-left">{prod.Engineering.partName}</td>
+                                                    <td className="py-5 px-4">{prod.Engineering.drawingNumber}</td>
+                                                    <td className="py-5 px-4 ">{prod.Engineering.category}</td>
                                                     <td className="py-5 px-4 text-left">
                                                         <div className="flex line-clamp-3">
-                                                            {prod.remark}
+                                                            {prod.Engineering.remark}
                                                         </div>
                                                     </td>
                                                     <td className="py-5 px-4 text-xs relative">
@@ -264,12 +223,6 @@ export default function ShowData() {
                                                                     <Image src="/images/icon/edit-2.svg" alt="view icon" height={16} width={16}/>
                                                                 </div>
                                                             </Link>
-                                                            <div 
-                                                                onClick={() => confirmDelete(prod.id)}
-                                                                className="p-2 rounded-sm bg-[#D62C35] cursor-pointer"
-                                                            >
-                                                                <Image src="/images/icon/trash.svg" alt="view icon" height={16} width={16}/>
-                                                            </div>
                                                         </div>
                                                     </td>
                                                 </tr>

@@ -8,14 +8,10 @@ import { useEffect } from "react";
 import { fetchProductionDetail } from "@/store/slice/production/getDetailSlice";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { updateProductionData } from "@/store/slice/production/updateSlice";
 
-import InputForm from "@/components/common/input/InputForm";
-import DropdownProductForm from "@/components/common/dropdown/DropdownProductForm";
 import DropdownString from "@/components/common/dropdown/DropdownString";
-import TextAreaForm from "@/components/common/input/TextAreaForm";
-import FileInputForm from "@/components/common/input/FileInputForm";
 import SubmitButton from "@/components/common/button/SubmitButton";
 
 export default function EditData() {
@@ -25,8 +21,6 @@ export default function EditData() {
     const { enqueueSnackbar } = useSnackbar();
     const params = useParams();
     const id = Number(params.id);
-    
-    const { products } = useAppSelector((state) => state.productList);
 
     /* ------------------ Get Detail ------------------ */
 
@@ -38,24 +32,17 @@ export default function EditData() {
         }
     }, [id, dispatch]);
 
-    useEffect(() => {
-        if (productionDetail?.productId) {
-            selectedProductIdRef.current = productionDetail.productId;
-        }
-    }, [productionDetail]);
-
     /* ------------------ End Get Detail ------------------ */
 
 
     /* ------------------ Update Data ------------------ */
 
     const [picProduction, setPICProduction] = useState("");
-    const [category, setCategory] = useState("");
-    const partNameRef = useRef<HTMLInputElement>(null);
-    const drawingNumberRef = useRef<HTMLInputElement>(null);
-    const remarkRef = useRef<HTMLTextAreaElement | null>(null);
-    const prodFileRef = useRef<HTMLInputElement>(null);
-    const selectedProductIdRef = useRef<number>(0);
+
+    useEffect(() => {
+        if (!productionDetail) return;
+        setPICProduction(productionDetail?.picProduction ?? "");
+    }, [productionDetail]);
 
     const handleUpdate = () => {
         try {
@@ -65,12 +52,6 @@ export default function EditData() {
 
             const payload = {
                 id: productionDetail?.id,
-                productId: selectedProductIdRef.current,
-                partName: partNameRef.current?.value || '',
-                drawingNumber: drawingNumberRef.current?.value || '',
-                category,
-                remark: remarkRef.current?.value || '',
-                prodFile: prodFileRef.current?.files?.[0] || '',
                 picProduction,
             };
 
@@ -99,56 +80,11 @@ export default function EditData() {
                 <div className="flex flex-col gap-y-5 mt-5">
                     <div className="flex flex-col gap-y-4">
                         <div className="grid grid-cols-3 gap-4">
-                            <InputForm
-                                label="Part Name *"
-                                placeholder="Example: Chassis Assy"
-                                defaultValue={productionDetail?.partName}
-                                ref={partNameRef}
-                            />
-                            <InputForm
-                                label="Drawing Number *"
-                                placeholder="Example: Chassis Assy"
-                                defaultValue={productionDetail?.drawingNumber}
-                                ref={drawingNumberRef}
-                            />
-                            <DropdownString
-                                label="Category *"
-                                options={["Chassis", "Under Body", "Upper Body"]}
-                                onSelect={(value) => setCategory(value)}
-                                defaultValue={productionDetail?.category}
-                            />
-                        </div>
-                        <div className="grid grid-cols-3 gap-4">
-                            <DropdownProductForm
-                                label="Product *"
-                                options={products}
-                                onSelect={(value) => {
-                                    selectedProductIdRef.current = value.id;
-                                }}
-                                defaultValue={productionDetail?.productId}
-                            />
                             <DropdownString
                                 label="PIC Production *"
-                                options={["Mechanical Engineering"]}
+                                options={["Production", "QA/QC"]}
+                                value={picProduction}
                                 onSelect={(value) => setPICProduction(value)}
-                                defaultValue={productionDetail?.picProduction}
-                            />
-                        </div>
-                        <div className="grid grid-cols-1">
-                            <TextAreaForm
-                                label="Remarks *"
-                                placeholder="Example: Describe the remarks"
-                                rows={3}
-                                defaultValue={productionDetail?.remark}
-                                ref={remarkRef}
-                            />
-                        </div>
-                        <div className="grid grid-cols-1">
-                            <FileInputForm
-                                label="Upload Documents *"
-                                acceptFile=".pdf"
-                                defaultFile={productionDetail?.prodFile}
-                                ref={prodFileRef}
                             />
                         </div>
                     </div>

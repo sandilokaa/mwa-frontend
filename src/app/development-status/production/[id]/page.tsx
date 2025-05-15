@@ -44,27 +44,27 @@ export default function DetailData() {
                         <div className="grid grid-cols-1">
                             <div className="flex flex-col gap-2">
                                 <p className="text-sm text-[#989898]">Part Name</p>
-                                <p>{productionDetail?.partName}</p>
+                                <p>{productionDetail?.Engineering.partName}</p>
                             </div>
                         </div>
                         <div className="grid grid-cols-3">
                             <div className="flex flex-col gap-2">
                                 <p className="text-sm text-[#989898]">PIC Production</p>
-                                <p>{productionDetail?.picProduction}</p>
+                                { productionDetail?.picProduction === null ? <p>-</p> : <p>{productionDetail?.picProduction}</p> }
                             </div>
                             <div className="flex flex-col gap-2">
                                 <p className="text-sm text-[#989898]">Drawing Number</p>
-                                <p>{productionDetail?.drawingNumber}</p>
+                                <p>{productionDetail?.Engineering.drawingNumber}</p>
                             </div>
                             <div className="flex flex-col gap-2">
                                 <p className="text-sm text-[#989898]">Category</p>
-                                <p>{productionDetail?.category}</p>
+                                <p>{productionDetail?.Engineering.category}</p>
                             </div>
                         </div>
                         <div className="grid grid-cols-1">
                             <div className="flex flex-col gap-2">
                                 <p className="text-sm text-[#989898]">Remarks</p>
-                                <p>{productionDetail?.remark}</p>
+                                <p>{productionDetail?.Engineering.remark}</p>
                             </div>
                         </div>
                         <div className="grid grid-cols-1">
