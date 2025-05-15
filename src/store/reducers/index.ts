@@ -6,6 +6,8 @@ import { recruitmentReducers } from "./recruitment";
 import { procurmentReducers } from "./procurement";
 import { issueReducer } from "./highlightIssue";
 import { productionReducer } from "./production";
+import { engineeringReducer } from "./engineering";
+import { stylingDesignReducer } from "./stylingDesign";
 
 export const rootReducer = combineReducers({
     ...authReducers,
@@ -14,5 +16,7 @@ export const rootReducer = combineReducers({
     ...procurmentReducers,
     ...recruitmentReducers,
     ...issueReducer,
-    ...productionReducer
+    ...productionReducer,
+    ...engineeringReducer,
+    ...stylingDesignReducer
 });
