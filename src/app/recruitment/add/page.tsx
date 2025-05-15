@@ -95,6 +95,7 @@ export default function AddData() {
                                 label="Division *"
                                 options={["Vehicle Engineering", "System Engineering", "Industrial Design", "Testing"]}
                                 onSelect={(value) => setDivision(value)}
+                                value={division}
                             />
                         </div>
                     </div> 

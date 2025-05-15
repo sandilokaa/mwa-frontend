@@ -94,6 +94,7 @@ export default function ShowData() {
                         <DropdownCategory
                             options={["Chassis", "Under Body", "Upper Body", "Exterior", "Interior"]}
                             onSelect={(value) => setSelectedCategory(value)}
+                            defaultValue="Chassis"
                         />
                     </div>
                 </div>

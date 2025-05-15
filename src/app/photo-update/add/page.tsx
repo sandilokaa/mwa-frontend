@@ -86,6 +86,7 @@ export default function AddData() {
                                 label="Category *"
                                 options={["Chassis", "Under Body", "Upper Body", "Exterior", "Interior"]}
                                 onSelect={(value) => setCategory(value)}
+                                value={category}
                             />
                             <DateInputForm
                                 label="Date *"

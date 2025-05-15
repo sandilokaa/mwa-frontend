@@ -333,31 +333,35 @@ export default function ShowData() {
                                                             <div
                                                                 className="flex justify-center items-center cursor-pointer"
                                                             >
-                                                                {issue.statusIssue === StatusIssue.Overdue ? (
-                                                                    <AlertCircle 
-                                                                        onClick={() => {
-                                                                            setSelectedIssueForModal(issue);
-                                                                            setShowOverdueModal(true);
-                                                                        }}
-                                                                        size={15} 
-                                                                        className="text-red-500" 
-                                                                    />
-                                                                ) : (
-                                                                    <Image 
-                                                                        onClick={() => {
-                                                                            setShowStatusMenuId(prevId => {
-                                                                                const newId = prevId === issue.id ? null : issue.id;
-                                                                                if (newId !== null) {
-                                                                                    setSelectedStatus(issue.statusIssue);
-                                                                                }
-                                                                                return newId;
-                                                                            });
-                                                                        }}
-                                                                        src="/images/icon/menu.svg" 
-                                                                        alt="Menu Icon" 
-                                                                        width={15} 
-                                                                        height={15} 
-                                                                    />
+                                                                {issue.statusIssue !== StatusIssue.Done && (
+                                                                    <div className="flex justify-center items-center cursor-pointer">
+                                                                        {issue.statusIssue === StatusIssue.Overdue ? (
+                                                                            <AlertCircle 
+                                                                                onClick={() => {
+                                                                                    setSelectedIssueForModal(issue);
+                                                                                    setShowOverdueModal(true);
+                                                                                }}
+                                                                                size={15} 
+                                                                                className="text-red-500" 
+                                                                            />
+                                                                        ) : (
+                                                                            <Image 
+                                                                                onClick={() => {
+                                                                                    setShowStatusMenuId(prevId => {
+                                                                                        const newId = prevId === issue.id ? null : issue.id;
+                                                                                        if (newId !== null) {
+                                                                                            setSelectedStatus(issue.statusIssue);
+                                                                                        }
+                                                                                        return newId;
+                                                                                    });
+                                                                                }}
+                                                                                src="/images/icon/menu.svg" 
+                                                                                alt="Menu Icon" 
+                                                                                width={15} 
+                                                                                height={15} 
+                                                                            />
+                                                                        )}
+                                                                    </div>
                                                                 )}
                                                             </div>
                                                         </div>

@@ -45,6 +45,13 @@ export default function EditData() {
     
     const [category, setCategory] = useState("");
     const [pic, setPIC] = useState("");
+
+    useEffect(() => {
+        if (!issueDetail) return;
+        setCategory(issueDetail?.category ?? "");
+        setPIC(issueDetail?.pic ?? "");
+    }, [issueDetail]);
+
     const dueDateRef = useRef<HTMLInputElement>(null);
     const itemNameRef = useRef<HTMLInputElement>(null);
     const countermeassureRef = useRef<HTMLTextAreaElement | null>(null);
@@ -105,13 +112,13 @@ export default function EditData() {
                                 label="Category *"
                                 options={["Chassis", "Under Body", "Upper Body", "Exterior", "Interior", "Production", "Procurement"]}
                                 onSelect={(value) => setCategory(value)}
-                                defaultValue={issueDetail?.category}
+                                value={category}
                             />
                             <DropdownString
                                 label="PIC (C/M) *"
                                 options={["RnE", "Vehicle Engineering", "System Engineering", "Industrial Design" , "Production", "Procurement", "Testing"]}
                                 onSelect={(value) => setPIC(value)}
-                                defaultValue={issueDetail?.pic}
+                                value={pic}
                             />
                         </div>  
                         <div className="grid grid-cols-1">

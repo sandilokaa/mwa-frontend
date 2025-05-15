@@ -91,11 +91,13 @@ export default function AddData() {
                                 label="Category *"
                                 options={["Chassis", "Under Body", "Upper Body", "Exterior", "Interior", "Production", "Procurement"]}
                                 onSelect={(value) => setCategory(value)}
+                                value={category}
                             />
                             <DropdownString
                                 label="PIC (C/M) *"
                                 options={["RnE", "Vehicle Engineering", "System Engineering", "Industrial Design" , "Production", "Procurement", "Testing"]}
                                 onSelect={(value) => setPIC(value)}
+                                value={pic}
                             />
                         </div>  
                         <div className="grid grid-cols-1">

@@ -38,22 +38,29 @@ export default function EditData() {
         }
     }, [id, dispatch]);
 
-    useEffect(() => {
-        if (photoUpdateDetail?.productId) {
-            selectedProductIdRef.current = photoUpdateDetail.productId;
-        }
-    }, [photoUpdateDetail]);
-
     /* ------------------ End Get Detail ------------------ */
 
 
     /* ------------------ Update Data ------------------ */
 
     const [category, setCategory] = useState("");
+
+    useEffect(() => {
+        if (!photoUpdateDetail) return;
+        setCategory(photoUpdateDetail?.category ?? "");
+    }, [photoUpdateDetail]);
+
     const dateInputRef = useRef<HTMLInputElement>(null);
     const informationRef = useRef<HTMLTextAreaElement | null>(null);
     const pictureRef = useRef<HTMLInputElement>(null);
+
     const selectedProductIdRef = useRef<number>(0);
+
+    useEffect(() => {
+        if (photoUpdateDetail?.productId) {
+            selectedProductIdRef.current = photoUpdateDetail.productId;
+        }
+    }, [photoUpdateDetail]);
 
     const handleUpdate = () => {
         try {
@@ -106,7 +113,7 @@ export default function EditData() {
                                 label="Category *"
                                 options={["Chassis", "Under Body", "Upper Body", "Exterior", "Interior"]}
                                 onSelect={(value) => setCategory(value)}
-                                defaultValue={photoUpdateDetail?.category}
+                                value={category}
                             />
                             <DateInputForm
                                 label="Date *"

@@ -41,7 +41,13 @@ export default function EditData() {
     const submissionDateRef = useRef<HTMLInputElement>(null);
     const joinDateRef = useRef<HTMLInputElement>(null);
     const positionRef = useRef<HTMLInputElement>(null);
+
     const [division, setDivision] = useState("");
+
+    useEffect(() => {
+        if (!recruitmentDetail) return;
+        setDivision(recruitmentDetail?.division ?? "");
+    }, [recruitmentDetail]);
 
     const handleUpdate = () => {
         try {
@@ -118,7 +124,7 @@ export default function EditData() {
                                 label="Division *"
                                 options={["Vehicle Engineering", "System Engineering", "Industrial Design", "Testing"]}
                                 onSelect={(value) => setDivision(value)}
-                                defaultValue={recruitmentDetail?.division}
+                                value={division}
                             />
                         </div>
                     </div>
