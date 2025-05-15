@@ -2,10 +2,28 @@
 
 import Link from "next/link";
 import Image from "next/image";
-
-import DocumentBadge from "@/components/common/badge/DocumentBadge";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { useParams } from "next/navigation";
+import { useEffect } from "react";
+import { fetchEngineeringDetail, Status2D, Status3D, StatusDXF } from "@/store/slice/engineering/getDetailSlice";
+import { formatDate } from "@/utils/format/formatDate";
+import CurrencyFormatter from "@/utils/format/formatCurrency";
 
 export default function DetailData() {
+
+    const dispatch = useAppDispatch();
+    const params = useParams();
+    const id = Number(params.id);
+
+    const { engineeringDetail } = useAppSelector(state => state.engineeringDetail);
+
+    useEffect(() => {
+        if (id) {
+            dispatch(fetchEngineeringDetail({ id }));
+        }
+    }, [id, dispatch]);
+
+
     return (
         <div>
             <div className="flex gap-2">   
@@ -18,7 +36,7 @@ export default function DetailData() {
                 <div className="bg-white w-full rounded-[10px] p-5 col-span-3">
                     <div className="flex justify-between">
                         <p className="text-sm font-bold">Designed Engineeering Information</p>
-                        <Link className="cursor-pointer" href="/development-status/engineering/:id/edit">
+                        <Link className="cursor-pointer" href={`/development-status/engineering/${id}/edit`}>
                             <Image className="cursor-pointer" src="/images/icon/edit.svg" alt="Edit Icon" width={22} height={22}/>
                         </Link>
                     </div>
@@ -26,63 +44,70 @@ export default function DetailData() {
                         <div className="grid grid-cols-3">
                             <div className="flex flex-col gap-2">
                                 <p className="text-sm text-[#989898]">Part Name</p>
-                                <p>Example: XXXXXXX</p>
-                            </div>
-                            <div className="flex flex-col gap-2">
-                                <p className="text-sm text-[#989898]">Part Number</p>
-                                <p>Example: XXXXXXX</p>
+                                <p>{engineeringDetail?.partName}</p>
                             </div>
                             <div className="flex flex-col gap-2">
                                 <p className="text-sm text-[#989898]">Drawing Number</p>
-                                <p>Example: XXXXXXX</p>
+                                <p>{engineeringDetail?.drawingNumber}</p>
+                            </div>
+                            <div className="flex flex-col gap-2">
+                                <p className="text-sm text-[#989898]">Category</p>
+                                <p>{engineeringDetail?.category}</p>
                             </div>
                         </div>
                         <div className="grid grid-cols-3">
                             <div className="flex flex-col gap-2">
                                 <p className="text-sm text-[#989898]">PIC 3D</p>
-                                <p>Example: XXXXXXX</p>
+                                <p>{engineeringDetail?.pic3D}</p>
                             </div>
                             <div className="flex flex-col gap-2">
                                 <p className="text-sm text-[#989898]">PIC 2D & DXF</p>
-                                <p>Example: XXXXXXX</p>
+                                <p>{engineeringDetail?.pic2DDXF}</p>
                             </div>
                         </div>
                         <div className="grid grid-cols-3">
                             <div className="flex flex-col gap-2">
                                 <p className="text-sm text-[#989898]">Start Date</p>
-                                <p>Example: XXXXXXX</p>
+                                <p>{formatDate(engineeringDetail?.startDate)}</p>
                             </div>
                             <div className="flex flex-col gap-2">
                                 <p className="text-sm text-[#989898]">Date Required</p>
-                                <p>Example: XXXXXXX</p>
+                                <p>{formatDate(engineeringDetail?.dateRequired)}</p>
                             </div>
                         </div>
                         <div className="grid grid-cols-3">
                             <div className="flex flex-col gap-2">
                                 <p className="text-sm text-[#989898]">Price</p>
-                                <p>Example: XXXXXXX</p>
+                                <p>{CurrencyFormatter(engineeringDetail?.price)}</p>
                             </div>
                             <div className="flex flex-col gap-2">
                                 <p className="text-sm text-[#989898]">Quantity</p>
-                                <p>Example: XXXXXXX</p>
+                                <p>{engineeringDetail?.quantity}</p>
                             </div>
                             <div className="flex flex-col gap-2">
                                 <p className="text-sm text-[#989898]">Total Price</p>
-                                <p>Example: XXXXXXX</p>
+                                <p>{CurrencyFormatter(engineeringDetail?.totalPrice)}</p>
                             </div>
                         </div>
                         <div className="grid grid-cols-1">
                             <div className="flex flex-col gap-2">
-                                <p className="text-sm text-[#989898]">Information</p>
-                                <p>Example: XXXXXXX</p>
+                                <p className="text-sm text-[#989898]">Remark</p>
+                                <p>{engineeringDetail?.remark}</p>
                             </div>
                         </div>
                         <div className="grid grid-cols-1">
                             <div className="flex flex-col gap-2">
                                 <p className="text-sm text-[#989898]">Supporting Documents</p>
-                                <DocumentBadge
-                                    text="blablabla"
-                                />
+                                <div className="flex">
+                                    {engineeringDetail?.picture && (
+                                        <Image
+                                            src={`http://localhost:8080/${engineeringDetail.picture}`}
+                                            alt="Supporting Documents"
+                                            width={500}
+                                            height={300}
+                                        />
+                                    )}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -94,9 +119,12 @@ export default function DetailData() {
                             <p
                                 className={`
                                     text-sm font-medium inline-block py-[10px] px-4 rounded-[5px]
+                                    ${engineeringDetail?.status3D === Status3D.NotYet ? 'text-[#7a7b7d] bg-[#F4F5F5]' : ''}
+                                    ${engineeringDetail?.status3D === Status3D.OnGoing ? 'text-[#ae8c02] bg-[#FFF9C4]' : ''}
+                                    ${engineeringDetail?.status3D === Status3D.Done ? 'text-[#3e9c9c] bg-[#DBF2F2]' : ''}
                                 `}
                             >
-                                On Progress
+                                {engineeringDetail?.status3D.replace(/(?:^|\s)\S/g, (match: string) => match.toUpperCase())}
                             </p>
                         </div>
                     </div>
@@ -106,9 +134,12 @@ export default function DetailData() {
                             <p
                                 className={`
                                     text-sm font-medium inline-block py-[10px] px-4 rounded-[5px]
+                                    ${engineeringDetail?.status2D === Status2D.NotYet ? 'text-[#7a7b7d] bg-[#F4F5F5]' : ''}
+                                    ${engineeringDetail?.status2D === Status2D.OnGoing ? 'text-[#ae8c02] bg-[#FFF9C4]' : ''}
+                                    ${engineeringDetail?.status2D === Status2D.Done ? 'text-[#3e9c9c] bg-[#DBF2F2]' : ''}
                                 `}
                             >
-                                On Progress
+                                {engineeringDetail?.status2D.replace(/(?:^|\s)\S/g, (match: string) => match.toUpperCase())}
                             </p>
                         </div>
                     </div>
@@ -118,9 +149,12 @@ export default function DetailData() {
                             <p
                                 className={`
                                     text-sm font-medium inline-block py-[10px] px-4 rounded-[5px]
+                                    ${engineeringDetail?.statusDXF === StatusDXF.NotYet ? 'text-[#7a7b7d] bg-[#F4F5F5]' : ''}
+                                    ${engineeringDetail?.statusDXF === StatusDXF.OnGoing ? 'text-[#ae8c02] bg-[#FFF9C4]' : ''}
+                                    ${engineeringDetail?.statusDXF === StatusDXF.Done ? 'text-[#3e9c9c] bg-[#DBF2F2]' : ''}
                                 `}
                             >
-                                On Progress
+                                {engineeringDetail?.statusDXF.replace(/(?:^|\s)\S/g, (match: string) => match.toUpperCase())}
                             </p>
                         </div>
                     </div>
