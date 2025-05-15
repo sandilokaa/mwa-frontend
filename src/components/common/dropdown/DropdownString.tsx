@@ -7,25 +7,17 @@ interface DropdownStringProps {
     label: string;
     options: string[];
     onSelect: (value: string) => void;
-    defaultValue?: string;
+    value?: string;
 }
 
 export default function DropdownString({
     label,
     options,
     onSelect,
-    defaultValue,
+    value,
 }: DropdownStringProps) {
     const [isOpen, setIsOpen] = useState(false);
-    const [selected, setSelected] = useState("");
     const dropdownRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        if (defaultValue && options.length > 0) {
-            const found = options.find(p => p === defaultValue);
-            if (found) setSelected(found);
-        }
-    }, [defaultValue, options]);
 
     // Close dropdown when clicking outside
     useEffect(() => {
@@ -45,7 +37,6 @@ export default function DropdownString({
     }, []);
 
     const handleSelect = (option: string) => {
-        setSelected(option);
         onSelect(option);
         setIsOpen(false);
     };
@@ -59,8 +50,8 @@ export default function DropdownString({
                     className="bg-white border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-300 cursor-pointer w-full h-[45px]"
                 >
                     <div className="flex justify-between items-center">
-                        <p className={`text-sm ${selected ? "text-black" : "text-[#989898]"}`}>
-                            {selected || "Select an option"}
+                        <p className={`text-sm ${value ? "text-black" : "text-[#989898]"}`}>
+                            {value || "Select an option"}
                         </p>
                         <Image
                             className="-rotate-90"

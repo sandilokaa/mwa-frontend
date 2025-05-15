@@ -1,27 +1,43 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 
 interface DropdownCategoryProps {
     options: string[];
     onSelect: (value: string) => void;
+    defaultValue?: string;
 }
 
-export default function DropdownCategory({ options, onSelect }: DropdownCategoryProps) {
+export default function DropdownCategory({ options, onSelect, defaultValue }: DropdownCategoryProps) {
     const [isOpen, setIsOpen] = useState(false);
-    const [selected, setSelected] = useState("Overall");
+    const [selected, setSelected] = useState(defaultValue || options[0]);
+    const dropdownRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        if (!options.includes("Overall") && options.length > 0) {
-            setSelected(options[0]);
-            onSelect(options[0]);
-        } else {
-            setSelected("Overall");
-            onSelect("Overall");
+        if (!selected && options.length > 0) {
+            const first = defaultValue || options[0];
+            setSelected(first);
+            onSelect(first);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [options]);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                dropdownRef.current &&
+                !dropdownRef.current.contains(event.target as Node)
+            ) {
+                setIsOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     const handleSelect = (option: string) => {
         setSelected(option);
@@ -30,7 +46,7 @@ export default function DropdownCategory({ options, onSelect }: DropdownCategory
     };
 
     return (
-        <div className="relative inline-block text-left">
+        <div ref={dropdownRef} className="relative inline-block text-left">
             <div className="flex flex-col gap-1">
                 <button
                     onClick={() => setIsOpen(!isOpen)}

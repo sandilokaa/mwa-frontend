@@ -37,7 +37,7 @@ const StatusMenu = ({
     return (
         <div
             ref={menuRef}
-            className="absolute right-0 mt-2 w-40 bg-white border border-gray-300 rounded z-50 p-3"
+            className="absolute right-0 mt-2 w-full bg-white border border-gray-300 rounded z-50 p-3"
         >
             {statusOptions.map(({ label, bgColor, textColor }) => (
                 <label key={label} className="flex items-center gap-2 py-1">
