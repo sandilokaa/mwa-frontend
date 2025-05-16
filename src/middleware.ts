@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import jwt from 'jsonwebtoken'
 
 export function middleware(request: NextRequest) {
     const token = request.cookies.get('token')?.value
@@ -18,6 +19,15 @@ export function middleware(request: NextRequest) {
         '/recruitment',
     ]
     const isProtected = protectedPaths.some((path) => pathname.startsWith(path))
+
+    if (token) {
+        try {
+            jwt.verify(token, process.env.NEXT_PUBLIC_SECRET!)
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (err) {
+            return NextResponse.redirect(new URL('/logout', request.url))
+        }
+    }
 
     if (isProtected && !token) {
         return NextResponse.redirect(new URL('/login', request.url))
