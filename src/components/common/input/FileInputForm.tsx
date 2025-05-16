@@ -6,9 +6,11 @@ interface FileInputFormProps {
     label: string;
     acceptFile?: string;
     defaultFile?: string;
+    multiple?: boolean;
+    onFileChange?: (files: File[]) => void;
 }
 
-const FileInputForm = forwardRef<HTMLInputElement, FileInputFormProps>(({ label, acceptFile, defaultFile }, ref) => {
+const FileInputForm = forwardRef<HTMLInputElement, FileInputFormProps>(({ label, acceptFile, defaultFile, multiple, onFileChange }, ref) => {
 
     const [files, setFiles] = useState<File[]>([]);
     const [defaultFileName, setDefaultFileName] = useState<string | null>(null);
@@ -24,14 +26,18 @@ const FileInputForm = forwardRef<HTMLInputElement, FileInputFormProps>(({ label,
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
-            setFiles([e.target.files[0]]);
+            const selectedFiles = Array.from(e.target.files);
+            setFiles(selectedFiles);
+            onFileChange?.(selectedFiles);
         }
     };
 
     const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         if (e.dataTransfer.files.length > 0) {
-            setFiles([e.dataTransfer.files[0]]);
+            const droppedFiles = Array.from(e.dataTransfer.files);
+            setFiles(droppedFiles);
+            onFileChange?.(droppedFiles);
         }
     };
 
@@ -59,26 +65,34 @@ const FileInputForm = forwardRef<HTMLInputElement, FileInputFormProps>(({ label,
                     className="hidden"
                     onChange={handleFileChange}
                     accept={acceptFile}
+                    multiple={multiple}
                 />
-
                 {files.length > 0 ? (
-                    <div className="flex items-center gap-5 bg-[#FAFAFA] rounded p-3 w-fit">
-                        <div className="flex gap-3">
-                            <Image src="/images/icon/document-upload.svg" alt="Upload Icon" width={20} height={20} />
-                            <p className="text-sm text-[#292929]">
-                                {files[0]?.name}
-                            </p>
-                        </div>
-                        <button
-                            type="button"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                handleRemoveFile();
-                            }}
-                            className="ml-auto cursor-pointer"
-                        >
-                            <X className="w-4 h-4 text-red-500" />
-                        </button>
+                    <div className="flex gap-2">
+                        {files.map((file, index) => (
+                            <div key={index} className="flex items-center gap-5 bg-[#FAFAFA] rounded p-3 w-fit">
+                                <div className="flex gap-3">
+                                    <Image src="/images/icon/document-upload.svg" alt="Upload Icon" width={20} height={20} />
+                                    <p className="text-sm text-[#ef6868]">{file.name}</p>
+                                </div>
+                                <button
+                                    type="button"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        const newFiles = [...files];
+                                        newFiles.splice(index, 1);
+                                        setFiles(newFiles);
+                                        if (fileInputRef.current) {
+                                            fileInputRef.current.value = "";
+                                        }
+                                        onFileChange?.(newFiles);
+                                    }}
+                                    className="ml-auto cursor-pointer"
+                                >
+                                    <X className="w-4 h-4 text-red-500" />
+                                </button>
+                            </div>
+                        ))}
                     </div>
                 ) : defaultFileName ? (
                     <div className="flex items-center gap-5 bg-[#FAFAFA] rounded p-3 w-fit">
