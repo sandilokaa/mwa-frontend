@@ -8,20 +8,24 @@ import { useProductFilter } from "@/context/ProductFilterContext";
 import { fetchFilteredStylingDesign, resetFilteredStylingDesign } from "@/store/slice/stylingDesign/getAllSlice";
 import { fetchPartDesignLists } from "@/store/slice/partDesign/getAllSlice";
 import { getEffectiveCategory } from "@/utils/filter/effetiveCategory";
+import { deletePartDesign, resetDeleteState } from "@/store/slice/partDesign/deleteSlice";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
+import { useSnackbar } from "notistack";
 import 'swiper/css';
 import 'swiper/css/pagination';
+import { refetchStylingDesign } from "@/utils/refetch/refetchStylingDesign";
 
 import AddButton from "@/components/common/button/AddButton";
 import DropdownCategory from "@/components/common/dropdown/DropdownFilterCategory";
 import VisibleButton from "@/components/common/button/VisibleButton";
+import ConfirmDialog from "@/components/common/modal/ConfirmDialog";
 
 export default function ShowData() {
 
     const dispatch = useAppDispatch();
     const { selectedProduct } = useProductFilter();
-
+    const { enqueueSnackbar } = useSnackbar();
 
     /* ------------------- Get All Styling Design ------------------- */
 
@@ -64,8 +68,48 @@ export default function ShowData() {
 
     /* ------------------- End Get All Part Design ------------------- */
 
+
+    /* ------------------- Delete Part Design ------------------- */
+        
+    const [openConfirm, setOpenConfirm] = useState(false);
+    const [targetId, setTargetId] = useState<number | null>(null);
+
+    const confirmDelete = (id: number) => {
+        setTargetId(id);
+        setOpenConfirm(true);
+    };
+
+    const handleConfirmedDelete = () => {
+        if (targetId !== null) {
+            dispatch(deletePartDesign({ id: targetId }))
+                .unwrap()
+                .then(() => {
+                    if (!selectedProduct?.id) return;
+                    enqueueSnackbar("You have successfully deleted the data", { variant: "success" });
+                    dispatch(resetDeleteState());
+                    refetchStylingDesign(dispatch, selectedProduct.id, getEffectiveCategory(selectedCategory));
+                })
+                .catch(() => {
+                    enqueueSnackbar("You failed to delete data", { variant: "error" });
+                    dispatch(resetDeleteState());
+                })
+        }
+        setOpenConfirm(false);
+    };
+
+    /* ------------------- End Delete Part Design ------------------- */
+
     return (
         <div>
+            <ConfirmDialog
+                open={openConfirm}
+                onClose={() => setOpenConfirm(false)}
+                onConfirm={handleConfirmedDelete}
+                title="Delete Part Design"
+                message="Are you sure you want to delete this part design?"
+                confirmText="Delete"
+                cancelText="Cancel"
+            />
             <div className="flex flex-col gap-y-5">
                 <p className="font-bold">Development Status Styling Design</p>
                 {
@@ -138,11 +182,11 @@ export default function ShowData() {
                                                 return (
                                                     <div key={part.id} className="relative group cursor-pointer max-w-[245px] max-h-[330px]">
                                                         <Image className="w-[245px] h-[330px] rounded-lg" src={`http://localhost:8080/${part.picture}`} alt="Item Image" width={245} height={330} />
-                                                        <div className="absolute left-0 inset-0 bg-[rgba(0,0,0,0.5)] opacity-0 group-hover:opacity-100 flex flex-col justify-end text-white p-4 transition-opacity duration-300 rounded-lg">
-                                                            <div className="flex flex-col gap-4">
-                                                                <div className="flex flex-col gap-1">
-                                                                    <p className="text-sm font-medium mt-1">{part?.name}</p>
-                                                                </div>
+                                                        <div className="absolute left-0 inset-0 bg-[rgba(0,0,0,0.5)] opacity-0 group-hover:opacity-100 flex flex-col justify-between text-white p-4 transition-opacity duration-300 rounded-lg">
+                                                            <div className="flex">
+                                                                <p className="text-sm font-medium">{part?.name}</p>
+                                                            </div>
+                                                            <div className="flex flex-col">
                                                                 <div className="flex gap-[10px] justify-end">
                                                                     <div className="p-2 rounded-sm bg-[#2181E8] cursor-pointer">
                                                                         <Image src="/images/icon/eye.svg" alt="view icon" height={16} width={16} />
@@ -153,7 +197,7 @@ export default function ShowData() {
                                                                         </div>
                                                                     </Link>
                                                                     <div 
-                                                                        onClick={() => "confirmDelete(photo.id)"}
+                                                                        onClick={() => confirmDelete(part.id)}
                                                                         className="p-2 rounded-sm bg-[#D62C35] cursor-pointer"
                                                                     >
                                                                         <Image src="/images/icon/trash.svg" alt="view icon" height={16} width={16} />
