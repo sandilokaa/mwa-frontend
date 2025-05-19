@@ -8,6 +8,7 @@ import { issueReducer } from "./highlightIssue";
 import { productionReducer } from "./production";
 import { engineeringReducer } from "./engineering";
 import { stylingDesignReducer } from "./stylingDesign";
+import { partDesignReducer } from "./partDesign";
 
 export const rootReducer = combineReducers({
     ...authReducers,
@@ -18,5 +19,6 @@ export const rootReducer = combineReducers({
     ...issueReducer,
     ...productionReducer,
     ...engineeringReducer,
-    ...stylingDesignReducer
+    ...stylingDesignReducer,
+    ...partDesignReducer
 });

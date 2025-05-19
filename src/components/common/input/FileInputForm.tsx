@@ -73,7 +73,7 @@ const FileInputForm = forwardRef<HTMLInputElement, FileInputFormProps>(({ label,
                             <div key={index} className="flex items-center gap-5 bg-[#FAFAFA] rounded p-3 w-fit">
                                 <div className="flex gap-3">
                                     <Image src="/images/icon/document-upload.svg" alt="Upload Icon" width={20} height={20} />
-                                    <p className="text-sm text-[#ef6868]">{file.name}</p>
+                                    <p className="text-sm text-black">{file.name}</p>
                                 </div>
                                 <button
                                     type="button"
@@ -89,7 +89,7 @@ const FileInputForm = forwardRef<HTMLInputElement, FileInputFormProps>(({ label,
                                     }}
                                     className="ml-auto cursor-pointer"
                                 >
-                                    <X className="w-4 h-4 text-red-500" />
+                                    <X className="w-4 h-4 text-black" />
                                 </button>
                             </div>
                         ))}
