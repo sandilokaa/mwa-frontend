@@ -134,7 +134,7 @@ export default function EditData() {
                             />
                             <DropdownString
                                 label="Category *"
-                                options={["Chassis", "Under Body", "Upper Body"]}
+                                options={["Chassis", "Under Body", "Upper Body", "Exterior", "Interior"]}
                                 onSelect={(value) => setCategory(value)}
                                 value={category}
                             />

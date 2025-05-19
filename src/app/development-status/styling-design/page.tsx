@@ -119,7 +119,7 @@ export default function ShowData() {
                         />
                     </Link>
                     <DropdownCategory
-                        options={["Chassis", "Under Body", "Upper Body"]}
+                        options={["Chassis", "Under Body", "Upper Body", "Exterior", "Interior"]}
                         onSelect={(value) => setSelectedCategory(value)}
                         defaultValue="Chassis"
                     />

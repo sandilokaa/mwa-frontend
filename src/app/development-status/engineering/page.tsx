@@ -201,7 +201,7 @@ export default function ShowData() {
                     </Link>
                     <div className="flex gap-4">
                         <DropdownCategory
-                            options={["Overall", "Chassis", "Under Body", "Upper Body"]}
+                            options={["Overall", "Chassis", "Under Body", "Upper Body", "Exterior", "Interior"]}
                             onSelect={(value) => setSelectedCategory(value)}
                             defaultValue="Overall"
                         />
