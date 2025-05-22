@@ -23,8 +23,8 @@ const OverdueModal = forwardRef<HTMLInputElement, OverdueModalProps>(({
     if (!open) return null;
 
     return (
-        <div className="fixed inset-0 bg-[rgba(0,0,0,0.6)] flex items-center justify-center z-50">
-            <div className="flex flex-col gap-4 bg-white p-6 rounded-lg w-[360px] shadow-lg text-left">
+        <div className="fixed inset-0 bg-[rgba(0,0,0,0.1)] flex items-center justify-center z-50">
+            <div className="flex flex-col gap-4 bg-white p-6 rounded-lg w-[360px] shadow-md text-left">
                 <h2 className="text-lg font-semibold text-[#D62C35]">Date Revision</h2>
                 <div className="flex flex-col gap-2">
                     <p className="text-sm">
