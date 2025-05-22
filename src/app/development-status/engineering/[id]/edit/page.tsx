@@ -113,10 +113,10 @@ export default function EditData() {
                 <Link className="cursor-pointer" href="/development-status/engineering">
                     <Image src="/images/icon/chevron-down.svg" width={24} height={24} alt="Back Icon"/>
                 </Link>
-                <p className="font-bold">Edit Designed Engineering</p>
+                <p className="font-bold">Edit Design Engineering</p>
             </div>
             <div className="mt-5 bg-white w-full rounded-[10px] p-5">
-                <p className="text-sm font-bold">Designed Engineering Form</p>
+                <p className="text-sm font-bold">Design Engineering Form</p>
                 <div className="flex flex-col gap-y-5 mt-5">
                     <div className="flex flex-col gap-y-4">
                         <div className="grid grid-cols-3 gap-4">

@@ -196,7 +196,7 @@ export default function ShowData() {
                 <div className="flex justify-between">
                     <Link href="/development-status/engineering/add">
                         <AddButton
-                            buttonText="Add Designed Engineering"
+                            buttonText="Add Design Engineering"
                         />
                     </Link>
                     <div className="flex gap-4">
@@ -215,12 +215,12 @@ export default function ShowData() {
             <div className="mt-5">
                 <div className="flex gap-4 w-full">
                     <div className="flex flex-col justify-between w-3/4 bg-white p-5 rounded-[10px]">
-                        <h2 className="font-bold text-sm">Cumulative Designed Engineering Performance</h2>
+                        <h2 className="font-bold text-sm">Cumulative Design Engineering Performance</h2>
                         <div className="flex justify-center">
                         </div>
                     </div>
                     <div className="flex flex-col w-1/3 h-full bg-white p-5 rounded-[10px] gap-5">
-                        <h2 className="font-bold text-sm">Designed Engineering Status Overview</h2>
+                        <h2 className="font-bold text-sm">Design Engineering Status Overview</h2>
                         <Swiper
                             spaceBetween={20}
                             slidesPerView={1}

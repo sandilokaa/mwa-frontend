@@ -30,12 +30,12 @@ export default function DetailData() {
                 <Link className="cursor-pointer" href="/development-status/engineering/">
                     <Image src="/images/icon/chevron-down.svg" width={24} height={24} alt="Back Icon"/>
                 </Link>
-                <p className="font-bold">Designed Engineeering Detail</p>
+                <p className="font-bold">Design Engineeering Detail</p>
             </div>
             <div className="grid grid-cols-4 mt-5 gap-5">
                 <div className="bg-white w-full rounded-[10px] p-5 col-span-3">
                     <div className="flex justify-between">
-                        <p className="text-sm font-bold">Designed Engineeering Information</p>
+                        <p className="text-sm font-bold">Design Engineeering Information</p>
                         <Link className="cursor-pointer" href={`/development-status/engineering/${id}/edit`}>
                             <Image className="cursor-pointer" src="/images/icon/edit.svg" alt="Edit Icon" width={22} height={22}/>
                         </Link>
