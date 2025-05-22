@@ -24,7 +24,7 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
     if (!open) return null;
 
     return (
-        <div className="fixed inset-0 bg-[rgba(0,0,0,0.6)] flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-[rgba(0,0,0,0.5)] flex items-center justify-center z-50">
             <div className="bg-white p-6 rounded shadow-md min-w-[300px]">
                 <h3 className="font-bold text-lg mb-2">{title}</h3>
                 <p className="mb-5 text-sm text-black">{message}</p>

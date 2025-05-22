@@ -7,8 +7,6 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { fetchProductionDetail, ProductionStatus } from "@/store/slice/production/getDetailSlice";
 
-import DocumentBadge from "@/components/common/badge/DocumentBadge";
-
 export default function DetailData() {
 
     const dispatch = useAppDispatch();
@@ -65,14 +63,6 @@ export default function DetailData() {
                             <div className="flex flex-col gap-2">
                                 <p className="text-sm text-[#989898]">Remarks</p>
                                 <p>{productionDetail?.Engineering.remark}</p>
-                            </div>
-                        </div>
-                        <div className="grid grid-cols-1">
-                            <div className="flex flex-col gap-2">
-                                <p className="text-sm text-[#989898]">Supporting Documents</p>
-                                <DocumentBadge
-                                    text="blablabla"
-                                />
                             </div>
                         </div>
                     </div>

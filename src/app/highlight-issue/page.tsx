@@ -21,9 +21,9 @@ import TablePagination from "@/components/common/pagination/TablePagination";
 import ConfirmDialog from "@/components/common/modal/ConfirmDialog";
 import StatusMenu from "@/components/common/modal/StatusMenu";
 import ProjectBarChart from "@/components/common/chart/ProjectBarChart";
-import { StatusIssueOptions } from "@/utils/status/statusOption";
 import { AlertCircle } from 'lucide-react';
 import OverdueModal from "@/components/common/modal/OverdueModal";
+import { getIssueOptions } from "@/utils/status/getIssueOption";
 
 export default function ShowData() {
 
@@ -134,12 +134,12 @@ export default function ShowData() {
         dispatch(updateStatusIssueData({ id, statusIssue: selectedStatus.toLowerCase() }))
             .unwrap()
             .then(() => {
-                enqueueSnackbar("Progress updated successfully", { variant: "success" });
+                enqueueSnackbar("Status updated successfully", { variant: "success" });
                 dispatch(resetUpdatedStatusIssue());
                 refetchHighlightIssues(dispatch, selectedProduct.id, search, targetId);
             })
             .catch(() => {
-                enqueueSnackbar("Failed to update progress", { variant: "error" });
+                enqueueSnackbar("Failed to update status", { variant: "error" });
                 dispatch(resetUpdatedStatusIssue());
             });
     
@@ -164,12 +164,12 @@ export default function ShowData() {
         dispatch(updateRevisionIssueData({ id, revisionDate }))
             .unwrap()
             .then(() => {
-                enqueueSnackbar("Progress updated successfully", { variant: "success" });
+                enqueueSnackbar("Revision date updated successfully", { variant: "success" });
                 dispatch(resetUpdatedRevisionIssue());
                 refetchHighlightIssues(dispatch, selectedProduct.id, search, targetId);
             })
             .catch(() => {
-                enqueueSnackbar("Failed to update progress", { variant: "error" });
+                enqueueSnackbar("Failed to update revision date", { variant: "error" });
                 dispatch(resetUpdatedRevisionIssue());
             });
     
@@ -335,7 +335,7 @@ export default function ShowData() {
                                                             >
                                                                 {issue.statusIssue !== StatusIssue.Done && (
                                                                     <div className="flex justify-center items-center cursor-pointer">
-                                                                        {issue.statusIssue === StatusIssue.Overdue ? (
+                                                                        {issue.statusIssue === StatusIssue.Overdue && !issue.revisionDate ? (
                                                                             <AlertCircle 
                                                                                 onClick={() => {
                                                                                     setSelectedIssueForModal(issue);
@@ -371,13 +371,15 @@ export default function ShowData() {
                                                                 onToggle={toggleStatus}
                                                                 onSave={() => handleUpdateStatus(issue.id)}
                                                                 onClose={() => setShowStatusMenuId(null)}
-                                                                statusOptions={StatusIssueOptions}
+                                                                statusOptions={getIssueOptions(issue.statusIssue, issue.revisionDate)}
                                                             />
                                                         )}
                                                         {showOverdueModal && selectedIssueForModal && (
                                                             <OverdueModal
                                                                 open={true}
-                                                                onSave={() => handleUpdateRevision(issue.id)}
+                                                                onSave={() => {
+                                                                    if (selectedIssueForModal) handleUpdateRevision(selectedIssueForModal.id);
+                                                                }}
                                                                 onClose={() => setShowOverdueModal(false)}
                                                                 issue={selectedIssueForModal}
                                                                 ref={revisionDateRef}
