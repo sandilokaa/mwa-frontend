@@ -4,10 +4,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { fetchEngineeringDetail, Status2D, Status3D, StatusDXF } from "@/store/slice/engineering/getDetailSlice";
 import { formatDate } from "@/utils/format/formatDate";
 import CurrencyFormatter from "@/utils/format/formatCurrency";
+
+import LargePhotoModal from "@/components/common/modal/LargePhotoModal";
 
 export default function DetailData() {
 
@@ -23,9 +25,25 @@ export default function DetailData() {
         }
     }, [id, dispatch]);
 
+    /* ---------------- LARGE PHOTO MODAL ---------------- */
+
+    const [openModal, setOpenModal] = useState(false);
+
+
+    const largePhotoModal = () => {
+        setOpenModal(true);
+    };
+
+    /* ---------------- END LARGE PHOTO MODAL ---------------- */
 
     return (
         <div>
+            <LargePhotoModal
+                open={openModal}
+                onClose={() => setOpenModal(false)}
+                imgUrl={`${process.env.NEXT_PUBLIC_API_URL}/${engineeringDetail?.picture}`}
+                downloadUrl={`${process.env.NEXT_PUBLIC_API_URL}/api/v1/download/${engineeringDetail?.picture}`}
+            />
             <div className="flex gap-2">   
                 <Link className="cursor-pointer" href="/development-status/engineering/">
                     <Image src="/images/icon/chevron-down.svg" width={24} height={24} alt="Back Icon"/>
@@ -98,16 +116,27 @@ export default function DetailData() {
                         <div className="grid grid-cols-1">
                             <div className="flex flex-col gap-2">
                                 <p className="text-sm text-[#989898]">Supporting Documents</p>
-                                <div className="flex">
-                                    {engineeringDetail?.picture && (
+                                {engineeringDetail?.picture && (
+                                    <div className="flex flex-col gap-4">
                                         <Image
                                             src={`http://localhost:8080/${engineeringDetail.picture}`}
                                             alt="Supporting Documents"
                                             width={500}
                                             height={300}
                                         />
-                                    )}
-                                </div>
+                                        <div className="flex gap-2">
+                                            <div 
+                                                onClick={() => largePhotoModal()}
+                                                className="px-4 py-2 bg-[#144C68] rounded-md cursor-pointer flex items-center"
+                                            >
+                                                <p className="text-sm font-medium text-white">View Large</p>
+                                            </div>
+                                            <div className="px-4 py-2 bg-[#144C68] rounded-md flex items-center">
+                                                <a className="text-sm font-medium text-white" download href={`${process.env.NEXT_PUBLIC_API_URL}/api/v1/download/${engineeringDetail.picture}`}>Download</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>
