@@ -53,7 +53,7 @@ const Sidebar = React.memo(function Sidebar() {
                                 >
                                     Project Target
                                 </MenuItem>
-                                <SubMenu label="Development Status" icon={<Image src="/images/icon/development-status.svg" alt="icon" width={20} height={20}/>}>
+                                <SubMenu label="Development Status" icon={<Image src="/images/icon/development-status.svg" alt="icon" width={20} height={20}/>} active={pathname.startsWith("/development-status")}>
                                     <div className="flex flex-col gap-y-1">
                                         <MenuItem 
                                             component={<Link href="/development-status/styling-design" prefetch/>} 
@@ -86,7 +86,7 @@ const Sidebar = React.memo(function Sidebar() {
                                         </MenuItem>
                                     </div>
                                 </SubMenu>
-                                <SubMenu label="Budget Status" icon={<Image src="/images/icon/budget-status.svg" alt="icon" width={20} height={20}/>}>
+                                <SubMenu label="Budget Status" icon={<Image src="/images/icon/budget-status.svg" alt="icon" width={20} height={20}/>} active={pathname.startsWith("/budget-status")}>
                                     <MenuItem component={<Link href="#" prefetch/>} active={pathname === "#"} icon={<Image src="/images/icon/dashboard.svg" alt="icon" width={20} height={20}/>}>
                                         Overall Result
                                     </MenuItem>
