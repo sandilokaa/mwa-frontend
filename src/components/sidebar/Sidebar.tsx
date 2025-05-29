@@ -14,7 +14,7 @@ const Sidebar = React.memo(function Sidebar() {
         <div className="h-screen flex">
             <ProSidebar className="border-r-0">
                 <div className="p-5 bg-white">
-                    <Image className="w-[180px] h-auto" src="/images/icon/mwr-logo.svg" width={180} height={100} alt="RnE Logo"/>
+                    <Image className="w-[180px] h-auto" src="/images/icon/mwr-logo.svg" width={180} height={100} alt="RnE Logo" priority/>
                 </div>
                 <Menu 
                     className="h-full bg-white p-5"
