@@ -125,7 +125,10 @@ export default function ShowData() {
                 }
                 <div className="flex bg-white p-5 rounded-[10px]">
                     {filteredStylingDesigns.length === 0 ? (
-                            <p className="font-bold">Styling Design</p>
+                            <div className="flex flex-col gap-y-4">
+                                <p className="font-bold">Styling Design</p>
+                                <p className="text-sm">Data not found.</p>
+                            </div>
                         ) : (
                         filteredStylingDesigns.map((design) => (
                             <div className="flex flex-col gap-10 w-full" key={design.id}>
@@ -209,7 +212,7 @@ export default function ShowData() {
                                                 )
                                             })
                                         ) : (
-                                            <p>No data found.</p>
+                                            <p className="text-sm">Data not found.</p>
                                         )}
                                     </div>
                                     {visibleCount < partDesigns.length && (

@@ -7,11 +7,13 @@ import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
 import { useParams } from "next/navigation";
 import { fetchStylingDesignDetail } from "@/store/slice/stylingDesign/getDetailSlice";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { updateStylingDesignData } from "@/store/slice/stylingDesign/updateSlice";
 
 import InputForm from "@/components/common/input/InputForm";
 import DropdownProductForm from "@/components/common/dropdown/DropdownProductForm";
 import SubmitButton from "@/components/common/button/SubmitButton";
+import FileInputForm from "@/components/common/input/FileInputForm";
 
 export default function EditData() {
 
@@ -27,7 +29,6 @@ export default function EditData() {
     
     const { stylingDesignDetail } = useAppSelector(state => state.stylingDesignDetail);
 
-    console.log(stylingDesignDetail)
     useEffect(() => {
         if (id) {
             dispatch(fetchStylingDesignDetail({ id }));
@@ -35,6 +36,84 @@ export default function EditData() {
     }, [id, dispatch]);
 
     /* ------------------ End Get Detail ------------------ */
+
+
+    /* ------------------ Update Styling Design ------------------ */
+
+    const [deletedImageIds, setDeletedImageIds] = useState<number[]>([]);
+    const [imageList, setImageList] = useState(stylingDesignDetail?.StylingDesignImages || []);
+
+    const handleRemoveImageFromList = (imageId: number) => {
+        setDeletedImageIds(prev => [...prev, imageId]);
+        setImageList(prev => prev.filter(img => img.id !== imageId));
+    };
+
+    const [fileInputs, setFileInputs] = useState<File[][]>([]);
+
+    const handleAddFileInput = () => {
+        setFileInputs(prev => [...prev, []]);
+    };
+
+    const handleFileChange = (file: File[], index: number): void => {
+        const updatedFiles = [...fileInputs];
+        updatedFiles[index] = file;
+        setFileInputs(updatedFiles);
+    };
+
+    const removeFileInput = (index: number) => {
+        setFileInputs(prev => prev.filter((_, i) => i !== index));
+    };
+
+    const nameRef = useRef<HTMLInputElement>(null);
+    const selectedProductIdRef = useRef<number>(0);
+
+    useEffect(() => {
+        if (stylingDesignDetail?.StylingDesignImages && imageList.length === 0) {
+            setImageList(stylingDesignDetail.StylingDesignImages);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [stylingDesignDetail]);
+
+    useEffect(() => {
+        if (stylingDesignDetail?.productId) {
+            selectedProductIdRef.current = stylingDesignDetail.productId;
+        }
+    }, [stylingDesignDetail]);
+
+    const handleSubmit = () => {
+        try {
+            if (!stylingDesignDetail?.id) {
+                throw new Error("Procurement ID is required");
+            }
+
+            const newFiles: File[] = fileInputs.flat();
+            const remainingOldImages = imageList.length;
+            const totalImagesToSubmit = remainingOldImages + newFiles.length;
+
+            if (totalImagesToSubmit === 0) {
+                enqueueSnackbar("Please upload at least one image or keep at least one existing image", { variant: "error" });
+                return;
+            }
+
+            const payload = {
+                id: stylingDesignDetail?.id,
+                productId: selectedProductIdRef.current,
+                name: nameRef.current?.value || '',
+                deletedImageId: deletedImageIds,
+                picture: newFiles,
+            };
+
+            dispatch(updateStylingDesignData(payload));
+            enqueueSnackbar("You have successfully updated the data", { variant: "success" });
+
+            router.push("/development-status/styling-design");
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+            enqueueSnackbar(error.message, { variant: "error" });
+        }
+    };
+
+    /* ------------------ End Update Styling Design ------------------ */
 
     return (
         <div>
@@ -54,20 +133,67 @@ export default function EditData() {
                                     label="Styling Design Name *"
                                     placeholder="Example: 6x6 Conversion Design"
                                     defaultValue={stylingDesignDetail?.name}
+                                    ref={nameRef}
                                 />
                             </div>
                             <DropdownProductForm
                                 label="Product *"
                                 options={products}
-                                onSelect={() => ""}
+                                onSelect={(value) => {
+                                    selectedProductIdRef.current = value.id;
+                                }}
                                 defaultValue={stylingDesignDetail?.productId}
                             />
                         </div>
-                        
+                        <div className="grid grid-cols-1 gap-2">
+                            {imageList.map((image, index) => (
+                                <div key={`existing-${index}`} className="flex justify-between items-center gap-4">
+                                    <div className="w-full">
+                                        <FileInputForm
+                                            label={`Uploaded File ${index + 1}`}
+                                            defaultFile={image.picture.split("/").pop()}
+                                        />
+                                    </div>
+                                    <div 
+                                        onClick={() => handleRemoveImageFromList(image.id)}
+                                        className="p-2 rounded-sm bg-[#D62C35] cursor-pointer h-fit"
+                                    >
+                                        <Image src="/images/icon/trash.svg" alt="view icon" height={16} width={16}/>
+                                    </div>
+                                </div>
+                            ))}
+                            <div className="grid grid-cols-1 gap-2">
+                                {fileInputs.map((_, index) => (
+                                    <div key={index} className="flex justify-between items-center gap-4">
+                                        <div className="w-full">
+                                            <FileInputForm
+                                                key={index}
+                                                label={`Upload Documents *`}
+                                                acceptFile=".jpg,.jpeg,.png"
+                                                onFileChange={(files: File[]) => handleFileChange(files, index)}
+                                            />
+                                        </div>
+                                        <div 
+                                            onClick={() => removeFileInput(index)}
+                                            className="p-2 rounded-sm bg-[#D62C35] cursor-pointer h-fit"
+                                        >
+                                            <Image  src="/images/icon/trash.svg" alt="view icon" height={16} width={16}/>
+                                        </div>
+                                    </div>
+                                ))}
+                                <button
+                                    type="button"
+                                    className="text-blue-600 text-sm mt-4 cursor-pointer"
+                                    onClick={handleAddFileInput}
+                                >
+                                    + Add another file
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     <div className="flex justify-end">
                         <SubmitButton
-                            onClick={() => ""}
+                            onClick={handleSubmit}
                             buttonText="Save Change"
                         />
                     </div>
