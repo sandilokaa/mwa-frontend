@@ -3,10 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
-import { useState, useRef } from "react";
+import { useRef } from "react";
 import { useSnackbar } from "notistack";
 import { useRouter } from "next/navigation";
 import { createdStylingDesignData } from "@/store/slice/stylingDesign/createSlice";
+import useFileInputs from "@/hooks/useFileInput";
 
 import InputForm from "@/components/common/input/InputForm";
 import FileInputForm from "@/components/common/input/FileInputForm";
@@ -21,21 +22,12 @@ export default function AddData() {
 
     const { products } = useAppSelector((state) => state.productList);
 
-    const [fileInputs, setFileInputs] = useState<File[][]>([]);
-
-    const handleAddFileInput = () => {
-        setFileInputs(prev => [...prev, []]);
-    };
-
-    const handleFileChange = (file: File[], index: number): void => {
-        const updatedFiles = [...fileInputs];
-        updatedFiles[index] = file;
-        setFileInputs(updatedFiles);
-    };
-
-    const removeFileInput = (index: number) => {
-        setFileInputs(prev => prev.filter((_, i) => i !== index));
-    };
+    const {
+        fileInputs,
+        handleAddFileInput,
+        handleFileChange,
+        removeFileInput
+    } = useFileInputs();
 
     const nameRef = useRef<HTMLInputElement>(null);
     const selectedProductIdRef = useRef<number>(0);

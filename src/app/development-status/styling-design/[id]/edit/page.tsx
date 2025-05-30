@@ -9,6 +9,7 @@ import { useParams } from "next/navigation";
 import { fetchStylingDesignDetail } from "@/store/slice/stylingDesign/getDetailSlice";
 import { useEffect, useState, useRef } from "react";
 import { updateStylingDesignData } from "@/store/slice/stylingDesign/updateSlice";
+import useFileInputs from "@/hooks/useFileInput";
 
 import InputForm from "@/components/common/input/InputForm";
 import DropdownProductForm from "@/components/common/dropdown/DropdownProductForm";
@@ -48,21 +49,12 @@ export default function EditData() {
         setImageList(prev => prev.filter(img => img.id !== imageId));
     };
 
-    const [fileInputs, setFileInputs] = useState<File[][]>([]);
-
-    const handleAddFileInput = () => {
-        setFileInputs(prev => [...prev, []]);
-    };
-
-    const handleFileChange = (file: File[], index: number): void => {
-        const updatedFiles = [...fileInputs];
-        updatedFiles[index] = file;
-        setFileInputs(updatedFiles);
-    };
-
-    const removeFileInput = (index: number) => {
-        setFileInputs(prev => prev.filter((_, i) => i !== index));
-    };
+    const {
+        fileInputs,
+        handleAddFileInput,
+        handleFileChange,
+        removeFileInput
+    } = useFileInputs();
 
     const nameRef = useRef<HTMLInputElement>(null);
     const selectedProductIdRef = useRef<number>(0);
@@ -150,7 +142,7 @@ export default function EditData() {
                                 <div key={`existing-${index}`} className="flex justify-between items-center gap-4">
                                     <div className="w-full">
                                         <FileInputForm
-                                            label={`Uploaded File ${index + 1}`}
+                                            label={`Uploaded Image ${index + 1}`}
                                             defaultFile={image.picture.split("/").pop()}
                                         />
                                     </div>
