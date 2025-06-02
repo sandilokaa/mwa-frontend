@@ -6,6 +6,8 @@ interface StylingDesign {
     name: string;
     deletedImageId: number[];
     picture: File[];
+    updatedImageId: number[];
+    updatedImage: File[];
 }
 
 export const updateStylingDesignData = createAsyncThunk(
@@ -23,6 +25,10 @@ export const updateStylingDesignData = createAsyncThunk(
             });
             updatedStylingDesign.picture.forEach((file) => {
                 formData.append('picture', file);
+            });
+            updatedStylingDesign.updatedImageId.forEach((id, index) => {
+                formData.append('updatedImageId', id.toString());
+                formData.append('updatedImage', updatedStylingDesign.updatedImage[index]);
             });
             
             const response = await api.put(
