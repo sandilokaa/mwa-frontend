@@ -15,6 +15,7 @@ import InputForm from "@/components/common/input/InputForm";
 import DropdownProductForm from "@/components/common/dropdown/DropdownProductForm";
 import SubmitButton from "@/components/common/button/SubmitButton";
 import FileInputForm from "@/components/common/input/FileInputForm";
+import LargePhotoModal from "@/components/common/modal/LargePhotoModal";
 
 export default function EditData() {
 
@@ -39,6 +40,18 @@ export default function EditData() {
     /* ------------------ End Get Detail ------------------ */
 
 
+    /* ---------------- Large Photo Update ---------------- */
+
+    const [openModal, setOpenModal] = useState(false);
+    const [selectedImage, setSelectedImage] = useState<{ picture: string } | null>(null);
+
+    const largePhotoModal = () => {
+        setOpenModal(true);
+    };
+
+    /* ---------------- End Large Photo Update ---------------- */
+
+
     /* ------------------ Update Styling Design ------------------ */
 
     const [deletedImageIds, setDeletedImageIds] = useState<number[]>([]);
@@ -57,6 +70,7 @@ export default function EditData() {
     } = useFileInputs();
 
     const nameRef = useRef<HTMLInputElement>(null);
+    const fileRefs = useRef<(HTMLInputElement | null)[]>([])
     const selectedProductIdRef = useRef<number>(0);
 
     useEffect(() => {
@@ -87,13 +101,27 @@ export default function EditData() {
                 return;
             }
 
+            const updatedImageId: number[] = [];
+            const updatedImage: File[] = [];
+
+            fileRefs.current.forEach((input, idx) => {
+                if (input?.files && input.files.length > 0) {
+                    updatedImageId.push(imageList[idx].id);
+                    updatedImage.push(input.files[0]);
+                }
+            });
+
             const payload = {
                 id: stylingDesignDetail?.id,
                 productId: selectedProductIdRef.current,
                 name: nameRef.current?.value || '',
                 deletedImageId: deletedImageIds,
                 picture: newFiles,
+                updatedImageId,
+                updatedImage
             };
+
+            console.log(payload)
 
             dispatch(updateStylingDesignData(payload));
             enqueueSnackbar("You have successfully updated the data", { variant: "success" });
@@ -109,6 +137,20 @@ export default function EditData() {
 
     return (
         <div>
+            <LargePhotoModal
+                open={openModal}
+                onClose={() => setOpenModal(false)}
+                imgUrl={
+                    selectedImage 
+                    ? `${process.env.NEXT_PUBLIC_API_URL}/${selectedImage.picture}` 
+                    : ''
+                }
+                downloadUrl={
+                    selectedImage 
+                    ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/download//${selectedImage.picture}` 
+                    : ''
+                }
+            />
             <div className="flex gap-2">   
                 <Link className="cursor-pointer" href="/development-status/styling-design">
                     <Image src="/images/icon/chevron-down.svg" width={24} height={24} alt="Back Icon"/>
@@ -143,14 +185,27 @@ export default function EditData() {
                                     <div className="w-full">
                                         <FileInputForm
                                             label={`Uploaded Image ${index + 1}`}
+                                            acceptFile=".jpg,.jpeg,.png"
                                             defaultFile={image.picture.split("/").pop()}
+                                            ref={(el) => { fileRefs.current[index] = el }}
                                         />
                                     </div>
-                                    <div 
-                                        onClick={() => handleRemoveImageFromList(image.id)}
-                                        className="p-2 rounded-sm bg-[#D62C35] cursor-pointer h-fit"
-                                    >
-                                        <Image src="/images/icon/trash.svg" alt="view icon" height={16} width={16}/>
+                                    <div className="flex flex-col gap-2">
+                                        <div 
+                                            onClick={() => {
+                                                setSelectedImage(image);
+                                                largePhotoModal();
+                                            }}
+                                            className="p-2 rounded-sm bg-[#2181E8] cursor-pointer"
+                                        >
+                                            <Image src="/images/icon/eye.svg" alt="view icon" height={16} width={16} />
+                                        </div>
+                                        <div 
+                                            onClick={() => handleRemoveImageFromList(image.id)}
+                                            className="p-2 rounded-sm bg-[#D62C35] cursor-pointer h-fit"
+                                        >
+                                            <Image src="/images/icon/trash.svg" alt="view icon" height={16} width={16}/>
+                                        </div>
                                     </div>
                                 </div>
                             ))}
