@@ -6,7 +6,7 @@ interface LargeModalProps {
     open: boolean;
     onClose: () => void;
     imgUrl: string;
-    downloadUrl: string;
+    downloadUrl?: string;
 }
 
 const LargePhotoModal: React.FC<LargeModalProps> = ({
