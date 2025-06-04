@@ -31,8 +31,8 @@ const LargePhotoModal: React.FC<LargeModalProps> = ({
                         <Image className="cursor-pointer h-[16px] w-[16px]" src="/images/icon/close.svg" alt="close icon" height={20} width={20}/>
                     </div>
                 </div>
-                <div className="flex">
-                    <Image src={imgUrl} alt="Detail Image" width={900} height={500}/>
+                <div className="flex w-[900px] h-[450px]">
+                    <Image className="object-contain" src={imgUrl} alt="Detail Image" width={900} height={500}/>
                 </div>
                 <div className="flex gap-2 font-medium justify-end">
                     <button
