@@ -20,6 +20,7 @@ import AddButton from "@/components/common/button/AddButton";
 import DropdownCategory from "@/components/common/dropdown/DropdownFilterCategory";
 import VisibleButton from "@/components/common/button/VisibleButton";
 import ConfirmDialog from "@/components/common/modal/ConfirmDialog";
+import LargePhotoModal from "@/components/common/modal/LargePhotoModal";
 
 export default function ShowData() {
 
@@ -99,8 +100,25 @@ export default function ShowData() {
 
     /* ------------------- End Delete Part Design ------------------- */
 
+    /* ---------------- Large Photo Modal ---------------- */
+
+    const [openModal, setOpenModal] = useState(false);
+    const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
+
+    const largePhotoModal = () => {
+        setOpenModal(true);
+    };
+
+    /* ---------------- END Large Photo Modal ---------------- */
+
     return (
         <div>
+            <LargePhotoModal
+                open={openModal}
+                onClose={() => setOpenModal(false)}
+                imgUrl={selectedPhoto ? `${process.env.NEXT_PUBLIC_API_URL}/${selectedPhoto}` : ""}
+                downloadUrl={selectedPhoto ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/download/${selectedPhoto}` : ""}
+            />
             <ConfirmDialog
                 open={openConfirm}
                 onClose={() => setOpenConfirm(false)}
@@ -115,7 +133,7 @@ export default function ShowData() {
                 {
                     filteredStylingDesigns.length === 0 && (
                         <div className="flex">
-                            <Link href="/development-status/styling-design/add">
+                            <Link href="/development-status/styling-design/add/styling">
                                 <AddButton
                                     buttonText="Add Styling Design"
                                 />
@@ -134,7 +152,7 @@ export default function ShowData() {
                             <div className="flex flex-col gap-10 w-full" key={design.id}>
                                 <div className="flex justify-between">
                                     <p className="font-bold">{design.name}</p>
-                                    <Link className="cursor-pointer" href={`/development-status/styling-design/${design.id}/edit`}>
+                                    <Link className="cursor-pointer" href={`/development-status/styling-design/${design.id}/edit/styling`}>
                                         <Image className="cursor-pointer" src="/images/icon/edit.svg" alt="Edit Icon" width={22} height={22}/>
                                     </Link>
                                 </div>
@@ -191,7 +209,13 @@ export default function ShowData() {
                                                             </div>
                                                             <div className="flex flex-col">
                                                                 <div className="flex gap-[10px] justify-end">
-                                                                    <div className="p-2 rounded-sm bg-[#2181E8] cursor-pointer">
+                                                                    <div 
+                                                                        onClick={() => {
+                                                                            setSelectedPhoto(part.picture);
+                                                                            largePhotoModal()
+                                                                        }}
+                                                                        className="p-2 rounded-sm bg-[#2181E8] cursor-pointer"
+                                                                    >
                                                                         <Image src="/images/icon/eye.svg" alt="view icon" height={16} width={16} />
                                                                     </div>
                                                                     <Link href={`/development-status/styling-design/${part.id}/edit/part`}>

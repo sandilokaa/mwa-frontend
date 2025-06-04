@@ -14,6 +14,7 @@ import AddButton from "@/components/common/button/AddButton";
 import DropdownCategory from "@/components/common/dropdown/DropdownFilterCategory";
 import ConfirmDialog from "@/components/common/modal/ConfirmDialog";
 import VisibleButton from "@/components/common/button/VisibleButton";
+import LargePhotoModal from "@/components/common/modal/LargePhotoModal";
 
 export default function ShowData() {
     const dispatch = useAppDispatch();
@@ -71,8 +72,26 @@ export default function ShowData() {
 
     /* ------------------- End Delete Photo Update ------------------- */
 
+
+    /* ---------------- Large Photo Modal ---------------- */
+
+    const [openModal, setOpenModal] = useState(false);
+    const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
+
+    const largePhotoModal = () => {
+        setOpenModal(true);
+    };
+
+    /* ---------------- END Large Photo Modal ---------------- */
+
     return (
         <div>
+            <LargePhotoModal
+                open={openModal}
+                onClose={() => setOpenModal(false)}
+                imgUrl={selectedPhoto ? `${process.env.NEXT_PUBLIC_API_URL}/${selectedPhoto}` : ""}
+                downloadUrl={selectedPhoto ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/download/${selectedPhoto}` : ""}
+            />
             <ConfirmDialog
                 open={openConfirm}
                 onClose={() => setOpenConfirm(false)}
@@ -113,7 +132,7 @@ export default function ShowData() {
                                     photoUpdates.slice(0, visibleCount).map((photo) => {
                                         return (
                                             <div key={photo.id} className="relative group cursor-pointer max-w-[275px] max-h-[370px]">
-                                                <Image className="w-[275px] h-[370px] rounded-lg" src={`http://localhost:8080/${photo.picture}`} alt="Item Image" width={275} height={370} />
+                                                <Image className="w-[275px] h-[370px] rounded-lg" src={`${process.env.NEXT_PUBLIC_API_URL}/${photo.picture}`} alt="Item Image" width={275} height={370} />
                                                 <div className="absolute left-0 inset-0 bg-[rgba(0,0,0,0.5)] opacity-0 group-hover:opacity-100 flex flex-col justify-end text-white p-4 transition-opacity duration-300 rounded-lg">
                                                     <div className="flex flex-col gap-4">
                                                         <div className="flex flex-col gap-1">
@@ -121,7 +140,13 @@ export default function ShowData() {
                                                             <p className="text-sm font-medium mt-1">{photo?.information}</p>
                                                         </div>
                                                         <div className="flex gap-[10px] justify-end">
-                                                            <div className="p-2 rounded-sm bg-[#2181E8] cursor-pointer">
+                                                            <div 
+                                                                onClick={() => {
+                                                                    setSelectedPhoto(photo.picture);
+                                                                    largePhotoModal()
+                                                                }}
+                                                                className="p-2 rounded-sm bg-[#2181E8] cursor-pointer"
+                                                            >
                                                                 <Image src="/images/icon/eye.svg" alt="view icon" height={16} width={16} />
                                                             </div>
                                                             <Link href={`/photo-update/${photo.id}/edit`}>

@@ -43,7 +43,7 @@ export default function EditData() {
     /* ---------------- Large Photo Update ---------------- */
 
     const [openModal, setOpenModal] = useState(false);
-    const [selectedImage, setSelectedImage] = useState<{ picture: string } | null>(null);
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
     const largePhotoModal = () => {
         setOpenModal(true);
@@ -142,12 +142,12 @@ export default function EditData() {
                 onClose={() => setOpenModal(false)}
                 imgUrl={
                     selectedImage 
-                    ? `${process.env.NEXT_PUBLIC_API_URL}/${selectedImage.picture}` 
+                    ? `${process.env.NEXT_PUBLIC_API_URL}/${selectedImage}` 
                     : ''
                 }
                 downloadUrl={
                     selectedImage 
-                    ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/download//${selectedImage.picture}` 
+                    ? `${process.env.NEXT_PUBLIC_API_URL}/api/v1/download/${selectedImage}` 
                     : ''
                 }
             />
@@ -193,7 +193,7 @@ export default function EditData() {
                                     <div className="flex flex-col gap-2">
                                         <div 
                                             onClick={() => {
-                                                setSelectedImage(image);
+                                                setSelectedImage(image.picture);
                                                 largePhotoModal();
                                             }}
                                             className="p-2 rounded-sm bg-[#2181E8] cursor-pointer"
