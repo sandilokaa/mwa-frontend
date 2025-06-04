@@ -9,6 +9,7 @@ import { productionReducer } from "./production";
 import { engineeringReducer } from "./engineering";
 import { stylingDesignReducer } from "./stylingDesign";
 import { partDesignReducer } from "./partDesign";
+import { projectTargetReducer } from "./projectTarget";
 
 export const rootReducer = combineReducers({
     ...authReducers,
@@ -20,5 +21,6 @@ export const rootReducer = combineReducers({
     ...productionReducer,
     ...engineeringReducer,
     ...stylingDesignReducer,
-    ...partDesignReducer
+    ...partDesignReducer,
+    ...projectTargetReducer
 });
