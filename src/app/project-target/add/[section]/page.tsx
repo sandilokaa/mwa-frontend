@@ -8,6 +8,8 @@ import { useRouter } from "next/navigation";
 import { useSnackbar } from "notistack";
 import { useRef } from "react";
 import { createdProjectTargetData } from "@/store/slice/projectTarget/createSlice";
+import { useParams } from "next/navigation";
+import { projectTargetMeta } from "@/utils/section/projectTargetMeta";
 
 import InputForm from "@/components/common/input/InputForm";
 import SubmitButton from "@/components/common/button/SubmitButton";
@@ -20,6 +22,9 @@ export default function AddData() {
     const dispatch = useAppDispatch();
     const { enqueueSnackbar } = useSnackbar();
     const router = useRouter();
+
+    const { section } = useParams() as { section: keyof typeof projectTargetMeta };
+    const meta = projectTargetMeta[section];
 
     const { products } = useAppSelector((state) => state.productList);
     
@@ -55,7 +60,7 @@ export default function AddData() {
         try {
             const payload = {
                 productId: selectedProductIdRef.current,
-                name: 'Delivery Target',
+                name: `${meta.name}`,
                 information: informationRef.current?.value || '',
                 picture: allFiles,
             };
@@ -75,19 +80,18 @@ export default function AddData() {
                 <Link className="cursor-pointer" href="/project-target">
                     <Image src="/images/icon/chevron-down.svg" width={24} height={24} alt="Back Icon"/>
                 </Link>
-                <p className="font-bold">Add Delivery Target</p>
+                <p className="font-bold">Add {meta.label}</p>
             </div>
             <div className="mt-5 bg-white w-full rounded-[10px] p-5">
-                <p className="text-sm font-bold">Delivery Target Form</p>
+                <p className="text-sm font-bold">{meta.name} Form</p>
                 <div className="flex flex-col gap-y-5 mt-5">
                     <div className="flex flex-col gap-y-4">
                         <div className="grid grid-cols-3 gap-4">
                             <div className="col-span-2">
                                 <InputForm
-                                    label="Delivery Target Name *"
-                                    placeholder="Example: 6x6 Conversion Design"
+                                    label={`${meta.label} Name *`}
                                     ref={nameRef}
-                                    defaultValue="Delivery Target"
+                                    defaultValue={`${meta.name}`}
                                     disable
                                 />
                             </div>
@@ -103,7 +107,7 @@ export default function AddData() {
                             <TextAreaForm
                                 label="Information *"
                                 placeholder="Example: Describe the information"
-                                rows={2}
+                                rows={3}
                                 ref={informationRef}
                             />
                         </div>
@@ -138,7 +142,7 @@ export default function AddData() {
                     <div className="flex justify-end">
                         <SubmitButton
                             onClick={handleSubmit}
-                            buttonText="Add Delivery Target"
+                            buttonText={`Add ${meta.label}`}
                         />
                     </div>
                 </div>
