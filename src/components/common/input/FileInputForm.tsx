@@ -1,3 +1,5 @@
+'use client'
+
 import { useRef, useState, forwardRef, useImperativeHandle, useEffect } from "react";
 import Image from "next/image";
 import { X } from "lucide-react";

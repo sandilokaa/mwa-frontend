@@ -1,4 +1,4 @@
-
+'use client'
 
 interface TablePaginationProps {
     currentPage: number;
