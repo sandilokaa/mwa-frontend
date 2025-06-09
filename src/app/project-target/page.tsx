@@ -76,13 +76,13 @@ export default function ShowData() {
             />
             <div className="flex flex-col gap-y-5">
                 <p className="font-bold">Project Target</p>
-                <div className="w-full max-w-screen-xl mx-auto">
+                <div className="grid grid-cols-1">
                     <Swiper
                         spaceBetween={20}
                         slidesPerView={2}
                         pagination={{ clickable: true }}
                         modules={[Pagination]}
-                        className="h-full"
+                        className="h-full w-full"
                     >
                         {projectTargetSections.map(section => {
                             const data = filteredProjectTargets.find(item => item.name === section.key);
