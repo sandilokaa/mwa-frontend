@@ -44,7 +44,7 @@ const SwiperPhotoModal: React.FC<SwiperModalProps> = ({
                         <Image className="cursor-pointer h-[16px] w-[16px]" src="/images/icon/close.svg" alt="close icon" height={20} width={20}/>
                     </div>
                 </div>
-                <div className="w-[900px] h-[470px] relative cursor-pointer">
+                <div className="w-[900px] h-[480px] relative cursor-pointer">
                     <Swiper
                         onSlideChange={(swiper) => setActiveIndex(swiper.activeIndex)}
                         spaceBetween={10}
@@ -62,7 +62,7 @@ const SwiperPhotoModal: React.FC<SwiperModalProps> = ({
                                         alt={`Slide ${idx + 1}`}
                                         width={900}
                                         height={450}
-                                        className="object-contain"
+                                        className="object-contain h-[450px] w-[900px]"
                                         />
                                     ) : (
                                         <div className="text-red-500">Image not available</div>
