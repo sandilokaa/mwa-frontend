@@ -128,8 +128,6 @@ export default function EditData() {
                 updatedImage
             };
 
-            console.log(payload)
-
             dispatch(updateProjectTargetData(payload));
             enqueueSnackbar("You have successfully updated the data", { variant: "success" });
 
