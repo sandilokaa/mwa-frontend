@@ -98,7 +98,7 @@ export default function ShowData() {
                                                         src={`${process.env.NEXT_PUBLIC_API_URL}/${data.ProjectTargetImages[0].picture}`}
                                                         alt={section.key}
                                                         width={600}
-                                                        height={250}
+                                                        height={300}
                                                         className="object-contain h-[300px] w-full rounded-lg"
                                                         priority
                                                     />

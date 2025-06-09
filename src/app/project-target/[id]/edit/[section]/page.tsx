@@ -204,6 +204,7 @@ export default function EditData() {
                                             label={`Uploaded Image ${index + 1}`}
                                             acceptFile=".jpg,.jpeg,.png"
                                             defaultFile={image.picture.split("/").pop()}
+                                            ref={(el) => { fileRefs.current[index] = el }}
                                         />
                                     </div>
                                     <div className="flex flex-col gap-2">
