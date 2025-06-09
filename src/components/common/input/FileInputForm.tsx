@@ -91,7 +91,7 @@ const FileInputForm = forwardRef<HTMLInputElement, FileInputFormProps>(({ label,
                                     }}
                                     className="ml-auto cursor-pointer"
                                 >
-                                    <X className="w-4 h-4 text-black" />
+                                    <X className="w-4 h-4 text-red-500" />
                                 </button>
                             </div>
                         ))}
