@@ -6,12 +6,14 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useEffect, useState } from "react";
 import { useProductFilter } from "@/context/ProductFilterContext";
 import { fetchFilteredProjectTarget, resetFilteredProjectTarget } from "@/store/slice/projectTarget/getAllSlice";
-import AddButton from "@/components/common/button/AddButton";
 import { projectTargetSections } from "@/utils/filter/projectTargetSection";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/pagination';
+
+import AddButton from "@/components/common/button/AddButton";
+import SwiperPhotoModal from "@/components/common/modal/SwiperPhotoModal";
 
 export default function ShowData() {
 
@@ -53,8 +55,25 @@ export default function ShowData() {
     
     /* ------------------- End Expanded Information ------------------- */
 
+
+    /* ---------------- Large Photo Modal ---------------- */
+
+    const [openModal, setOpenModal] = useState(false);
+    const [selectedPhoto, setSelectedPhoto] = useState<string[]>([]);
+
+    const largePhotoModal = () => {
+        setOpenModal(true);
+    };
+
+    /* ---------------- END Large Photo Modal ---------------- */
+
     return (
         <div>
+            <SwiperPhotoModal
+                open={openModal}
+                onClose={() => setOpenModal(false)}
+                images={selectedPhoto?.map(path => `${process.env.NEXT_PUBLIC_API_URL}/${path}`) ?? []}
+            />
             <div className="flex flex-col gap-y-5">
                 <p className="font-bold">Project Target</p>
                 <div className="w-full max-w-screen-xl mx-auto">
@@ -63,6 +82,7 @@ export default function ShowData() {
                         slidesPerView={2}
                         pagination={{ clickable: true }}
                         modules={[Pagination]}
+                        className="h-full"
                     >
                         {projectTargetSections.map(section => {
                             const data = filteredProjectTargets.find(item => item.name === section.key);
@@ -73,13 +93,16 @@ export default function ShowData() {
                                         <p className="font-bold">{section.key}</p>
                                         {data ? (
                                             <div className="flex flex-col gap-5">
-                                                <Image
-                                                    src={`${process.env.NEXT_PUBLIC_API_URL}/${data.ProjectTargetImages[0].picture}`}
-                                                    alt={section.key}
-                                                    width={600}
-                                                    height={250}
-                                                    className="object-contain h-[300px] w-full rounded-lg"
-                                                />
+                                                {data?.ProjectTargetImages?.[0]?.picture && (
+                                                    <Image
+                                                        src={`${process.env.NEXT_PUBLIC_API_URL}/${data.ProjectTargetImages[0].picture}`}
+                                                        alt={section.key}
+                                                        width={600}
+                                                        height={250}
+                                                        className="object-contain h-[300px] w-full rounded-lg"
+                                                        priority
+                                                    />
+                                                )}
                                                 <div className="flex flex-col gap-2">
                                                     <div className="flex flex-col gap-1">
                                                         <p className={`transition-all ${!expandedIds[data.id] ? "line-clamp-2" : ""}`}>
@@ -95,6 +118,11 @@ export default function ShowData() {
                                                     <div className="flex flex-col">
                                                         <div className="flex gap-[10px] justify-end">
                                                             <div 
+                                                                onClick={() => {
+                                                                    const imageUrls = data.ProjectTargetImages.map((item) => item.picture)
+                                                                    setSelectedPhoto(imageUrls);
+                                                                    largePhotoModal()
+                                                                }}
                                                                 className="p-2 rounded-sm bg-[#2181E8] cursor-pointer"
                                                             >
                                                                 <Image src="/images/icon/eye.svg" alt="view icon" height={16} width={16} />
