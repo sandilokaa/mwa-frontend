@@ -50,6 +50,7 @@ const Sidebar = React.memo(function Sidebar() {
                                     component={<Link href="/project-target" prefetch/>} 
                                     active={pathname.startsWith("/project-target")} 
                                     icon={<Image src="/images/icon/project-target.svg" alt="icon" width={20} height={20}/>}
+                                    className="mt-1"
                                 >
                                     Project Target
                                 </MenuItem>
