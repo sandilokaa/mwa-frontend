@@ -44,6 +44,9 @@ const Sidebar = React.memo(function Sidebar() {
                         <MenuItem component={<Link href="/dashboard" prefetch/>} active={pathname === "/dashboard"} icon={<Image src="/images/icon/dashboard.svg" alt="icon" width={20} height={20}/>}>
                             Dashboard
                         </MenuItem>
+                        <MenuItem component={<Link href="/product" prefetch/>} active={pathname === "/product"} icon={<Image src="/images/icon/product.svg" alt="icon" width={20} height={20}/>}>
+                            Product
+                        </MenuItem>
                         <SubMenu label="Project" icon={<Image src="/images/icon/project.svg" alt="icon" width={20} height={20}/>}>
                             <div className="flex flex-col gap-y-1">
                                 <MenuItem 
