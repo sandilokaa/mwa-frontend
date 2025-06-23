@@ -20,6 +20,10 @@ interface BarChartProps {
 }
 
 export default function BarChart({ data, title }: BarChartProps) {
+
+    const maxValue = Math.max(...data.datasets[0].data);
+    const yMax = Math.ceil(maxValue + 2);
+
     const options = {
         responsive: true,
         plugins: {
@@ -31,6 +35,19 @@ export default function BarChart({ data, title }: BarChartProps) {
                 text: title,
             },
         },
+        scales: {
+            y: {
+                ticks: {
+                    callback: function (value: string | number) {
+                        const numericValue = Number(value);
+                        return Number.isInteger(numericValue) ? numericValue : '';
+                    },
+                    stepSize: 1,
+                },
+                beginAtZero: true,
+                suggestedMax: yMax
+            },
+        }
     };
 
     return <Bar data={data} options={options} height={170} />;
