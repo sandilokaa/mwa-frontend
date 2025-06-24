@@ -192,7 +192,7 @@ export default function ShowData() {
                 cancelText="Cancel"
             />
             <div className="flex flex-col gap-y-5">
-                <p className="font-bold">Designed Engineering</p>
+                <p className="font-bold">Design Engineering</p>
                 <div className="flex justify-between">
                     <Link href="/development-status/engineering/add">
                         <AddButton

@@ -201,7 +201,7 @@ export default function ShowData() {
                                         {partDesigns.length > 0 ? (
                                             partDesigns.slice(0, visibleCount).map((part) => {
                                                 return (
-                                                    <div key={part.id} className="relative group cursor-pointer max-w-[245px] max-h-[330px]">
+                                                    <div key={part.id} className="relative group cursor-pointer max-w-[245px] max-h-[330px] border border-gray-200 rounded-lg">
                                                         <Image className="w-[245px] h-[330px] rounded-lg" src={`${process.env.NEXT_PUBLIC_API_URL}/${part.picture}`} alt="Item Image" width={245} height={330} />
                                                         <div className="absolute left-0 inset-0 bg-[rgba(0,0,0,0.5)] opacity-0 group-hover:opacity-100 flex flex-col justify-between text-white p-4 transition-opacity duration-300 rounded-lg">
                                                             <div className="flex">

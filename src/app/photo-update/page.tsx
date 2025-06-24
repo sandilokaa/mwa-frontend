@@ -118,7 +118,7 @@ export default function ShowData() {
                     </div>
                 </div>
             </div>
-            <div className="mt-10">
+            <div className="mt-10 bg-white p-5 rounded-lg">
                 <div className="grid grid-cols-1">
                     <p className="font-bold">{selectedCategory}</p>
                 </div>
@@ -131,7 +131,7 @@ export default function ShowData() {
                                 {photoUpdates.length > 0 ? (
                                     photoUpdates.slice(0, visibleCount).map((photo) => {
                                         return (
-                                            <div key={photo.id} className="relative group cursor-pointer max-w-[275px] max-h-[370px]">
+                                            <div key={photo.id} className="relative group cursor-pointer max-w-[275px] max-h-[370px] border border-gray-200 rounded-lg">
                                                 <Image className="w-[275px] h-[370px] rounded-lg" src={`${process.env.NEXT_PUBLIC_API_URL}/${photo.picture}`} alt="Item Image" width={275} height={370} />
                                                 <div className="absolute left-0 inset-0 bg-[rgba(0,0,0,0.5)] opacity-0 group-hover:opacity-100 flex flex-col justify-end text-white p-4 transition-opacity duration-300 rounded-lg">
                                                     <div className="flex flex-col gap-4">

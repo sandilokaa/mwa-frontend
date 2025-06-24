@@ -195,7 +195,7 @@ export default function ShowData() {
                 <div className="flex justify-between">
                     <Link href="/highlight-issue/add">
                         <AddButton
-                            buttonText="Add Highligt Issue"
+                            buttonText="Add Highlight Issue"
                         />
                     </Link>
                     <SearchInput
