@@ -79,7 +79,7 @@ export default function DropdownProductForm({
             </div>
 
             {isOpen && (
-                <div className="absolute right-0 mt-2 w-full bg-white border border-gray-300 rounded-md shadow-lg z-10 p-2 max-h-64 overflow-y-auto">
+                <div className="absolute right-0 mt-2 w-full bg-white border border-gray-300 rounded-md shadow-lg z-10 p-2 max-h-[160px] overflow-y-auto">
                     {options.map((product) => (
                         <button
                             key={product.id}
