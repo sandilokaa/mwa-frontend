@@ -11,7 +11,7 @@ export default function ShowData() {
             <div className="flex flex-col gap-5">
                 <p className="font-bold">Master Schedule</p>
                 <div className="flex justify-between">
-                    <Link href="/development-status/engineering/add">
+                    <Link href="/dashboard/add">
                         <AddButton
                             buttonText="Add Event"
                         />
