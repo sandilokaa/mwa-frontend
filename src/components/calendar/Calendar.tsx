@@ -1,13 +1,37 @@
 "use client"
 
+import { useRef, useEffect, useState } from "react";
 import { eachWeekOfInterval, startOfMonth, endOfMonth } from "date-fns";
 
 export default function DashoardCalendar() {
 
+    const currentWeekRef = useRef<HTMLDivElement | null>(null);
+    const [lineLeft, setLineLeft] = useState<number | null>(null);
+
     const generateWeeks = (year: number, month: number) => {
         const start = startOfMonth(new Date(year, month));
         const end = endOfMonth(new Date(year, month));
-        return eachWeekOfInterval({ start, end }).map((_, i) => `w${i + 1}`);
+        return eachWeekOfInterval({ start, end })
+            .slice(0, 4)
+            .map((_, i) => `w${i + 1}`);
+    };
+
+    const getCurrentWeekLabel = (year: number, month: number) => {
+        const start = startOfMonth(new Date(year, month));
+        const end = endOfMonth(new Date(year, month));
+        const weeks = eachWeekOfInterval({ start, end });
+        const today = new Date();
+
+        for (let i = 0; i < weeks.length; i++) {
+            const weekStart = weeks[i];
+            const weekEnd = weeks[i + 1] ?? end;
+
+            if (today >= weekStart && today < weekEnd) {
+                return `w${i + 1}`;
+            }
+        }
+
+        return null;
     };
 
     const monthNames = [
@@ -16,47 +40,67 @@ export default function DashoardCalendar() {
         "September", "Oktober", "November", "Desember"
     ];
 
-    const currentYear = new Date().getFullYear();
-    const years = [currentYear, currentYear + 1];
+    const years = Array.from({length:11}, (_, i) => 2024 + i);
+
+    useEffect(() => {
+        if (currentWeekRef.current) {
+            currentWeekRef.current.scrollIntoView({
+                behavior: "smooth",
+                inline: "center",
+                block: "nearest"
+            });
+            const rect = currentWeekRef.current.getBoundingClientRect();
+            const parentRect = currentWeekRef.current.offsetParent?.getBoundingClientRect();
+            if (rect && parentRect) {
+                setLineLeft(rect.left - parentRect.left + rect.width / 2);
+            }
+        }
+    }, []);
 
     return (
-        <div className=" grid grid-cols-1 overflow-x-auto p-4 bg-white rounded">
+        <div className="relative grid grid-cols-1 overflow-x-auto p-5 bg-white rounded">
             <div className="flex flex-col gap-2 min-w-max">
-                <div className="flex gap-2">
-                    {years.map((year) => (
-                        <div
-                            key={year}
-                            className="flex justify-center font-bold text-lg"
-                            style={{ width: `${12 * 140}px` }}
-                        >
-                            {year}
-                        </div>
-                    ))}
-                </div>
-
-                <div className="flex gap-4">
+                <div className="flex gap-2 border border-gray-200 rounded-sm p-2">
                     {years.map((year) =>
-                        monthNames.map((month, monthIndex) => (
-                            <div
-                                key={`${year}-${month}`}
-                                className="min-w-[140px] border p-2 rounded bg-gray-50"
-                            >
-                                <div className="text-sm font-semibold mb-1 text-center">{month}</div>
-                                    <div className="flex gap-1 flex-wrap">
-                                    {generateWeeks(year, monthIndex).map((week) => (
-                                        <div
-                                            key={week}
-                                            className="bg-blue-100 text-xs px-2 py-1 rounded"
-                                        >
-                                            {week}
+                        monthNames.map((month, monthIndex) => { 
+                            const currentWeekLabel = getCurrentWeekLabel(year, monthIndex);
+                            
+                            return (
+                                <div
+                                    key={`${year}-${month}`}
+                                    className="min-w-[140px] p-2 rounded bg-gray-50"
+                                >
+                                    <div className="text-sm font-semibold mb-1 text-center">{year} - {month}</div>
+                                        <div className="flex gap-2 flex-wrap">
+                                            {generateWeeks(year, monthIndex).map((week) => {
+                                                const isCurrent =
+                                                    year === new Date().getFullYear() &&
+                                                    monthIndex === new Date().getMonth() &&
+                                                    week === currentWeekLabel;
+
+                                                return (
+                                                    <div
+                                                        ref={isCurrent ? currentWeekRef : null}
+                                                        key={week}
+                                                        className={`text-xs px-3 py-2 rounded ${isCurrent ? "bg-red-500 text-white font-bold" : "bg-blue-100"}`}
+                                                    >
+                                                        {week}
+                                                    </div>
+                                                );
+                                            })}
                                         </div>
-                                    ))}
                                 </div>
-                            </div>
-                        ))
+                            )
+                        })
                     )}
                 </div>
             </div>
+            {lineLeft !== null && (
+                <div
+                    className="absolute top-[90px] bottom-0 w-[2px] bg-red-500 z-0"
+                    style={{ left: `${lineLeft}px` }}
+                />
+            )}
         </div>
     );
 }
