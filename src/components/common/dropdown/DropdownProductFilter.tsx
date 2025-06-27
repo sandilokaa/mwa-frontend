@@ -23,14 +23,16 @@ export default function DropdownProduct() {
         if (products.length === 0) {
             dispatch(fetchProducts());
         }
+    }, [dispatch, products.length]);
 
-        if (!selectedProduct) {
+    useEffect(() => {
+        if (products.length > 0 && !selectedProduct) {
             const defaultProduct = products.find(product => product.name === "6x6 Conversion");
             if (defaultProduct) {
                 setSelectedProduct(defaultProduct);
             }
         }
-    }, [dispatch, selectedProduct, products, setSelectedProduct]);
+    }, [products, selectedProduct, setSelectedProduct]);
 
     // Auto-close on outside click
     useEffect(() => {

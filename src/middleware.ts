@@ -5,12 +5,13 @@ export function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl
 
     if (pathname === '/') {
-        const redirectTo = token ? '/dashboard' : '/login'
+        const redirectTo = token ? '/schedule' : '/login'
         return NextResponse.redirect(new URL(redirectTo, request.url))
     }
 
     const protectedPaths = [
-        '/dashboard',
+        '/schedule',
+        '/product',
         '/project-target',
         '/development-status',
         '/highlight-issue',
@@ -29,7 +30,8 @@ export function middleware(request: NextRequest) {
 export const config = {
     matcher: [
         '/',
-        '/dashboard/:path*',
+        '/schedule/:path*',
+        '/product/:path*',
         '/project-target/:path*',
         '/development-status/:path*',
         '/highlight-issue/:path*',

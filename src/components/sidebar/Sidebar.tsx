@@ -41,11 +41,11 @@ const Sidebar = React.memo(function Sidebar() {
                         <span>Menu</span>
                     </div>
                     <div className="flex flex-col mt-[10px] gap-y-2 text-sm text-[#144C68] font-medium">
-                        <MenuItem component={<Link href="/dashboard" prefetch/>} active={pathname === "/dashboard"} icon={<Image src="/images/icon/dashboard.svg" alt="icon" width={20} height={20}/>}>
-                            Dashboard
-                        </MenuItem>
                         <MenuItem component={<Link href="/product" prefetch/>} active={pathname === "/product"} icon={<Image src="/images/icon/product.svg" alt="icon" width={20} height={20}/>}>
                             Product
+                        </MenuItem>
+                        <MenuItem component={<Link href="/schedule" prefetch/>} active={pathname === "/schedule"} icon={<Image src="/images/icon/calendar.svg" alt="icon" width={20} height={20}/>}>
+                            Master Schedule
                         </MenuItem>
                         <SubMenu label="Project" icon={<Image src="/images/icon/project.svg" alt="icon" width={20} height={20}/>}>
                             <div className="flex flex-col gap-y-1">
