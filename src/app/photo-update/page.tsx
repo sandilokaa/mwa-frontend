@@ -118,7 +118,7 @@ export default function ShowData() {
                     </div>
                 </div>
             </div>
-            <div className="mt-10 bg-white p-5 rounded-lg">
+            <div className="mt-5 bg-white p-5 rounded-lg">
                 <div className="grid grid-cols-1">
                     <p className="font-bold">{selectedCategory}</p>
                 </div>

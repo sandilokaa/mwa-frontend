@@ -37,7 +37,7 @@ export default function LoginData() {
         if (loginUser.fulfilled.match(result)) {
             enqueueSnackbar('Login successful!', { variant: 'success' });
             setTimeout(() => {
-                router.push('/dashboard');
+                router.push('/schedule');
             }, 1000);
         } else {
             setFormError("Your email or password is incorrect!");

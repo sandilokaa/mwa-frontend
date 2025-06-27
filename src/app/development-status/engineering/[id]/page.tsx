@@ -119,10 +119,11 @@ export default function DetailData() {
                                 {engineeringDetail?.picture && (
                                     <div className="flex flex-col gap-4">
                                         <Image
-                                            src={`http://localhost:8080/${engineeringDetail.picture}`}
+                                            src={`${process.env.NEXT_PUBLIC_API_URL}/${engineeringDetail.picture}`}
                                             alt="Supporting Documents"
-                                            width={500}
-                                            height={300}
+                                            className="rounded-lg"
+                                            width={400}
+                                            height={200}
                                         />
                                         <div className="flex gap-2">
                                             <div 
