@@ -37,9 +37,11 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
                 ) : (
                     <ProductFilterProvider>
                         <AuthInit/>
-                        <div className="flex h-screen overflow-hidden">
-                            <Sidebar />
-                            <div className="flex-1 flex flex-col">
+                        <div className="flex h-screen">
+                            <div className="h-screen">
+                                <Sidebar />
+                            </div>
+                            <div className="flex-1 flex flex-col overflow-hidden">
                                 <Navbar />
                                 {loading ? (
                                         <div className="flex justify-center items-center h-full">

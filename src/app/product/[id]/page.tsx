@@ -48,7 +48,7 @@ export default function DetailData() {
                 </Link>
                 <p className="font-bold">Product Detail</p>
             </div>
-            <div className="grid grid-cols-4 mt-5 gap-5">
+            <div className="grid grid-cols-1 mt-5 gap-5">
                 <div className="bg-white w-full rounded-[10px] p-5 col-span-3">
                     <div className="flex justify-between">
                         <p className="text-sm font-bold">Product Information</p>

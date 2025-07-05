@@ -11,8 +11,8 @@ const Sidebar = React.memo(function Sidebar() {
     const pathname = usePathname();
 
     return (
-        <div className="h-screen flex">
-            <ProSidebar className="border-r-0">
+        <div className="h-screen bg-white flex flex-col">
+            <ProSidebar className="border-r-0 bg-white h-full">
                 <div className="p-5 bg-white">
                     <Image className="w-[180px] h-auto" src="/images/icon/mwr-logo.svg" width={180} height={100} alt="RnE Logo" priority/>
                 </div>
@@ -41,13 +41,13 @@ const Sidebar = React.memo(function Sidebar() {
                         <span>Menu</span>
                     </div>
                     <div className="flex flex-col mt-[10px] gap-y-2 text-sm text-[#144C68] font-medium">
-                        <MenuItem component={<Link href="/product" prefetch/>} active={pathname === "/product"} icon={<Image src="/images/icon/product.svg" alt="icon" width={20} height={20}/>}>
+                        <MenuItem component={<Link href="/product" prefetch/>} active={pathname.startsWith("/product")} icon={<Image src="/images/icon/product.svg" alt="icon" width={20} height={20}/>}>
                             Product
                         </MenuItem>
-                        <MenuItem component={<Link href="/schedule" prefetch/>} active={pathname === "/schedule"} icon={<Image src="/images/icon/calendar.svg" alt="icon" width={20} height={20}/>}>
+                        <MenuItem component={<Link href="/schedule" prefetch/>} active={pathname.startsWith("/schedule")} icon={<Image src="/images/icon/calendar.svg" alt="icon" width={20} height={20}/>}>
                             Master Schedule
                         </MenuItem>
-                        <SubMenu label="Project" icon={<Image src="/images/icon/project.svg" alt="icon" width={20} height={20}/>}>
+                        <SubMenu label="Project" icon={<Image src="/images/icon/project.svg" alt="icon" width={20} height={20}/>} className="bg-white">
                             <div className="flex flex-col gap-y-1">
                                 <MenuItem 
                                     component={<Link href="/project-target" prefetch/>} 
@@ -57,7 +57,7 @@ const Sidebar = React.memo(function Sidebar() {
                                 >
                                     Project Target
                                 </MenuItem>
-                                <SubMenu label="Development Status" icon={<Image src="/images/icon/development-status.svg" alt="icon" width={20} height={20}/>} active={pathname.startsWith("/development-status")}>
+                                <SubMenu label="Development Status" icon={<Image src="/images/icon/development-status.svg" alt="icon" width={20} height={20}/>} active={pathname.startsWith("/development-status")} className="bg-white">
                                     <div className="flex flex-col gap-y-1">
                                         <MenuItem 
                                             component={<Link href="/development-status/styling-design" prefetch/>} 
@@ -90,13 +90,15 @@ const Sidebar = React.memo(function Sidebar() {
                                         </MenuItem>
                                     </div>
                                 </SubMenu>
-                                <SubMenu label="Budget Status" icon={<Image src="/images/icon/budget-status.svg" alt="icon" width={20} height={20}/>} active={pathname.startsWith("/budget-status")}>
-                                    <MenuItem component={<Link href="#" prefetch/>} active={pathname === "#"} icon={<Image src="/images/icon/dashboard.svg" alt="icon" width={20} height={20}/>}>
-                                        Overall Result
-                                    </MenuItem>
-                                    <MenuItem component={<Link href="#" prefetch/>} active={pathname === "#"} icon={<Image src="/images/icon/dashboard.svg" alt="icon" width={20} height={20}/>}>
-                                        Result Month
-                                    </MenuItem>
+                                <SubMenu label="Budget Status" icon={<Image src="/images/icon/budget-status.svg" alt="icon" width={20} height={20}/>} active={pathname.startsWith("/budget-status")} className="bg-white">
+                                    <div className="flex flex-col gap-y-1 mt-1">
+                                        <MenuItem component={<Link href="/budget-status/overall-result" prefetch/>} active={pathname === "/budget-status/overall"} icon={<Image src="/images/icon/bs-ovl.svg" alt="icon" width={20} height={20}/>}>
+                                            Overall Result
+                                        </MenuItem>
+                                        <MenuItem component={<Link href="/budget-status/monthly-result" prefetch/>} active={pathname === "/budget-status/monthly-result"} icon={<Image src="/images/icon/bs-mr.svg" alt="icon" width={20} height={20}/>}>
+                                            Monthly Result
+                                        </MenuItem>
+                                    </div>
                                 </SubMenu>
                                 <MenuItem 
                                     component={<Link href="/highlight-issue" prefetch/>} 
@@ -114,7 +116,7 @@ const Sidebar = React.memo(function Sidebar() {
                                 </MenuItem>
                             </div>
                         </SubMenu>
-                        <SubMenu label="People" icon={<Image src="/images/icon/people.svg" alt="icon" width={20} height={20}/>}>
+                        <SubMenu label="People" icon={<Image src="/images/icon/people.svg" alt="icon" width={20} height={20}/>} className="bg-white">
                             <MenuItem 
                                 component={<Link href="/recruitment" prefetch/>} 
                                 active={pathname.startsWith("/recruitment")}

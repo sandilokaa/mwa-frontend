@@ -27,10 +27,8 @@ export default function DropdownProduct() {
 
     useEffect(() => {
         if (products.length > 0 && !selectedProduct) {
-            const defaultProduct = products.find(product => product.name === "6x6 Conversion");
-            if (defaultProduct) {
-                setSelectedProduct(defaultProduct);
-            }
+            const defaultProduct = products[0];
+            setSelectedProduct(defaultProduct);
         }
     }, [products, selectedProduct, setSelectedProduct]);
 
@@ -57,7 +55,7 @@ export default function DropdownProduct() {
     };
 
     return (
-        <div ref={dropdownRef} className="relative inline-block text-left w-[160px]">
+        <div ref={dropdownRef} className="relative inline-block text-left w-[200px]">
             <div className="flex flex-col gap-1">
                 <button
                     onClick={() => setIsOpen(!isOpen)}
