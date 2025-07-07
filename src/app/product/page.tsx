@@ -100,7 +100,7 @@ export default function ShowData() {
                                                     <div className="absolute left-0 inset-0 bg-[rgba(0,0,0,0.5)] opacity-0 group-hover:opacity-100 flex flex-col justify-end text-white p-4 transition-opacity duration-300 rounded-lg w-full h-[220px]">
                                                         <div className="flex flex-col gap-4">
                                                             <div className="flex flex-col gap-1">
-                                                                <p className="font-bold">{product.name}</p>
+                                                                <p className="font-bold">{product.name.toUpperCase()}</p>
                                                                 <p className="text-sm font-medium">{product.tagline}</p>
                                                             </div>
                                                             <div className="flex gap-[10px] justify-end">
