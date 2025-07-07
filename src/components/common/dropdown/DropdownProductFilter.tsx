@@ -55,7 +55,7 @@ export default function DropdownProduct() {
     };
 
     return (
-        <div ref={dropdownRef} className="relative inline-block text-left w-[300px]">
+        <div ref={dropdownRef} className="relative inline-block text-left w-[620px]">
             <div className="flex flex-col gap-1">
                 <button
                     onClick={() => setIsOpen(!isOpen)}
@@ -63,7 +63,7 @@ export default function DropdownProduct() {
                     className="rounded-sm px-3 py-2 cursor-pointer w-full h-[45px] flex justify-center items-center"
                 >
                     <div className="flex justify-between items-center gap-3">
-                        <p className="text-[#144C68] font-bold tracking-wider text-3xl">
+                        <p className="text-[#144C68] font-bold tracking-wider text-4xl">
                             {selectedProduct ? selectedProduct.name.toUpperCase() : "Select Product"}
                         </p>
                         <Image
