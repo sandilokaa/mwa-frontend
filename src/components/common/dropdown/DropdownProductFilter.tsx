@@ -55,22 +55,23 @@ export default function DropdownProduct() {
     };
 
     return (
-        <div ref={dropdownRef} className="relative inline-block text-left w-[200px]">
+        <div ref={dropdownRef} className="relative inline-block text-left w-[300px]">
             <div className="flex flex-col gap-1">
                 <button
                     onClick={() => setIsOpen(!isOpen)}
-                    className="bg-[#EFEFEF] rounded-sm px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-300 cursor-pointer w-full h-[45px]"
+                    // className="bg-[#EFEFEF] rounded-sm px-3 py-2 focus:outline-none focus:ring-1 focus:ring-gray-300 cursor-pointer w-full h-[45px]"
+                    className="rounded-sm px-3 py-2 cursor-pointer w-full h-[45px] flex justify-center items-center"
                 >
-                    <div className="flex justify-between items-center gap-2">
-                        <p className="text-sm text-black">
+                    <div className="flex justify-between items-center gap-3">
+                        <p className="text-black font-medium tracking-wider text-3xl">
                             {selectedProduct ? selectedProduct.name : "Select Product"}
                         </p>
                         <Image
                             className="-rotate-90"
                             src="/images/icon/chevron-down.svg"
                             alt="Arrow Icon"
-                            height={24}
-                            width={24}
+                            height={28}
+                            width={28}
                         />
                     </div>
                 </button>
@@ -82,7 +83,8 @@ export default function DropdownProduct() {
                         <button
                             key={product.id}
                             onClick={() => handleSelect(product)}
-                            className="w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer rounded-sm text-sm"
+                            // className="w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer rounded-sm font-medium tracking-wider"
+                            className="w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer rounded-sm font-medium tracking-wider"
                         >
                             {product.name}
                         </button>

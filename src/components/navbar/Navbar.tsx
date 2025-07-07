@@ -26,44 +26,44 @@ export default function Navbar() {
     };
 
     return (
-        <div className="p-5 h-auto bg-white">
-            <div className="flex justify-end gap-3">
-                <div className="flex">
-                    <DropdownProduct/>
-                </div>
-                <div className="flex gap-x-[8px] justify-center items-center py-2 px-4 bg-[#292929] text-white rounded-sm">
-                    <Image src="/images/icon/profile.svg" alt="Profile Icon" width={20} height={20}/>
-                    <p className="text-sm">
-                        {loading ? <span className="animate-pulse">Loading...</span> : user?.username ?? "Guest"}
-                    </p>
-                </div>
-                <div onClick={handleLogout} className="flex gap-x-[8px] justify-center items-center py-2 px-4 bg-[#FEF2F3] text-white rounded-sm cursor-pointer">
-                    <Image className="h-[20px] w-[20px]" src="/images/icon/logout.svg" alt="Logout Icon" width={20} height={20}/>
-                    <p className="text-sm text-[#EB575F]">Logout</p>
-                </div>
-            </div>
-        </div>
         // <div className="p-5 h-auto bg-white">
-        //     <div className="flex justify-between items-center">
-        //         <div className="w-[150px]" />
-
-        //         <div className="flex justify-center flex-1">
-        //             <DropdownProduct />
+        //     <div className="flex justify-end gap-3">
+        //         <div className="flex">
+        //             <DropdownProduct/>
         //         </div>
-
-        //         <div className="flex gap-3 items-center">
-        //             <div className="flex h-[45px] gap-x-[8px] justify-center items-center py-2 px-4 bg-[#292929] text-white rounded-sm">
-        //                 <Image src="/images/icon/profile.svg" alt="Profile Icon" width={20} height={20}/>
-        //                 <p className="text-sm">
-        //                     {loading ? <span className="animate-pulse">Loading...</span> : user?.username ?? "Guest"}
-        //                 </p>
-        //             </div>
-        //             <div onClick={handleLogout} className="flex h-[45px] gap-x-[8px] justify-center items-center py-2 px-4 bg-[#FEF2F3] text-white rounded-sm cursor-pointer">
-        //                 <Image className="h-[20px] w-[20px]" src="/images/icon/logout.svg" alt="Logout Icon" width={20} height={20}/>
-        //                 <p className="text-sm text-[#EB575F]">Logout</p>
-        //             </div>
+        //         <div className="flex gap-x-[8px] justify-center items-center py-2 px-4 bg-[#292929] text-white rounded-sm">
+        //             <Image src="/images/icon/profile.svg" alt="Profile Icon" width={20} height={20}/>
+        //             <p className="font-medium">
+        //                 {loading ? <span className="animate-pulse">Loading...</span> : user?.username ?? "Guest"}
+        //             </p>
+        //         </div>
+        //         <div onClick={handleLogout} className="flex gap-x-[8px] justify-center items-center py-2 px-4 bg-[#FEF2F3] text-white rounded-sm cursor-pointer">
+        //             <Image className="h-[20px] w-[20px]" src="/images/icon/logout.svg" alt="Logout Icon" width={20} height={20}/>
+        //             <p className="text-[#EB575F] font-medium">Logout</p>
         //         </div>
         //     </div>
         // </div>
+        <div className="p-5 h-auto bg-white">
+            <div className="flex justify-between items-center">
+                <div className="w-[150px]" />
+
+                <div className="flex justify-center flex-1">
+                    <DropdownProduct />
+                </div>
+
+                <div className="flex gap-3 items-center">
+                    <div className="flex h-[45px] gap-x-[8px] justify-center items-center py-2 px-4 bg-[#292929] text-white rounded-sm">
+                        <Image src="/images/icon/profile.svg" alt="Profile Icon" width={20} height={20}/>
+                        <p className="text-sm">
+                            {loading ? <span className="animate-pulse">Loading...</span> : user?.username ?? "Guest"}
+                        </p>
+                    </div>
+                    <div onClick={handleLogout} className="flex h-[45px] gap-x-[8px] justify-center items-center py-2 px-4 bg-[#FEF2F3] text-white rounded-sm cursor-pointer">
+                        <Image className="h-[20px] w-[20px]" src="/images/icon/logout.svg" alt="Logout Icon" width={20} height={20}/>
+                        <p className="text-sm text-[#EB575F]">Logout</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     )
 }
