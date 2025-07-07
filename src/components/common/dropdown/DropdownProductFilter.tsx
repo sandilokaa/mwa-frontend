@@ -64,7 +64,7 @@ export default function DropdownProduct() {
                 >
                     <div className="flex justify-between items-center gap-3">
                         <p className="text-black font-medium tracking-wider text-3xl">
-                            {selectedProduct ? selectedProduct.name : "Select Product"}
+                            {selectedProduct ? selectedProduct.name.toUpperCase() : "Select Product"}
                         </p>
                         <Image
                             className="-rotate-90"
@@ -86,7 +86,7 @@ export default function DropdownProduct() {
                             // className="w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer rounded-sm font-medium tracking-wider"
                             className="w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer rounded-sm font-medium tracking-wider"
                         >
-                            {product.name}
+                            {product.name.toUpperCase()}
                         </button>
                     ))}
                 </div>
