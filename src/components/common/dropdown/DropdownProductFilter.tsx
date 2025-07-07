@@ -63,7 +63,7 @@ export default function DropdownProduct() {
                     className="rounded-sm px-3 py-2 cursor-pointer w-full h-[45px] flex justify-center items-center"
                 >
                     <div className="flex justify-between items-center gap-3">
-                        <p className="text-black font-bold tracking-wider text-3xl">
+                        <p className="text-[#144C68] font-bold tracking-wider text-3xl">
                             {selectedProduct ? selectedProduct.name.toUpperCase() : "Select Product"}
                         </p>
                         <Image
@@ -84,7 +84,7 @@ export default function DropdownProduct() {
                             key={product.id}
                             onClick={() => handleSelect(product)}
                             // className="w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer rounded-sm font-medium tracking-wider"
-                            className="w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer rounded-sm font-bold tracking-wider"
+                            className="w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer rounded-sm font-bold tracking-wider text-[#144C68]"
                         >
                             {product.name.toUpperCase()}
                         </button>
