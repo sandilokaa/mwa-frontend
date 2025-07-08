@@ -21,6 +21,7 @@ import DropdownCategory from "@/components/common/dropdown/DropdownFilterCategor
 import VisibleButton from "@/components/common/button/VisibleButton";
 import ConfirmDialog from "@/components/common/modal/ConfirmDialog";
 import LargePhotoModal from "@/components/common/modal/LargePhotoModal";
+import CanAccess from "@/components/access/CanAccess";
 
 export default function ShowData() {
 
@@ -133,11 +134,13 @@ export default function ShowData() {
                 {
                     filteredStylingDesigns.length === 0 && (
                         <div className="flex">
-                            <Link href="/development-status/styling-design/add/styling">
-                                <AddButton
-                                    buttonText="Add Styling Design"
-                                />
-                            </Link>
+                            <CanAccess roles={['RnE']}>
+                                <Link href="/development-status/styling-design/add/styling">
+                                    <AddButton
+                                        buttonText="Add Styling Design"
+                                    />
+                                </Link>
+                            </CanAccess>
                         </div>
                     )
                 }
@@ -152,9 +155,11 @@ export default function ShowData() {
                             <div className="flex flex-col gap-10 w-full" key={design.id}>
                                 <div className="flex justify-between">
                                     <p className="font-bold">{design.name}</p>
-                                    <Link className="cursor-pointer" href={`/development-status/styling-design/${design.id}/edit/styling`}>
-                                        <Image className="cursor-pointer" src="/images/icon/edit.svg" alt="Edit Icon" width={22} height={22}/>
-                                    </Link>
+                                    <CanAccess roles={['RnE']}>
+                                        <Link className="cursor-pointer" href={`/development-status/styling-design/${design.id}/edit/styling`}>
+                                            <Image className="cursor-pointer" src="/images/icon/edit.svg" alt="Edit Icon" width={22} height={22}/>
+                                        </Link>
+                                    </CanAccess>
                                 </div>
                                 <div className="flex justify-center">
                                     <Swiper
@@ -178,11 +183,13 @@ export default function ShowData() {
                     )}
                 </div>
                 <div className="flex justify-between">
-                    <Link href="/development-status/styling-design/add/part">
-                        <AddButton
-                            buttonText="Add Part Design"
-                        />
-                    </Link>
+                    <CanAccess roles={['RnE']}>
+                        <Link href="/development-status/styling-design/add/part">
+                            <AddButton
+                                buttonText="Add Part Design"
+                            />
+                        </Link>
+                    </CanAccess>
                     <DropdownCategory
                         options={["Chassis", "Under Body", "Upper Body", "Exterior", "Interior"]}
                         onSelect={(value) => setSelectedCategory(value)}
@@ -212,23 +219,25 @@ export default function ShowData() {
                                                                     <div 
                                                                         onClick={() => {
                                                                             setSelectedPhoto(part.picture);
-                                                                            largePhotoModal()
+                                                                            largePhotoModal();
                                                                         }}
                                                                         className="p-2 rounded-sm bg-[#2181E8] cursor-pointer"
                                                                     >
                                                                         <Image src="/images/icon/eye.svg" alt="view icon" height={16} width={16} />
                                                                     </div>
-                                                                    <Link href={`/development-status/styling-design/${part.id}/edit/part`}>
-                                                                        <div className="p-2 rounded-sm bg-[#FDBE1B] cursor-pointer">
-                                                                            <Image src="/images/icon/edit-2.svg" alt="view icon" height={16} width={16} />
+                                                                    <CanAccess roles={['RnE']}>
+                                                                        <Link href={`/development-status/styling-design/${part.id}/edit/part`}>
+                                                                            <div className="p-2 rounded-sm bg-[#FDBE1B] cursor-pointer">
+                                                                                <Image src="/images/icon/edit-2.svg" alt="view icon" height={16} width={16} />
+                                                                            </div>
+                                                                        </Link>
+                                                                        <div 
+                                                                            onClick={() => confirmDelete(part.id)}
+                                                                            className="p-2 rounded-sm bg-[#D62C35] cursor-pointer"
+                                                                        >
+                                                                            <Image src="/images/icon/trash.svg" alt="view icon" height={16} width={16} />
                                                                         </div>
-                                                                    </Link>
-                                                                    <div 
-                                                                        onClick={() => confirmDelete(part.id)}
-                                                                        className="p-2 rounded-sm bg-[#D62C35] cursor-pointer"
-                                                                    >
-                                                                        <Image src="/images/icon/trash.svg" alt="view icon" height={16} width={16} />
-                                                                    </div>
+                                                                    </CanAccess>
                                                                 </div>
                                                             </div>
                                                         </div>

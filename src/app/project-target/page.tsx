@@ -14,6 +14,7 @@ import 'swiper/css/pagination';
 
 import AddButton from "@/components/common/button/AddButton";
 import SwiperPhotoModal from "@/components/common/modal/SwiperPhotoModal";
+import CanAccess from "@/components/access/CanAccess";
 
 export default function ShowData() {
 
@@ -127,21 +128,25 @@ export default function ShowData() {
                                                             >
                                                                 <Image src="/images/icon/eye.svg" alt="view icon" height={16} width={16} />
                                                             </div>
-                                                            <Link href={`/project-target/${data.id}/edit/${section.url}`}>
-                                                                <div className="p-2 rounded-sm bg-[#FDBE1B] cursor-pointer">
-                                                                    <Image src="/images/icon/edit-2.svg" alt="view icon" height={16} width={16} />
-                                                                </div>
-                                                            </Link>
+                                                            <CanAccess roles={['RnE']}>
+                                                                <Link href={`/project-target/${data.id}/edit/${section.url}`}>
+                                                                    <div className="p-2 rounded-sm bg-[#FDBE1B] cursor-pointer">
+                                                                        <Image src="/images/icon/edit-2.svg" alt="view icon" height={16} width={16} />
+                                                                    </div>
+                                                                </Link>
+                                                            </CanAccess>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         ) : (
-                                            <div className="flex flex-1 justify-center items-center">
-                                                <Link href={`/project-target/add/${section.url}`}>
-                                                    <AddButton buttonText={`Add ${section.key}`} />
-                                                </Link>
-                                            </div>
+                                            <CanAccess roles={['RnE']}>
+                                                <div className="flex flex-1 justify-center items-center">
+                                                    <Link href={`/project-target/add/${section.url}`}>
+                                                        <AddButton buttonText={`Add ${section.key}`} />
+                                                    </Link>
+                                                </div>
+                                            </CanAccess>
                                         )}
                                     </div>
                                 </SwiperSlide>

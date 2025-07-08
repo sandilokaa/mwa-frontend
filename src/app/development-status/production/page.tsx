@@ -12,13 +12,13 @@ import { updateProductionStatusData, resetUpdatedStatusProduction } from "@/stor
 import { getProductionChartData } from "@/utils/chart/productionChart";
 import { getEffectiveCategory } from "@/utils/filter/effetiveCategory";
 
-import AddButton from "@/components/common/button/AddButton";
 import SearchInput from "@/components/common/input/SearchInput";
 import TablePagination from "@/components/common/pagination/TablePagination";
 import StatusMenu from "@/components/common/modal/StatusMenu";
 import { StatusProductionOptions } from "@/utils/status/statusOption";
 import DropdownCategory from "@/components/common/dropdown/DropdownFilterCategory";
 import DoughnutChart from "@/components/common/chart/DoughnutChart";
+import CanAccess from "@/components/access/CanAccess";
 
 export default function ShowData() {
 
@@ -94,11 +94,6 @@ export default function ShowData() {
             <div className="flex flex-col gap-y-5">
                 <p className="font-bold">Development Status Production</p>
                 <div className="flex justify-between">
-                    <Link href="/development-status/production/add">
-                        <AddButton
-                            buttonText="Add Production"
-                        />
-                    </Link>
                     <div className="flex gap-4">
                         <DropdownCategory
                             options={["Overall", "Chassis", "Under Body", "Upper Body", "Exterior", "Interior"]}
@@ -186,20 +181,22 @@ export default function ShowData() {
                                                             >
                                                                 <p>{prod.productionStatus.replace(/(?:^|\s)\S/g, (match: string) => match.toUpperCase())}</p>
                                                             </div>
-                                                            <div
-                                                                onClick={() => {
-                                                                    setShowStatusMenuId(prevId => {
-                                                                        const newId = prevId === prod.id ? null : prod.id;
-                                                                        if (newId !== null) {
-                                                                            setSelectedStatus(prod.productionStatus);
-                                                                        }
-                                                                        return newId;
-                                                                    });
-                                                                }}
-                                                                className="flex justify-center items-center cursor-pointer"
-                                                            >
-                                                                <Image src="/images/icon/menu.svg" alt="Menu Icon" width={15} height={15}/>
-                                                            </div>
+                                                            <CanAccess roles={['RnE']}>
+                                                                <div
+                                                                    onClick={() => {
+                                                                        setShowStatusMenuId(prevId => {
+                                                                            const newId = prevId === prod.id ? null : prod.id;
+                                                                            if (newId !== null) {
+                                                                                setSelectedStatus(prod.productionStatus);
+                                                                            }
+                                                                            return newId;
+                                                                        });
+                                                                    }}
+                                                                    className="flex justify-center items-center cursor-pointer"
+                                                                >
+                                                                    <Image src="/images/icon/menu.svg" alt="Menu Icon" width={15} height={15}/>
+                                                                </div>
+                                                            </CanAccess>
                                                         </div>
                                                         {showStatusMenuId === prod.id && (
                                                             <StatusMenu
@@ -218,11 +215,13 @@ export default function ShowData() {
                                                                     <Image src="/images/icon/eye.svg" alt="view icon" height={16} width={16}/>
                                                                 </div>
                                                             </Link>
-                                                            <Link href={`/development-status/production/${prod.id}/edit`} prefetch>
-                                                                <div className="p-2 rounded-sm bg-[#FDBE1B] cursor-pointer">
-                                                                    <Image src="/images/icon/edit-2.svg" alt="view icon" height={16} width={16}/>
-                                                                </div>
-                                                            </Link>
+                                                            <CanAccess roles={['RnE']}>
+                                                                <Link href={`/development-status/production/${prod.id}/edit`} prefetch>
+                                                                    <div className="p-2 rounded-sm bg-[#FDBE1B] cursor-pointer">
+                                                                        <Image src="/images/icon/edit-2.svg" alt="view icon" height={16} width={16}/>
+                                                                    </div>
+                                                                </Link>
+                                                            </CanAccess>
                                                         </div>
                                                     </td>
                                                 </tr>

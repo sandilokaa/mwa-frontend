@@ -11,6 +11,7 @@ import { useSnackbar } from "notistack";
 import AddButton from "@/components/common/button/AddButton";
 import VisibleButton from "@/components/common/button/VisibleButton";
 import ConfirmDialog from "@/components/common/modal/ConfirmDialog";
+import CanAccess from "@/components/access/CanAccess";
 
 export default function ShowData() {
 
@@ -79,11 +80,13 @@ export default function ShowData() {
             <div className="flex flex-col gap-5">
                 <p className="font-bold">Product</p>
                 <div className="flex justify-between">
-                    <Link href="/product/add">
-                        <AddButton
-                            buttonText="Add Product"
-                        />
-                    </Link>
+                    <CanAccess roles={['RnE']}>
+                        <Link href="/product/add">
+                            <AddButton
+                                buttonText="Add Product"
+                            />
+                        </Link>
+                    </CanAccess>
                 </div>
                 <div className="mt-5 bg-white p-5 rounded-lg">
                     <div>
@@ -109,17 +112,19 @@ export default function ShowData() {
                                                                         <Image src="/images/icon/eye.svg" alt="view icon" height={16} width={16}/>
                                                                     </div>
                                                                 </Link>
-                                                                <Link href={`/product/${product.id}/edit`} prefetch>
-                                                                    <div className="p-2 rounded-sm bg-[#FDBE1B] cursor-pointer">
-                                                                        <Image src="/images/icon/edit-2.svg" alt="view icon" height={16} width={16} />
+                                                                <CanAccess roles={['RnE']}>
+                                                                    <Link href={`/product/${product.id}/edit`} prefetch>
+                                                                        <div className="p-2 rounded-sm bg-[#FDBE1B] cursor-pointer">
+                                                                            <Image src="/images/icon/edit-2.svg" alt="view icon" height={16} width={16} />
+                                                                        </div>
+                                                                    </Link>
+                                                                    <div 
+                                                                        onClick={() => confirmDelete(product.id)}
+                                                                        className="p-2 rounded-sm bg-[#D62C35] cursor-pointer"
+                                                                    >
+                                                                        <Image src="/images/icon/trash.svg" alt="view icon" height={16} width={16} />
                                                                     </div>
-                                                                </Link>
-                                                                <div 
-                                                                    onClick={() => confirmDelete(product.id)}
-                                                                    className="p-2 rounded-sm bg-[#D62C35] cursor-pointer"
-                                                                >
-                                                                    <Image src="/images/icon/trash.svg" alt="view icon" height={16} width={16} />
-                                                                </div>
+                                                                </CanAccess>
                                                             </div>
                                                         </div>
                                                     </div>

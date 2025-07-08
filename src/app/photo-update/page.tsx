@@ -15,6 +15,7 @@ import DropdownCategory from "@/components/common/dropdown/DropdownFilterCategor
 import ConfirmDialog from "@/components/common/modal/ConfirmDialog";
 import VisibleButton from "@/components/common/button/VisibleButton";
 import LargePhotoModal from "@/components/common/modal/LargePhotoModal";
+import CanAccess from "@/components/access/CanAccess";
 
 export default function ShowData() {
     const dispatch = useAppDispatch();
@@ -104,11 +105,13 @@ export default function ShowData() {
             <div className="flex flex-col gap-y-5">
                 <p className="font-bold">Photo Update</p>
                 <div className="flex justify-between">
-                    <Link href="/photo-update/add">
-                        <AddButton
-                            buttonText="Add Photo Update"
-                        />
-                    </Link>
+                    <CanAccess roles={['RnE']}>
+                        <Link href="/photo-update/add">
+                            <AddButton
+                                buttonText="Add Photo Update"
+                            />
+                        </Link>
+                    </CanAccess>
                     <div className="flex gap-5">
                         <DropdownCategory
                             options={["Chassis", "Under Body", "Upper Body", "Exterior", "Interior"]}
@@ -143,23 +146,25 @@ export default function ShowData() {
                                                             <div 
                                                                 onClick={() => {
                                                                     setSelectedPhoto(photo.picture);
-                                                                    largePhotoModal()
+                                                                    largePhotoModal();
                                                                 }}
                                                                 className="p-2 rounded-sm bg-[#2181E8] cursor-pointer"
                                                             >
                                                                 <Image src="/images/icon/eye.svg" alt="view icon" height={16} width={16} />
                                                             </div>
-                                                            <Link href={`/photo-update/${photo.id}/edit`}>
-                                                                <div className="p-2 rounded-sm bg-[#FDBE1B] cursor-pointer">
-                                                                    <Image src="/images/icon/edit-2.svg" alt="view icon" height={16} width={16} />
+                                                            <CanAccess roles={['RnE']}>
+                                                                <Link href={`/photo-update/${photo.id}/edit`}>
+                                                                    <div className="p-2 rounded-sm bg-[#FDBE1B] cursor-pointer">
+                                                                        <Image src="/images/icon/edit-2.svg" alt="view icon" height={16} width={16} />
+                                                                    </div>
+                                                                </Link>
+                                                                <div 
+                                                                    onClick={() => confirmDelete(photo.id)}
+                                                                    className="p-2 rounded-sm bg-[#D62C35] cursor-pointer"
+                                                                >
+                                                                    <Image src="/images/icon/trash.svg" alt="view icon" height={16} width={16} />
                                                                 </div>
-                                                            </Link>
-                                                            <div 
-                                                                onClick={() => confirmDelete(photo.id)}
-                                                                className="p-2 rounded-sm bg-[#D62C35] cursor-pointer"
-                                                            >
-                                                                <Image src="/images/icon/trash.svg" alt="view icon" height={16} width={16} />
-                                                            </div>
+                                                            </CanAccess>
                                                         </div>
                                                     </div>
                                                 </div>

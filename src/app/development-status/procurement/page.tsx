@@ -21,6 +21,7 @@ import { getProcurementChartData } from "@/utils/chart/procurementChart";
 import TablePagination from "@/components/common/pagination/TablePagination";
 import NotifPagination from "@/components/common/pagination/NotifPagination";
 import ProgressProcMenu from "@/components/common/modal/ProgressProcMenu";
+import CanAccess from "@/components/access/CanAccess";
 
 export default function ShowData() {
 
@@ -159,11 +160,13 @@ export default function ShowData() {
             <div className="flex flex-col gap-y-5">
                 <p className="font-bold">Procurement</p>
                 <div className="flex justify-between">
-                    <Link href="/development-status/procurement/add" prefetch>
-                        <AddButton
-                            buttonText="Add Procurement"
-                        />
-                    </Link>
+                    <CanAccess roles={['RnE']}>
+                        <Link href="/development-status/procurement/add" prefetch>
+                            <AddButton
+                                buttonText="Add Procurement"
+                            />
+                        </Link>
+                    </CanAccess>
                     <SearchInput
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
@@ -287,20 +290,22 @@ export default function ShowData() {
                                                             >
                                                                 <p> {formatProgressProc(proc.progress)} </p>
                                                             </div>
-                                                            <div
-                                                                onClick={() => {
-                                                                    setShowProgressMenuId(prevId => {
-                                                                        const newId = prevId === proc.id ? null : proc.id;
-                                                                        if (newId !== null) {
-                                                                            setSelectedProgress(proc.progress);
-                                                                        }
-                                                                        return newId;
-                                                                    });
-                                                                }}
-                                                                className="flex justify-center items-center cursor-pointer"
-                                                            >
-                                                                <Image src="/images/icon/menu.svg" alt="Menu Icon" width={15} height={15}/>
-                                                            </div>
+                                                            <CanAccess roles={['RnE']}>
+                                                                <div
+                                                                    onClick={() => {
+                                                                        setShowProgressMenuId(prevId => {
+                                                                            const newId = prevId === proc.id ? null : proc.id;
+                                                                            if (newId !== null) {
+                                                                                setSelectedProgress(proc.progress);
+                                                                            }
+                                                                            return newId;
+                                                                        });
+                                                                    }}
+                                                                    className="flex justify-center items-center cursor-pointer"
+                                                                >
+                                                                    <Image src="/images/icon/menu.svg" alt="Menu Icon" width={15} height={15}/>
+                                                                </div>
+                                                            </CanAccess>
                                                         </div>
                                                         {showProgressMenuId === proc.id && (
                                                             <ProgressProcMenu
@@ -330,17 +335,19 @@ export default function ShowData() {
                                                                     <Image src="/images/icon/eye.svg" alt="view icon" height={16} width={16}/>
                                                                 </div>
                                                             </Link>
-                                                            <Link href={`/development-status/procurement/${proc.id}/edit`} prefetch>
-                                                                <div className="p-2 rounded-sm bg-[#FDBE1B] cursor-pointer">
-                                                                    <Image src="/images/icon/edit-2.svg" alt="view icon" height={16} width={16}/>
+                                                            <CanAccess roles={['RnE']}>
+                                                                <Link href={`/development-status/procurement/${proc.id}/edit`} prefetch>
+                                                                    <div className="p-2 rounded-sm bg-[#FDBE1B] cursor-pointer">
+                                                                        <Image src="/images/icon/edit-2.svg" alt="view icon" height={16} width={16}/>
+                                                                    </div>
+                                                                </Link>
+                                                                <div 
+                                                                    onClick={() => confirmDelete(proc.id)}
+                                                                    className="p-2 rounded-sm bg-[#D62C35] cursor-pointer"
+                                                                >
+                                                                    <Image src="/images/icon/trash.svg" alt="view icon" height={16} width={16}/>
                                                                 </div>
-                                                            </Link>
-                                                            <div 
-                                                                onClick={() => confirmDelete(proc.id)}
-                                                                className="p-2 rounded-sm bg-[#D62C35] cursor-pointer"
-                                                            >
-                                                                <Image src="/images/icon/trash.svg" alt="view icon" height={16} width={16}/>
-                                                            </div>
+                                                            </CanAccess>
                                                         </div>
                                                     </td>
                                                 </tr>

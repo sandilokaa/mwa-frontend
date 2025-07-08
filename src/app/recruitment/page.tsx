@@ -20,6 +20,7 @@ import { getRecruitmentChartData } from "@/utils/chart/recruitmentChart";
 import TablePagination from "@/components/common/pagination/TablePagination";
 import NotifPagination from "@/components/common/pagination/NotifPagination";
 import ProgressRecMenu from "@/components/common/modal/ProgressRecMenu";
+import CanAccess from "@/components/access/CanAccess";
 
 export default function ShowData() {
 
@@ -146,11 +147,13 @@ export default function ShowData() {
             <div className="flex flex-col gap-y-5">
                 <p className="font-bold">Recruitment</p>
                 <div className="flex justify-between">
-                    <Link href="/recruitment/add" prefetch>
-                        <AddButton
-                            buttonText="Add Recruitment"
-                        />
-                    </Link>
+                    <CanAccess roles={['RnE']}>
+                        <Link href="/recruitment/add" prefetch>
+                            <AddButton
+                                buttonText="Add Recruitment"
+                            />
+                        </Link>
+                    </CanAccess>
                     <SearchInput
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
@@ -273,20 +276,22 @@ export default function ShowData() {
                                                             >
                                                                 <p> {formatProgressRec(rec.progress)} </p>
                                                             </div>
-                                                            <div
-                                                                onClick={() => {
-                                                                    setShowProgressMenuId(prevId => {
-                                                                        const newId = prevId === rec.id ? null : rec.id;
-                                                                        if (newId !== null) {
-                                                                            setSelectedProgress(rec.progress);
-                                                                        }
-                                                                        return newId;
-                                                                    });
-                                                                }}
-                                                                className="flex justify-center items-center cursor-pointer"
-                                                            >
-                                                                <Image src="/images/icon/menu.svg" alt="Menu Icon" width={15} height={15}/>
-                                                            </div>
+                                                            <CanAccess roles={['RnE']}>
+                                                                <div
+                                                                    onClick={() => {
+                                                                        setShowProgressMenuId(prevId => {
+                                                                            const newId = prevId === rec.id ? null : rec.id;
+                                                                            if (newId !== null) {
+                                                                                setSelectedProgress(rec.progress);
+                                                                            }
+                                                                            return newId;
+                                                                        });
+                                                                    }}
+                                                                    className="flex justify-center items-center cursor-pointer"
+                                                                >
+                                                                    <Image src="/images/icon/menu.svg" alt="Menu Icon" width={15} height={15}/>
+                                                                </div>
+                                                            </CanAccess>
                                                         </div>
                                                         {showProgressMenuId === rec.id && (
                                                             <ProgressRecMenu
@@ -316,17 +321,19 @@ export default function ShowData() {
                                                                     <Image src="/images/icon/eye.svg" alt="view icon" height={16} width={16}/>
                                                                 </div>
                                                             </Link>
-                                                            <Link href={`/recruitment/${rec.id}/edit`} prefetch>
-                                                                <div className="p-2 rounded-sm bg-[#FDBE1B] cursor-pointer">
-                                                                    <Image src="/images/icon/edit-2.svg" alt="view icon" height={16} width={16}/>
+                                                            <CanAccess roles={['RnE']}>
+                                                                <Link href={`/recruitment/${rec.id}/edit`} prefetch>
+                                                                    <div className="p-2 rounded-sm bg-[#FDBE1B] cursor-pointer">
+                                                                        <Image src="/images/icon/edit-2.svg" alt="view icon" height={16} width={16}/>
+                                                                    </div>
+                                                                </Link>
+                                                                <div 
+                                                                    onClick={() => confirmDelete(rec.id)}
+                                                                    className="p-2 rounded-sm bg-[#D62C35] cursor-pointer"
+                                                                >
+                                                                    <Image src="/images/icon/trash.svg" alt="view icon" height={16} width={16}/>
                                                                 </div>
-                                                            </Link>
-                                                            <div 
-                                                                onClick={() => confirmDelete(rec.id)}
-                                                                className="p-2 rounded-sm bg-[#D62C35] cursor-pointer"
-                                                            >
-                                                                <Image src="/images/icon/trash.svg" alt="view icon" height={16} width={16}/>
-                                                            </div>
+                                                            </CanAccess>
                                                         </div>
                                                     </td>
                                                 </tr>

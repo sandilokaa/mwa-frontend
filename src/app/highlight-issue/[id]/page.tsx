@@ -8,6 +8,8 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { formatDate } from "@/utils/format/formatDate";
 import { fetchIssueDetail, StatusIssue } from "@/store/slice/highlightIssue/getDetailSlice";
 
+import CanAccess from "@/components/access/CanAccess";
+
 export default function DetailData() {
 
     const dispatch = useAppDispatch();
@@ -34,9 +36,11 @@ export default function DetailData() {
                 <div className="bg-white w-full rounded-[10px] p-5 col-span-3">
                     <div className="flex justify-between">
                         <p className="text-sm font-bold">Highlight Issue Information</p>
-                        <Link className="cursor-pointer" href={`/highlight-issue/${id}/edit`}>
-                            <Image className="cursor-pointer" src="/images/icon/edit.svg" alt="Edit Icon" width={22} height={22}/>
-                        </Link>
+                        <CanAccess roles={['RnE']}>
+                            <Link className="cursor-pointer" href={`/highlight-issue/${id}/edit`}>
+                                <Image className="cursor-pointer" src="/images/icon/edit.svg" alt="Edit Icon" width={22} height={22}/>
+                            </Link>
+                        </CanAccess>
                     </div>
                     <div className="flex flex-col gap-4 mt-5 font-medium">
                         <div className="grid grid-cols-1">

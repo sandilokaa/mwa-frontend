@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { fetchProductDetail } from "@/store/slice/product/getDetailSlice";
 
 import LargePhotoModal from "@/components/common/modal/LargePhotoModal";
+import CanAccess from "@/components/access/CanAccess";
 
 export default function DetailData() {
 
@@ -52,9 +53,11 @@ export default function DetailData() {
                 <div className="bg-white w-full rounded-[10px] p-5 col-span-3">
                     <div className="flex justify-between">
                         <p className="text-sm font-bold">Product Information</p>
-                        <Link className="cursor-pointer" href={`/product/${id}/edit`}>
-                            <Image className="cursor-pointer" src="/images/icon/edit.svg" alt="Edit Icon" width={22} height={22}/>
-                        </Link>
+                        <CanAccess roles={['RnE']}>
+                            <Link className="cursor-pointer" href={`/product/${id}/edit`}>
+                                <Image className="cursor-pointer" src="/images/icon/edit.svg" alt="Edit Icon" width={22} height={22}/>
+                            </Link>
+                        </CanAccess>
                     </div>
                     <div className="flex flex-col gap-4 mt-5 font-medium">
                         <div className="grid grid-cols-1">

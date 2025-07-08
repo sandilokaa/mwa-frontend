@@ -25,6 +25,7 @@ import DropdownCategory from "@/components/common/dropdown/DropdownFilterCategor
 import TablePagination from "@/components/common/pagination/TablePagination";
 import ConfirmDialog from "@/components/common/modal/ConfirmDialog";
 import StatusMenu from "@/components/common/modal/StatusMenu";
+import CanAccess from "@/components/access/CanAccess";
 
 export default function ShowData() {
 
@@ -194,11 +195,13 @@ export default function ShowData() {
             <div className="flex flex-col gap-y-5">
                 <p className="font-bold">Design Engineering</p>
                 <div className="flex justify-between">
-                    <Link href="/development-status/engineering/add">
-                        <AddButton
-                            buttonText="Add Design Engineering"
-                        />
-                    </Link>
+                    <CanAccess roles={['RnE']}>
+                        <Link href="/development-status/engineering/add">
+                            <AddButton
+                                buttonText="Add Design Engineering"
+                            />
+                        </Link>
+                    </CanAccess>
                     <div className="flex gap-4">
                         <DropdownCategory
                             options={["Overall", "Chassis", "Under Body", "Upper Body", "Exterior", "Interior"]}
@@ -296,12 +299,14 @@ export default function ShowData() {
                                                             >
                                                                 <p>{engine.status3D.replace(/(?:^|\s)\S/g, (match: string) => match.toUpperCase())}</p>
                                                             </div>
-                                                            <div
-                                                                onClick={() => toggleStatusMenu(engine.id, "status3D")}
-                                                                className="flex justify-center items-center cursor-pointer"
-                                                            >
-                                                                <Image src="/images/icon/menu.svg" alt="Menu Icon" width={15} height={15}/>
-                                                            </div>
+                                                            <CanAccess roles={['RnE']}>
+                                                                <div
+                                                                    onClick={() => toggleStatusMenu(engine.id, "status3D")}
+                                                                    className="flex justify-center items-center cursor-pointer"
+                                                                >
+                                                                    <Image src="/images/icon/menu.svg" alt="Menu Icon" width={15} height={15}/>
+                                                                </div>
+                                                            </CanAccess>
                                                         </div>
                                                         {showStatusMenu[engine.id]?.status3D && (
                                                             <StatusMenu
@@ -341,12 +346,14 @@ export default function ShowData() {
                                                             >
                                                                 <p>{engine.status2D.replace(/(?:^|\s)\S/g, (match: string) => match.toUpperCase())}</p>
                                                             </div>
-                                                            <div
-                                                                onClick={() => toggleStatusMenu(engine.id, "status2D")}
-                                                                className="flex justify-center items-center cursor-pointer"
-                                                            >
-                                                                <Image src="/images/icon/menu.svg" alt="Menu Icon" width={15} height={15}/>
-                                                            </div>
+                                                            <CanAccess roles={['RnE']}>
+                                                                <div
+                                                                    onClick={() => toggleStatusMenu(engine.id, "status2D")}
+                                                                    className="flex justify-center items-center cursor-pointer"
+                                                                >
+                                                                    <Image src="/images/icon/menu.svg" alt="Menu Icon" width={15} height={15}/>
+                                                                </div>
+                                                            </CanAccess>
                                                         </div>
                                                         {showStatusMenu[engine.id]?.status2D && (
                                                             <StatusMenu
@@ -386,12 +393,14 @@ export default function ShowData() {
                                                             >
                                                                 <p>{engine.statusDXF.replace(/(?:^|\s)\S/g, (match: string) => match.toUpperCase())}</p>
                                                             </div>
-                                                            <div
-                                                                onClick={() => toggleStatusMenu(engine.id, "statusDXF")}
-                                                                className="flex justify-center items-center cursor-pointer"
-                                                            >
-                                                                <Image src="/images/icon/menu.svg" alt="Menu Icon" width={15} height={15}/>
-                                                            </div>
+                                                            <CanAccess roles={['RnE']}>
+                                                                <div
+                                                                    onClick={() => toggleStatusMenu(engine.id, "statusDXF")}
+                                                                    className="flex justify-center items-center cursor-pointer"
+                                                                >
+                                                                    <Image src="/images/icon/menu.svg" alt="Menu Icon" width={15} height={15}/>
+                                                                </div>
+                                                            </CanAccess>
                                                         </div>
                                                         {showStatusMenu[engine.id]?.statusDXF && (
                                                             <StatusMenu
@@ -426,17 +435,19 @@ export default function ShowData() {
                                                                     <Image src="/images/icon/eye.svg" alt="view icon" height={16} width={16}/>
                                                                 </div>
                                                             </Link>
-                                                            <Link href={`/development-status/engineering/${engine.id}/edit`} prefetch>
-                                                                <div className="p-2 rounded-sm bg-[#FDBE1B] cursor-pointer">
-                                                                    <Image src="/images/icon/edit-2.svg" alt="view icon" height={16} width={16}/>
+                                                            <CanAccess roles={['RnE']}>
+                                                                <Link href={`/development-status/engineering/${engine.id}/edit`} prefetch>
+                                                                    <div className="p-2 rounded-sm bg-[#FDBE1B] cursor-pointer">
+                                                                        <Image src="/images/icon/edit-2.svg" alt="view icon" height={16} width={16}/>
+                                                                    </div>
+                                                                </Link>
+                                                                <div 
+                                                                    onClick={() => confirmDelete(engine.id)}
+                                                                    className="p-2 rounded-sm bg-[#D62C35] cursor-pointer"
+                                                                >
+                                                                    <Image src="/images/icon/trash.svg" alt="view icon" height={16} width={16}/>
                                                                 </div>
-                                                            </Link>
-                                                            <div 
-                                                                onClick={() => confirmDelete(engine.id)}
-                                                                className="p-2 rounded-sm bg-[#D62C35] cursor-pointer"
-                                                            >
-                                                                <Image src="/images/icon/trash.svg" alt="view icon" height={16} width={16}/>
-                                                            </div>
+                                                            </CanAccess>
                                                         </div>
                                                     </td>
                                                 </tr>

@@ -24,6 +24,7 @@ import ProjectBarChart from "@/components/common/chart/ProjectBarChart";
 import { AlertCircle } from 'lucide-react';
 import OverdueModal from "@/components/common/modal/OverdueModal";
 import { getIssueOptions } from "@/utils/status/getIssueOption";
+import CanAccess from "@/components/access/CanAccess";
 
 export default function ShowData() {
 
@@ -193,11 +194,13 @@ export default function ShowData() {
             <div className="flex flex-col gap-y-5">
                 <p className="font-bold">Highlight Issue</p>
                 <div className="flex justify-between">
-                    <Link href="/highlight-issue/add">
-                        <AddButton
-                            buttonText="Add Highlight Issue"
-                        />
-                    </Link>
+                    <CanAccess roles={['RnE']}>
+                        <Link href="/highlight-issue/add">
+                            <AddButton
+                                buttonText="Add Highlight Issue"
+                            />
+                        </Link>
+                    </CanAccess>
                     <SearchInput
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
@@ -330,40 +333,42 @@ export default function ShowData() {
                                                             >
                                                                 <p>{issue.statusIssue.replace(/(?:^|\s)\S/g, (match: string) => match.toUpperCase())}</p>
                                                             </div>
-                                                            <div
-                                                                className="flex justify-center items-center cursor-pointer"
-                                                            >
-                                                                {issue.statusIssue !== StatusIssue.Done && (
-                                                                    <div className="flex justify-center items-center cursor-pointer">
-                                                                        {issue.statusIssue === StatusIssue.Overdue && !issue.revisionDate ? (
-                                                                            <AlertCircle 
-                                                                                onClick={() => {
-                                                                                    setSelectedIssueForModal(issue);
-                                                                                    setShowOverdueModal(true);
-                                                                                }}
-                                                                                size={15} 
-                                                                                className="text-red-500" 
-                                                                            />
-                                                                        ) : (
-                                                                            <Image 
-                                                                                onClick={() => {
-                                                                                    setShowStatusMenuId(prevId => {
-                                                                                        const newId = prevId === issue.id ? null : issue.id;
-                                                                                        if (newId !== null) {
-                                                                                            setSelectedStatus(issue.statusIssue);
-                                                                                        }
-                                                                                        return newId;
-                                                                                    });
-                                                                                }}
-                                                                                src="/images/icon/menu.svg" 
-                                                                                alt="Menu Icon" 
-                                                                                width={15} 
-                                                                                height={15} 
-                                                                            />
-                                                                        )}
-                                                                    </div>
-                                                                )}
-                                                            </div>
+                                                            <CanAccess roles={['RnE']}>
+                                                                <div
+                                                                    className="flex justify-center items-center cursor-pointer"
+                                                                >
+                                                                    {issue.statusIssue !== StatusIssue.Done && (
+                                                                        <div className="flex justify-center items-center cursor-pointer">
+                                                                            {issue.statusIssue === StatusIssue.Overdue && !issue.revisionDate ? (
+                                                                                <AlertCircle 
+                                                                                    onClick={() => {
+                                                                                        setSelectedIssueForModal(issue);
+                                                                                        setShowOverdueModal(true);
+                                                                                    }}
+                                                                                    size={15} 
+                                                                                    className="text-red-500" 
+                                                                                />
+                                                                            ) : (
+                                                                                <Image 
+                                                                                    onClick={() => {
+                                                                                        setShowStatusMenuId(prevId => {
+                                                                                            const newId = prevId === issue.id ? null : issue.id;
+                                                                                            if (newId !== null) {
+                                                                                                setSelectedStatus(issue.statusIssue);
+                                                                                            }
+                                                                                            return newId;
+                                                                                        });
+                                                                                    }}
+                                                                                    src="/images/icon/menu.svg" 
+                                                                                    alt="Menu Icon" 
+                                                                                    width={15} 
+                                                                                    height={15} 
+                                                                                />
+                                                                            )}
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+                                                            </CanAccess>
                                                         </div>
                                                         {showStatusMenuId === issue.id && (
                                                             <StatusMenu
@@ -393,17 +398,19 @@ export default function ShowData() {
                                                                     <Image src="/images/icon/eye.svg" alt="view icon" height={16} width={16}/>
                                                                 </div>
                                                             </Link>
-                                                            <Link href={`/highlight-issue/${issue.id}/edit`} prefetch>
-                                                                <div className="p-2 rounded-sm bg-[#FDBE1B] cursor-pointer">
-                                                                    <Image src="/images/icon/edit-2.svg" alt="view icon" height={16} width={16}/>
+                                                            <CanAccess roles={['RnE']}>
+                                                                <Link href={`/highlight-issue/${issue.id}/edit`} prefetch>
+                                                                    <div className="p-2 rounded-sm bg-[#FDBE1B] cursor-pointer">
+                                                                        <Image src="/images/icon/edit-2.svg" alt="view icon" height={16} width={16}/>
+                                                                    </div>
+                                                                </Link>
+                                                                <div 
+                                                                    onClick={() => confirmDelete(issue.id)}
+                                                                    className="p-2 rounded-sm bg-[#D62C35] cursor-pointer"
+                                                                >
+                                                                    <Image src="/images/icon/trash.svg" alt="view icon" height={16} width={16}/>
                                                                 </div>
-                                                            </Link>
-                                                            <div 
-                                                                onClick={() => confirmDelete(issue.id)}
-                                                                className="p-2 rounded-sm bg-[#D62C35] cursor-pointer"
-                                                            >
-                                                                <Image src="/images/icon/trash.svg" alt="view icon" height={16} width={16}/>
-                                                            </div>
+                                                            </CanAccess>
                                                         </div>
                                                     </td>
                                                 </tr>
