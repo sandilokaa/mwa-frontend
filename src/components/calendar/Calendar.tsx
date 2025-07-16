@@ -5,6 +5,8 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useProductFilter } from "@/context/ProductFilterContext";
 import { Schedule } from "@/store/slice/schedule/getAllSlice";
 import { fetchFilteredSchedule } from "@/store/slice/schedule/getAllSlice";
+import { deleteSchedule, resetDeleteState } from "@/store/slice/schedule/deleteSlice";
+import { refetchSchedule } from "@/utils/refetch/refetchSchedule";
 import { 
     eachWeekOfInterval, 
     startOfMonth, 
@@ -13,11 +15,19 @@ import {
     endOfWeek,
     differenceInDays,
 } from "date-fns";
+import Image from "next/image";
+import Link from "next/link";
+import { useSnackbar } from "notistack";
+
+import ConfirmDialog from "../common/modal/ConfirmDialog";
 
 export default function DashboardCalendar() {
 
     const dispatch = useAppDispatch();
+    const { enqueueSnackbar } = useSnackbar();
     const { selectedProduct } = useProductFilter();
+
+    /* --------------- Calendar --------------- */
 
     const currentWeekRef = useRef<HTMLDivElement | null>(null);
     const [lineLeft, setLineLeft] = useState<number | null>(null);
@@ -181,86 +191,145 @@ export default function DashboardCalendar() {
         }, {} as Record<string, Schedule[]>);
     }, [filteredSchedule]);
 
+    /* --------------- End Calendar --------------- */
+
+
+    /* --------------- Delete Schedule --------------- */
+
+    const [openConfirm, setOpenConfirm] = useState(false);
+    const [targetId, setTargetId] = useState<number | null>(null);
+
+    const confirmDelete = (id: number) => {
+        setTargetId(id);
+        setOpenConfirm(true);
+    };
+
+    const handleConfirmedDelete = () => {
+        if (targetId !== null) {
+            dispatch(deleteSchedule({ id: targetId }))
+                .unwrap()
+                .then(() => {
+                    enqueueSnackbar("You have successfully deleted the data", { variant: "success" });
+                    dispatch(resetDeleteState());
+                    refetchSchedule(dispatch, selectedProduct?.id);
+                })
+                .catch(() => {
+                    enqueueSnackbar("You failed to delete data", { variant: "error" });
+                    dispatch(resetDeleteState());
+                })
+        }
+        setOpenConfirm(false);
+    };
+
+    /* --------------- End Delete Schedule --------------- */
 
     return (
-        <div className="flex w-full h-full bg-gray-100">
-            <div className="relative overflow-x-auto p-5 bg-white rounded-lg w-full">
-                <div className="flex flex-col gap-2 min-w-max sticky top-0 bg-white z-10 pb-2">
-                    <div className="flex border-b border-gray-300">
-                        {years.map((year) => (
-                            <div key={year} className="flex">
-                                {monthNames.map((month, monthIndex) => {
-                                    const weeksInMonth = monthYearData.find(d => d.year === year && d.month === monthIndex)?.weeks.length || 0;
+        <div>
+            <ConfirmDialog
+                open={openConfirm}
+                onClose={() => setOpenConfirm(false)}
+                onConfirm={handleConfirmedDelete}
+                title="Delete Photo"
+                message="Are you sure you want to delete this Photo?"
+                confirmText="Delete"
+                cancelText="Cancel"
+            />
+            <div className="flex w-full h-full bg-gray-100">
+                <div className="relative overflow-x-auto p-5 bg-white rounded-lg w-full">
+                    <div className="flex flex-col gap-2 min-w-max sticky top-0 bg-white z-10 pb-2">
+                        <div className="flex border-b border-gray-300">
+                            {years.map((year) => (
+                                <div key={year} className="flex">
+                                    {monthNames.map((month, monthIndex) => {
+                                        const weeksInMonth = monthYearData.find(d => d.year === year && d.month === monthIndex)?.weeks.length || 0;
+                                        return (
+                                            <div key={`${year}-${month}`} className="flex flex-col items-center border-r border-gray-200 w-full" style={{width: weeksInMonth * timelineCellWidth}}>
+                                                <div className="font-bold text-center w-full text-gray-700">{month} {year}</div>
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            ))}
+                        </div>
+                        <div className="flex border-b border-gray-300">
+                            {monthYearData.map(({ year, month, weeks }) => {
+                                const currentWeekLabel = getCurrentWeekLabel();
+                                return (
+                                    <div key={`${year}-${month}-weeks`} className="flex">
+                                        {weeks.map((week) => {
+                                            const isCurrent =
+                                                year === new Date().getFullYear() &&
+                                                month === new Date().getMonth() &&
+                                                week.label === currentWeekLabel;
+
+                                            return (
+                                                <div
+                                                    ref={isCurrent ? el => { if (el) currentWeekRef.current = el; } : null}
+                                                    key={`${year}-${month}-${week.label}`}
+                                                    className={`text-sm font-medium p-1 text-center border-r border-gray-200 text-gray-500 ${isCurrent ? "bg-red-200 font-bold !text-red-800" : ""}`}
+                                                    style={{width: timelineCellWidth}}
+                                                >
+                                                    {week.label}
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    </div>
+
+                    <div className="relative w-full mt-2">
+                        {Object.entries(schedulesByPic).map(([pic, schedules]) => (
+                            <div key={pic} className="relative h-15 flex items-center">
+                                {schedules.map((schedule) => {
+                                    const { left, width } = calculateSchedulePosition(schedule);
+                                    
                                     return (
-                                        <div key={`${year}-${month}`} className="flex flex-col items-center border-r border-gray-200 w-full" style={{width: weeksInMonth * timelineCellWidth}}>
-                                            <div className="font-bold text-center w-full text-gray-700">{month} {year}</div>
+                                        <div
+                                            key={schedule.id}
+                                            className="absolute p-2 border border-gray-300 rounded-md flex items-center justify-center
+                                                    hover:bg-gray-50 group transition-all cursor-pointer"
+                                            style={{
+                                                left: `${left}px`,
+                                                width: `${width}px`,
+                                                minWidth: `${width}px`,
+                                            }}
+                                        >
+                                            <div className="text-sm text-black p-2 truncate font-medium">
+                                                {schedule.scheduleName}
+                                            </div>
+                                            
+                                            <div className="absolute right-0 top-0 hidden group-hover:flex gap-1 p-1 bg-white rounded-md">
+                                                <Link href={`/schedule/${schedule.id}/edit`}>
+                                                    <div className="p-1 rounded-md bg-[#FDBE1B] cursor-pointer">
+                                                        <Image src="/images/icon/edit-2.svg" alt="view icon" height={14} width={14} />
+                                                    </div>
+                                                </Link>
+                                                <div 
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        confirmDelete(schedule.id);
+                                                    }}
+                                                    className="p-1 rounded-md bg-[#D62C35] cursor-pointer"
+                                                >
+                                                    <Image src="/images/icon/trash.svg" alt="view icon" height={14} width={14} />
+                                                </div>
+                                            </div>
                                         </div>
-                                    )
+                                    );
                                 })}
                             </div>
                         ))}
                     </div>
-                    <div className="flex border-b border-gray-300">
-                        {monthYearData.map(({ year, month, weeks }) => {
-                            const currentWeekLabel = getCurrentWeekLabel();
-                            return (
-                                <div key={`${year}-${month}-weeks`} className="flex">
-                                    {weeks.map((week) => {
-                                        const isCurrent =
-                                            year === new Date().getFullYear() &&
-                                            month === new Date().getMonth() &&
-                                            week.label === currentWeekLabel;
-
-                                        return (
-                                            <div
-                                                ref={isCurrent ? el => { if (el) currentWeekRef.current = el; } : null}
-                                                key={`${year}-${month}-${week.label}`}
-                                                className={`text-sm font-medium p-1 text-center border-r border-gray-200 text-gray-500 ${isCurrent ? "bg-red-200 font-bold !text-red-800" : ""}`}
-                                                style={{width: timelineCellWidth}}
-                                            >
-                                                {week.label}
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            )
-                        })}
-                    </div>
+                    
+                    {lineLeft !== null && (
+                        <div
+                            className="absolute top-[81px] bottom-0 w-[2px] bg-red-500 z-20"
+                            style={{ left: `${lineLeft}px` }}
+                        />
+                    )}
                 </div>
-
-                <div className="relative w-full mt-2">
-                    {Object.entries(schedulesByPic).map(([pic, schedules]) => (
-                        <div key={pic} className="relative h-15 flex items-center">
-                            {schedules.map((schedule) => {
-                                const { left, width } = calculateSchedulePosition(schedule);
-                                
-                                return (
-                                    <div
-                                        key={schedule.id}
-                                        className="absolute p-2 border border-gray-300 rounded-md flex items-center justify-center"
-                                        style={{
-                                            left: `${left}px`,
-                                            width: `${width}px`,
-                                            minWidth: `${width}px`,
-                                        }}
-                                        // title={`${schedule.scheduleName}: ${schedule.startDate} to ${schedule.endDate}`}
-                                    >
-                                        <div className="text-sm text-black p-2 truncate font-medium">
-                                            {schedule.scheduleName}
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    ))}
-                </div>
-                
-                {lineLeft !== null && (
-                    <div
-                        className="absolute top-[81px] bottom-0 w-[2px] bg-red-500 z-20"
-                        style={{ left: `${lineLeft}px` }}
-                    />
-                )}
             </div>
         </div>
     );

@@ -70,7 +70,7 @@ export default function EditData() {
             dispatch(updateScheduleData(payload));
             enqueueSnackbar("You have successfully updated the data", { variant: "success" });
 
-            router.push("/schedule");
+            window.location.assign("/schedule");
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             enqueueSnackbar(error.message, { variant: "error" });
