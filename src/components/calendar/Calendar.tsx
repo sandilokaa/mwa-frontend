@@ -13,7 +13,6 @@ import {
     endOfMonth, 
     startOfWeek, 
     endOfWeek,
-    differenceInDays,
 } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
@@ -57,7 +56,6 @@ export default function DashboardCalendar() {
 
     const getCurrentWeekLabel = () => {
         const today = new Date();
-        const startOfMonthToday = startOfMonth(today);
         const dayOfMonth = today.getDate();
         const weekIndex = Math.ceil(dayOfMonth / 7);
         const startOfWeekToday = startOfWeek(today);
@@ -70,7 +68,6 @@ export default function DashboardCalendar() {
         }
         return 'W4';
     };
-
 
     const monthNames = useMemo(() => [
         "January", "February", "March", "April",
@@ -92,12 +89,22 @@ export default function DashboardCalendar() {
     }, [years, monthNames]);
     
     useEffect(() => {
-        if (currentWeekRef.current && currentWeekRef.current.offsetParent) {
+        if (currentWeekRef.current) {
             const el = currentWeekRef.current;
             el.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
-            const parentLeft = (el.offsetParent as HTMLElement).offsetLeft;
-            const left = el.offsetLeft + el.offsetWidth / 2 - 1 + parentLeft;
-            setLineLeft(left);
+            
+            // Get the container element (timeline area)
+            const timelineContainer = el.closest('.flex.flex-col.min-w-max');
+            if (timelineContainer) {
+                const containerRect = timelineContainer.getBoundingClientRect();
+                const elRect = el.getBoundingClientRect();
+                
+                // Calculate relative position within timeline
+                const relativeLeft = elRect.left - containerRect.left;
+                const centerPosition = relativeLeft + el.offsetWidth / 2 - 1;
+                
+                setLineLeft(centerPosition);
+            }
         }
     }, [monthYearData]);
     
@@ -116,14 +123,10 @@ export default function DashboardCalendar() {
         return () => clearTimeout(delay);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedProduct?.id, dispatch]);
-
-    const timelineStartDate = useMemo(() => {
-        if (monthYearData.length === 0) return new Date();
-        const firstMonth = monthYearData[0];
-        return startOfWeek(startOfMonth(new Date(firstMonth.year, firstMonth.month)));
-    }, [monthYearData]);
     
     const timelineCellWidth = 70;
+    const picColumnWidth = 180;
+    const rowHeight = 60;
 
     const calculateSchedulePosition = (schedule: Schedule) => {
         const startDate = new Date(schedule.startDate);
@@ -158,7 +161,7 @@ export default function DashboardCalendar() {
                 const week = yearData.weeks[j];
                 if (week.start.getTime() === startWeek.start.getTime() && 
                     week.end.getTime() === startWeek.end.getTime()) {
-                    startIndex = i * 4 + j; // 4 weeks per month
+                    startIndex = i * 4 + j;
                     foundStart = true;
                 }
                 if (week.start.getTime() === endWeek.start.getTime() && 
@@ -223,110 +226,211 @@ export default function DashboardCalendar() {
 
     /* --------------- End Delete Schedule --------------- */
 
+    const headerHeight = 100;
+
     return (
-        <div>
+        <div className="w-full h-full bg-gray-50">
             <ConfirmDialog
                 open={openConfirm}
                 onClose={() => setOpenConfirm(false)}
                 onConfirm={handleConfirmedDelete}
-                title="Delete Photo"
-                message="Are you sure you want to delete this Photo?"
+                title="Delete Progress"
+                message="Are you sure you want to delete this Progress?"
                 confirmText="Delete"
                 cancelText="Cancel"
             />
-            <div className="flex w-full h-full bg-gray-100">
-                <div className="relative overflow-x-auto p-5 bg-white rounded-lg w-full">
-                    <div className="flex flex-col gap-2 min-w-max sticky top-0 bg-white z-10 pb-2">
-                        <div className="flex border-b border-gray-300">
-                            {years.map((year) => (
-                                <div key={year} className="flex">
-                                    {monthNames.map((month, monthIndex) => {
-                                        const weeksInMonth = monthYearData.find(d => d.year === year && d.month === monthIndex)?.weeks.length || 0;
-                                        return (
-                                            <div key={`${year}-${month}`} className="flex flex-col items-center border-r border-gray-200 w-full" style={{width: weeksInMonth * timelineCellWidth}}>
-                                                <div className="font-bold text-center w-full text-gray-700">{month} {year}</div>
+            
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+                <div className="relative overflow-x-auto">
+                    {/* Header Section */}
+                    <div 
+                        className="flex sticky top-0 bg-white z-30 border-b border-gray-200"
+                        style={{ height: headerHeight }}
+                    >
+                        {/* PIC Column Header */}
+                        <div 
+                            className="flex-shrink-0 border-r border-gray-200 bg-gradient-to-r from-gray-50 to-gray-100 sticky left-0 z-40"
+                            style={{ width: picColumnWidth }}
+                        >
+                            <div className="h-full flex flex-col justify-center items-center px-4">
+                                <div className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+                                    Person in Charge
+                                </div>
+                                <div className="text-xs text-gray-500 mt-1">
+                                    PIC
+                                </div>
+                            </div>
+                        </div>
+                        
+                        {/* Calendar Header */}
+                        <div className="flex flex-col min-w-max">
+                            {/* Year/Month Header */}
+                            <div className="flex border-b border-gray-200 h-12">
+                                {years.map((year) => (
+                                    <div key={year} className="flex">
+                                        {monthNames.map((month, monthIndex) => {
+                                            const weeksInMonth = monthYearData.find(d => d.year === year && d.month === monthIndex)?.weeks.length || 0;
+                                            return (
+                                                <div 
+                                                    key={`${year}-${month}`} 
+                                                    className="flex items-center justify-center border-r border-gray-200 bg-gray-50" 
+                                                    style={{width: weeksInMonth * timelineCellWidth}}
+                                                >
+                                                    <div className="text-sm font-semibold text-gray-700">
+                                                        {month} {year}
+                                                    </div>
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+                                ))}
+                            </div>
+                            
+                            {/* Week Header */}
+                            <div className="flex h-12">
+                                {monthYearData.map(({ year, month, weeks }) => {
+                                    const currentWeekLabel = getCurrentWeekLabel();
+                                    return (
+                                        <div key={`${year}-${month}-weeks`} className="flex">
+                                            {weeks.map((week) => {
+                                                const isCurrent =
+                                                    year === new Date().getFullYear() &&
+                                                    month === new Date().getMonth() &&
+                                                    week.label === currentWeekLabel;
+
+                                                return (
+                                                    <div
+                                                        ref={isCurrent ? el => { if (el) currentWeekRef.current = el; } : null}
+                                                        key={`${year}-${month}-${week.label}`}
+                                                        className={`
+                                                            flex items-center justify-center border-r border-gray-200 text-xs font-medium
+                                                            ${isCurrent 
+                                                                ? "bg-red-100 text-red-800 font-bold" 
+                                                                : "bg-white text-gray-600 hover:bg-gray-50"
+                                                            }
+                                                        `}
+                                                        style={{width: timelineCellWidth}}
+                                                    >
+                                                        {week.label}
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    )
+                                })}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Content Section */}
+                    <div className="flex relative">
+                        {/* PIC Column Content */}
+                        <div 
+                            className="flex-shrink-0 border-r border-gray-200 bg-white sticky left-0 z-20"
+                            style={{ width: picColumnWidth }}
+                        >
+                            <div className="flex flex-col">
+                                {Object.entries(schedulesByPic).map(([pic, schedules], index) => (
+                                    <div 
+                                        key={pic} 
+                                        className={`
+                                            flex items-center px-4 border-b border-gray-100
+                                            ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}
+                                            hover:bg-blue-50 transition-colors duration-200
+                                        `}
+                                        style={{ height: rowHeight }}
+                                    >
+                                        <div className="flex items-center space-x-3 w-full">
+                                            <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center flex-shrink-0">
+                                                <span className="text-white text-sm font-medium">
+                                                    {pic ? pic.charAt(0).toUpperCase() : 'U'}
+                                                </span>
                                             </div>
-                                        )
+                                            <div className="min-w-0 flex-1">
+                                                <div className="text-sm font-medium text-gray-900 truncate">
+                                                    {pic || 'Unassigned'}
+                                                </div>
+                                                <div className="text-xs text-gray-500">
+                                                    {schedules.length} schedule{schedules.length > 1 ? 's' : ''}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Schedule Timeline */}
+                        <div className="flex-1 relative">
+                            {Object.entries(schedulesByPic).map(([pic, schedules], index) => (
+                                <div 
+                                    key={pic} 
+                                    className={`
+                                        relative border-b border-gray-100
+                                        ${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}
+                                        hover:bg-blue-50 transition-colors duration-200
+                                    `}
+                                    style={{ height: rowHeight }}
+                                >
+                                    {schedules.map((schedule) => {
+                                        const { left, width } = calculateSchedulePosition(schedule);
+                                        
+                                        return (
+                                            <div
+                                                key={schedule.id}
+                                                className="absolute group"
+                                                style={{
+                                                    left: `${left + 4}px`,
+                                                    width: `${Math.max(width - 8, 80)}px`,
+                                                    top: '8px',
+                                                    height: `${rowHeight - 16}px`
+                                                }}
+                                            >
+                                                <div className="
+                                                    h-full w-full rounded-lg border border-blue-200 bg-blue-50 
+                                                    hover:bg-blue-100 hover:border-blue-300 hover:shadow-md
+                                                    transition-all duration-200 cursor-pointer
+                                                    flex items-center justify-between px-3
+                                                ">
+                                                    <div className="text-xs font-medium text-blue-900 truncate flex-1">
+                                                        {schedule.scheduleName}
+                                                    </div>
+                                                    
+                                                    <div className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex gap-1">
+                                                        <Link href={`/schedule/${schedule.id}/edit`}>
+                                                            <div className="p-1.5 rounded-md bg-amber-500 hover:bg-amber-600 transition-colors shadow-sm">
+                                                                <Image src="/images/icon/edit-2.svg" alt="edit" height={12} width={12} />
+                                                            </div>
+                                                        </Link>
+                                                        <div 
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                confirmDelete(schedule.id);
+                                                            }}
+                                                            className="p-1.5 rounded-md bg-red-500 hover:bg-red-600 transition-colors shadow-sm"
+                                                        >
+                                                            <Image src="/images/icon/trash.svg" alt="delete" height={12} width={12} />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        );
                                     })}
                                 </div>
                             ))}
                         </div>
-                        <div className="flex border-b border-gray-300">
-                            {monthYearData.map(({ year, month, weeks }) => {
-                                const currentWeekLabel = getCurrentWeekLabel();
-                                return (
-                                    <div key={`${year}-${month}-weeks`} className="flex">
-                                        {weeks.map((week) => {
-                                            const isCurrent =
-                                                year === new Date().getFullYear() &&
-                                                month === new Date().getMonth() &&
-                                                week.label === currentWeekLabel;
-
-                                            return (
-                                                <div
-                                                    ref={isCurrent ? el => { if (el) currentWeekRef.current = el; } : null}
-                                                    key={`${year}-${month}-${week.label}`}
-                                                    className={`text-sm font-medium p-1 text-center border-r border-gray-200 text-gray-500 ${isCurrent ? "bg-red-200 font-bold !text-red-800" : ""}`}
-                                                    style={{width: timelineCellWidth}}
-                                                >
-                                                    {week.label}
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                )
-                            })}
-                        </div>
-                    </div>
-
-                    <div className="relative w-full mt-2">
-                        {Object.entries(schedulesByPic).map(([pic, schedules]) => (
-                            <div key={pic} className="relative h-15 flex items-center">
-                                {schedules.map((schedule) => {
-                                    const { left, width } = calculateSchedulePosition(schedule);
-                                    
-                                    return (
-                                        <div
-                                            key={schedule.id}
-                                            className="absolute p-2 border border-gray-300 rounded-md flex items-center justify-center
-                                                    hover:bg-gray-50 group transition-all cursor-pointer"
-                                            style={{
-                                                left: `${left}px`,
-                                                width: `${width}px`,
-                                                minWidth: `${width}px`,
-                                            }}
-                                        >
-                                            <div className="text-sm text-black p-2 truncate font-medium">
-                                                {schedule.scheduleName}
-                                            </div>
-                                            
-                                            <div className="absolute right-0 top-0 hidden group-hover:flex gap-1 p-1 bg-white rounded-md">
-                                                <Link href={`/schedule/${schedule.id}/edit`}>
-                                                    <div className="p-1 rounded-md bg-[#FDBE1B] cursor-pointer">
-                                                        <Image src="/images/icon/edit-2.svg" alt="view icon" height={14} width={14} />
-                                                    </div>
-                                                </Link>
-                                                <div 
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        confirmDelete(schedule.id);
-                                                    }}
-                                                    className="p-1 rounded-md bg-[#D62C35] cursor-pointer"
-                                                >
-                                                    <Image src="/images/icon/trash.svg" alt="view icon" height={14} width={14} />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        ))}
                     </div>
                     
+                    {/* Current Week Indicator Line */}
                     {lineLeft !== null && (
                         <div
-                            className="absolute top-[81px] bottom-0 w-[2px] bg-red-500 z-20"
-                            style={{ left: `${lineLeft}px` }}
+                            className="absolute bg-red-500 z-10 shadow-sm"
+                            style={{ 
+                                left: `${lineLeft + picColumnWidth}px`,
+                                top: `${headerHeight}px`,
+                                bottom: 0,
+                                width: '2px'
+                            }}
                         />
                     )}
                 </div>
