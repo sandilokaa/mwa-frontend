@@ -87,7 +87,7 @@ export default function AddData() {
                             />
                             <DropdownString
                                 label="PIC (C/M) *"
-                                options={["RnE", "Styling Design", "Vehicle Engineering", "CAE Engineer", "Procurement", "PMO", "Production"]}
+                                options={["RnE", "Styling Design", "Vehicle Engineering", "System Engineering", "CAE Engineer", "Procurement", "PMO", "Production"]}
                                 onSelect={(value) => setPIC(value)}
                                 value={pic}
                             />

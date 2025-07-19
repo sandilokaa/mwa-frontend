@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useState, useRef, useEffect } from "react";
 import { useAppSelector, useAppDispatch } from "@/store/hooks";
 import { useSnackbar } from "notistack";
-import { useRouter, useParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import { fetchScheduleDetail } from "@/store/slice/schedule/getDetailSlice";
 import { updateScheduleData } from "@/store/slice/schedule/updateSlice";
 
@@ -19,7 +19,6 @@ export default function EditData() {
 
     const dispatch = useAppDispatch();
     const { enqueueSnackbar } = useSnackbar();
-    const router = useRouter();
     const params = useParams();
     const id = Number(params.id);
 
@@ -109,7 +108,7 @@ export default function EditData() {
                             />
                             <DropdownString
                                 label="PIC (C/M) *"
-                                options={["RnE", "Styling Design", "Vehicle Engineering", "CAE Engineer", "Procurement", "PMO", "Production"]}
+                                options={["RnE", "Styling Design", "Vehicle Engineering", "System Engineering", "CAE Engineer", "Procurement", "PMO", "Production"]}
                                 onSelect={(value) => setPIC(value)}
                                 value={pic}
                             />
