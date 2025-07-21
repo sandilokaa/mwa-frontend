@@ -265,13 +265,13 @@ export default function DashboardCalendar() {
                                                             h-full w-full rounded-lg border border-blue-200 bg-blue-50 
                                                             hover:bg-blue-100 hover:border-blue-300 hover:shadow-md
                                                             transition-all duration-200 cursor-pointer
-                                                            flex items-center justify-between px-3
+                                                            flex items-center px-3
                                                         ">
-                                                            <div className="text-xs font-medium text-blue-900 truncate flex-1">
+                                                            <div className="text-xs font-medium text-blue-900 truncate text-center w-full">
                                                                 {schedule.scheduleName}
                                                             </div>
                                                             
-                                                            <div className="ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex gap-1">
+                                                            <div className="absolute opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex gap-1 right-0 mr-2">
                                                                 <Link href={`/schedule/${schedule.id}/edit`}>
                                                                     <div className="p-1.5 rounded-md bg-amber-500 hover:bg-amber-600 transition-colors shadow-sm">
                                                                         <Image src="/images/icon/edit-2.svg" alt="edit" height={12} width={12} />

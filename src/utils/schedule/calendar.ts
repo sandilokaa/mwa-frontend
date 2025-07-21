@@ -39,7 +39,7 @@ export const MONTH_NAMES = [
 ];
 
 export const TIMELINE_CONFIG = {
-    cellWidth: 70,
+    cellWidth: 85,
     picColumnWidth: 180,
     baseRowHeight: 60,
     scheduleItemHeight: 45,
