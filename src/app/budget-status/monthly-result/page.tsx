@@ -41,9 +41,9 @@ export default function ShowData() {
                 dispatch(fetchFilteredBudgetLimit({
                     productId: selectedProduct.id,
                     system: search,
-                    page: 1,
                     month: selectedMonth,
-                    year: selectedYear
+                    year: selectedYear,
+                    page: 1,
                 }));
             }
         }, 500);
@@ -57,9 +57,9 @@ export default function ShowData() {
         dispatch(fetchFilteredBudgetLimit({
             productId: selectedProduct.id,
             system: search,
-            page: newPage,
             month: selectedMonth,
-            year: selectedYear
+            year: selectedYear,
+            page: newPage,
         }));
     };
 
