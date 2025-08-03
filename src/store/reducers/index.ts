@@ -10,7 +10,8 @@ import { engineeringReducer } from "./engineering";
 import { stylingDesignReducer } from "./stylingDesign";
 import { partDesignReducer } from "./partDesign";
 import { projectTargetReducer } from "./projectTarget";
-import { scheduleReducer } from "./schedule"
+import { scheduleReducer } from "./schedule";
+import { budgetLimitReducer } from "./budgetStatus/limit";
 
 export const rootReducer = combineReducers({
     ...authReducers,
@@ -24,5 +25,6 @@ export const rootReducer = combineReducers({
     ...stylingDesignReducer,
     ...partDesignReducer,
     ...projectTargetReducer,
-    ...scheduleReducer
+    ...scheduleReducer,
+    ...budgetLimitReducer
 });
